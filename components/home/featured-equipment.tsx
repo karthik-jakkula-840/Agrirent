@@ -38,7 +38,7 @@ export async function FeaturedEquipment() {
           price_per_day: 4000,
           rating: 4.9,
           location: 'Warangal, Telangana',
-          images: ['https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=800&auto=format&fit=crop'],
+          images: ['/mock_tractor.jpg'],
           is_available: true,
           profiles: { first_name: 'Venkat', last_name: 'Rao', is_verified: true }
         },
@@ -50,7 +50,7 @@ export async function FeaturedEquipment() {
           price_per_hour: 200,
           rating: 4.7,
           location: 'Nizamabad, Telangana',
-          images: ['https://images.unsplash.com/photo-1590494490074-ceaa81fae4e5?q=80&w=800&auto=format&fit=crop'],
+          images: ['/mock_tractor.jpg'],
           is_available: false,
           profiles: { first_name: 'Anil', last_name: 'Kumar', is_verified: true }
         },
@@ -61,7 +61,7 @@ export async function FeaturedEquipment() {
           price_per_day: 800,
           rating: 4.5,
           location: 'Karimnagar, Telangana',
-          images: ['https://images.unsplash.com/photo-1605335133649-14a51e1858c4?q=80&w=800&auto=format&fit=crop'],
+          images: ['/mock_tractor.jpg'],
           is_available: true,
           profiles: { first_name: 'Srinivas', last_name: 'Goud', is_verified: false }
         }
