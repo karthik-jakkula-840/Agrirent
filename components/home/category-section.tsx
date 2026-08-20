@@ -36,7 +36,7 @@ export async function CategorySection() {
   // Catching error silently to fallback
   let dbCategories: any[] = []
   try {
-    const { data } = await supabase.from('categories').select('*').limit(8)
+    const { data } = await supabase.from('categories').select('*, equipment(count)').limit(8)
     if (data && data.length > 0) {
       dbCategories = data
     }
@@ -45,12 +45,23 @@ export async function CategorySection() {
   }
 
   const displayCategories = dbCategories.length > 0 
-    ? dbCategories.map(cat => ({
-        id: cat.id,
-        name: cat.name,
-        count: cat.equipment_count || 0,
-        icon: getIconForCategory(cat.name)
-      }))
+    ? dbCategories.map(cat => {
+        let count = 0;
+        if (Array.isArray(cat.equipment) && cat.equipment.length > 0) {
+          count = cat.equipment[0].count;
+        } else if (cat.equipment && typeof cat.equipment.count === 'number') {
+          count = cat.equipment.count;
+        } else if (cat.equipment_count !== undefined) {
+          count = cat.equipment_count;
+        }
+        
+        return {
+          id: cat.id,
+          name: cat.name,
+          count: count,
+          icon: getIconForCategory(cat.name)
+        };
+      })
     : defaultCategories
 
   return (

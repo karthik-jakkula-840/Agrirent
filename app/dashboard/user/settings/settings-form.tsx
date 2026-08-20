@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Lock, Loader2, CheckCircle2, Shield } from 'lucide-react'
+import { Lock, Loader2, CheckCircle2, Shield, Globe } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 export function SettingsForm() {
@@ -86,6 +86,33 @@ export function SettingsForm() {
             {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Updating...</> : 'Update Password'}
           </Button>
         </form>
+      </section>
+
+      <section>
+        <div className="mb-6 border-b border-gray-100 pb-4">
+          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+            <Globe className="h-5 w-5 text-gray-400" /> Preferences
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">Manage your language and accessibility settings.</p>
+        </div>
+        
+        <div className="space-y-6 max-w-md">
+          <div className="space-y-2">
+            <Label htmlFor="language">Language</Label>
+            <select
+              id="language"
+              name="language"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              defaultValue="en"
+            >
+              <option value="en">English</option>
+              <option value="es">Español (Spanish)</option>
+              <option value="fr">Français (French)</option>
+              <option value="hi">हिन्दी (Hindi)</option>
+              <option value="te">తెలుగు (Telugu)</option>
+            </select>
+          </div>
+        </div>
       </section>
     </div>
   )
