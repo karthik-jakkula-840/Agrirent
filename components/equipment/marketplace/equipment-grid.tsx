@@ -7,9 +7,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Search, Loader2, SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react'
 
-export function EquipmentGrid({ initialCategories }: { initialCategories: any[] }) {
+export function EquipmentGrid({ initialCategories, defaultCategory = '' }: { initialCategories: any[], defaultCategory?: string }) {
   const [search, setSearch] = useState('')
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState(defaultCategory)
   const [sort, setSort] = useState('newest')
   const [page, setPage] = useState(1)
   const pageSize = 9

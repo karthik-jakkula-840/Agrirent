@@ -14,7 +14,14 @@ export const metadata: Metadata = {
   }
 }
 
-export default async function MarketplacePage() {
+interface Props {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function MarketplacePage(props: Props) {
+  const searchParams = await props.searchParams
+  const defaultCategory = typeof searchParams.category === 'string' ? searchParams.category : ''
+
   const supabase = await createClient()
   
   // Fetch initial categories for the sidebar
@@ -39,7 +46,7 @@ export default async function MarketplacePage() {
         </div>
 
         <div className="container mx-auto px-4 md:px-6 pt-12">
-          <EquipmentGrid initialCategories={categories || []} />
+          <EquipmentGrid initialCategories={categories || []} defaultCategory={defaultCategory} />
         </div>
       </main>
 

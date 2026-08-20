@@ -15,7 +15,7 @@ interface CategoryCardProps {
 
 export function CategoryCard({ id, name, count, icon }: CategoryCardProps) {
   return (
-    <Link href={`/categories/${id}`}>
+    <Link href={`/equipment?category=${id}`}>
       <motion.div
         whileHover={{ y: -5 }}
         className="group relative bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-300 overflow-hidden"

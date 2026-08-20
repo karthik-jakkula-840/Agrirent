@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import Link from 'next/link'
 import { CategoryCard } from './category-card'
 import { Tractor, Combine, Truck, Wind, Droplets, Leaf, Sprout, Axe } from 'lucide-react'
 
@@ -64,9 +65,9 @@ export async function CategorySection() {
               Find the right equipment for every agricultural task. From tractors to harvesters, rent from trusted owners in your area.
             </p>
           </div>
-          <button className="text-primary font-semibold hover:text-primary/80 transition-colors whitespace-nowrap">
+          <Link href="/equipment" className="text-primary font-semibold hover:text-primary/80 transition-colors whitespace-nowrap">
             View All Categories &rarr;
-          </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
