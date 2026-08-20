@@ -1,0 +1,48 @@
+import { redirect } from 'next/navigation'
+import { getCurrentUser } from '@/lib/supabase/auth'
+import { createClient } from '@/lib/supabase/server'
+import { DashboardLayoutClient } from './layout-client'
+
+export const metadata = {
+  title: 'Customer Dashboard | Agriform',
+}
+
+export default async function UserDashboardLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const user = await getCurrentUser()
+  
+  if (!user) {
+    redirect('/login')
+  }
+
+  const supabase = await createClient()
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .single()
+
+  const typedProfile = profile as any
+  if (typedProfile) {
+    typedProfile.avatar_url = typedProfile.profile_image
+  }
+  if (typedProfile?.role === 'owner' || typedProfile?.role === 'rental_owner') redirect('/dashboard/owner')
+  if (typedProfile?.role === 'admin') redirect('/dashboard/admin')
+  if (typedProfile?.role !== 'customer') redirect('/')
+
+  // Fetch unread notifications count
+  const { count: unreadCount } = await supabase
+    .from('notifications')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+    .eq('is_read', false)
+
+  return (
+    <DashboardLayoutClient profile={profile} unreadCount={unreadCount || 0}>
+      {children}
+    </DashboardLayoutClient>
+  )
+}
