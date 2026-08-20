@@ -75,7 +75,7 @@ export function EquipmentCard({
       className="h-full"
     >
       <Card className="h-full flex flex-col overflow-hidden border-border/50 hover:shadow-xl transition-shadow bg-card">
-        <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+        <div className="relative aspect-[16/9] overflow-hidden bg-gray-100">
           <Image
             src={imageUrl}
             alt={name}
@@ -104,7 +104,7 @@ export function EquipmentCard({
           </div>
         </div>
         
-        <CardHeader className="p-4 pb-0">
+        <CardHeader className="p-3 pb-0">
           <div className="flex justify-between items-start gap-2">
             <h3 className="font-semibold text-lg line-clamp-1 text-foreground" title={name}>
               {name}
@@ -121,7 +121,7 @@ export function EquipmentCard({
           </div>
         </CardHeader>
         
-        <CardContent className="p-4 pt-3 flex-grow">
+        <CardContent className="p-3 pt-2 flex-grow">
           <div className="flex items-center gap-2">
             <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold uppercase shrink-0">
               {ownerName.charAt(0)}
@@ -136,7 +136,7 @@ export function EquipmentCard({
           </div>
         </CardContent>
         
-        <CardFooter className="p-4 pt-0 border-t border-border/40 flex items-center justify-between mt-auto bg-gray-50/50">
+        <CardFooter className="p-3 pt-0 border-t border-border/40 flex items-center justify-between mt-auto bg-gray-50/50">
           <div>
             <div className="text-lg font-bold text-primary">
               ₹{pricePerDay.toLocaleString('en-IN')}

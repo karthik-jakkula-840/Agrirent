@@ -38,7 +38,7 @@ export async function FeaturedEquipment() {
           price_per_day: 4000,
           rating: 4.9,
           location: 'Warangal, Telangana',
-          images: ['/mock_tractor.jpg'],
+          images: ['/mock_harvester.jpg'],
           is_available: true,
           profiles: { first_name: 'Venkat', last_name: 'Rao', is_verified: true }
         },
@@ -50,7 +50,7 @@ export async function FeaturedEquipment() {
           price_per_hour: 200,
           rating: 4.7,
           location: 'Nizamabad, Telangana',
-          images: ['/mock_tractor.jpg'],
+          images: ['/mock_rotavator.jpg'],
           is_available: false,
           profiles: { first_name: 'Anil', last_name: 'Kumar', is_verified: true }
         },
@@ -61,7 +61,7 @@ export async function FeaturedEquipment() {
           price_per_day: 800,
           rating: 4.5,
           location: 'Karimnagar, Telangana',
-          images: ['/mock_tractor.jpg'],
+          images: ['/mock_trailer.jpg'],
           is_available: true,
           profiles: { first_name: 'Srinivas', last_name: 'Goud', is_verified: false }
         }
