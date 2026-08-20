@@ -112,6 +112,14 @@ export function SettingsForm() {
               <option value="te">తెలుగు (Telugu)</option>
             </select>
           </div>
+          <Button type="button" className="w-full bg-primary text-white" onClick={() => {
+            const select = document.getElementById('language') as HTMLSelectElement;
+            if (select) {
+              alert(`Language changed to ${select.value}`);
+            }
+          }}>
+            Apply Changes
+          </Button>
         </div>
       </section>
     </div>
