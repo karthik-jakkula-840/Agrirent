@@ -66,8 +66,8 @@ export function OwnerCta({ userRole, isAuthenticated }: OwnerCtaProps) {
             <div className="relative w-full max-w-md aspect-square rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 p-8 flex items-center justify-center">
               <div className="w-full h-full bg-white rounded-full shadow-2xl flex items-center justify-center p-8 overflow-hidden relative border-8 border-white">
                 <Image 
-                  src="https://images.unsplash.com/photo-1586771107445-d3afcb8da016?q=80&w=800&auto=format&fit=crop" 
-                  alt="Happy Farmer" 
+                  src="/mock_tractor.jpg" 
+                  alt="Agricultural Equipment Owner" 
                   fill
                   sizes="(max-width: 768px) 100vw, 400px"
                   className="object-cover"
