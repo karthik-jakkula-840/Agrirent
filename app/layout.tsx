@@ -3,6 +3,7 @@ import "./globals.css";
 
 import { QueryProvider } from "@/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { BottomNav } from "@/components/layout/bottom-nav";
 
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 
@@ -91,8 +92,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col pb-16 md:pb-0">
         <QueryProvider>{children}</QueryProvider>
+        <BottomNav />
         <Toaster />
       </body>
     </html>

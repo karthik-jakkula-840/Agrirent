@@ -136,23 +136,32 @@ export function EquipmentCard({
           </div>
         </CardContent>
         
-        <CardFooter className="p-3 pt-0 border-t border-border/40 flex items-center justify-between mt-auto bg-gray-50/50">
-          <div>
-            <div className="text-lg font-bold text-primary">
-              ₹{pricePerDay.toLocaleString('en-IN')}
-              <span className="text-xs font-normal text-muted-foreground">/day</span>
-            </div>
-            {pricePerHour && (
-              <div className="text-xs text-muted-foreground">
-                ₹{pricePerHour.toLocaleString('en-IN')}/hr
+        <CardFooter className="p-3 pt-0 flex flex-col gap-3 mt-auto bg-gray-50/50">
+          <div className="flex w-full items-center justify-between">
+            <div>
+              <div className="text-xl md:text-lg font-bold text-gray-900">
+                ₹{pricePerDay.toLocaleString('en-IN')}
+                <span className="text-xs font-normal text-muted-foreground">/day</span>
               </div>
-            )}
+              {pricePerHour && (
+                <div className="text-xs text-muted-foreground">
+                  ₹{pricePerHour.toLocaleString('en-IN')}/hr
+                </div>
+              )}
+            </div>
           </div>
-          <Link href={`/equipment/${id}`}>
-            <Button variant="default" size="sm" className="bg-secondary hover:bg-secondary/90 text-white">
-              Rent Now
-            </Button>
-          </Link>
+          <div className="flex w-full gap-2">
+            <Link href={`/equipment/${id}`} className="flex-1">
+              <Button variant="outline" className="w-full h-10 border-gray-300">
+                Details
+              </Button>
+            </Link>
+            <Link href={`/equipment/${id}?book=true`} className="flex-[2]">
+              <Button variant="default" className="w-full h-10 bg-secondary hover:bg-secondary/90 text-white font-bold uppercase tracking-wider">
+                Rent Now
+              </Button>
+            </Link>
+          </div>
         </CardFooter>
       </Card>
     </motion.div>

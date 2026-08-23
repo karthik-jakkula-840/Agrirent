@@ -107,76 +107,23 @@ export function NavbarClient({ user, role }: NavbarClientProps) {
           )}
         </div>
 
-        {/* Mobile Toggle */}
-        <button
-          className="md:hidden text-gray-900"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        {/* Mobile Toggle & Actions */}
+        <div className="flex md:hidden items-center gap-3">
+          {user ? (
+            <Link href="/profile">
+              <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold">
+                {user?.email?.[0].toUpperCase() || 'U'}
+              </div>
+            </Link>
+          ) : (
+            <Link href="/login">
+              <Button size="sm" className="bg-primary text-white text-xs h-8 px-3 rounded-full">
+                Login
+              </Button>
+            </Link>
+          )}
+        </div>
       </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 bg-white shadow-lg border-t border-gray-100 p-4 flex flex-col gap-4 md:hidden"
-          >
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-base font-medium text-gray-700 p-2 hover:bg-gray-50 rounded-md"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link.name}
-              </Link>
-            ))}
-            {!user && (
-              <Link
-                href="/signup?type=owner"
-                className="text-base font-medium text-secondary p-2 hover:bg-gray-50 rounded-md"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Become an Owner
-              </Link>
-            )}
-            <hr className="my-2 border-gray-100" />
-            <div className="flex flex-col gap-2">
-              {user ? (
-                <>
-                  <Link href={getDashboardLink()} onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="outline" className="w-full justify-start">
-                      Dashboard
-                    </Button>
-                  </Link>
-                  <form action={logout} className="w-full">
-                    <Button variant="ghost" type="submit" className="w-full justify-start text-red-500">
-                      Logout
-                    </Button>
-                  </form>
-                </>
-              ) : (
-                <>
-                  <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="outline" className="w-full justify-start">
-                      Login
-                    </Button>
-                  </Link>
-                  <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
-                    <Button className="w-full justify-start bg-primary text-white">
-                      Sign Up
-                    </Button>
-                  </Link>
-                </>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </header>
   )
 }

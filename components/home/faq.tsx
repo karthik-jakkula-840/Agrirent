@@ -56,8 +56,8 @@ export function Faq() {
         {/* @ts-ignore */}
         <Accordion type="single" className="w-full">
           {faqs.map((faq, index) => (
-            <AccordionItem key={index} value={`item-${index}`} className="border-b border-gray-100 py-2">
-              <AccordionTrigger className="text-left text-lg font-semibold text-gray-900 hover:text-primary transition-colors">
+            <AccordionItem key={index} value={`item-${index}`} className="border border-gray-200/80 rounded-3xl mb-4 bg-white shadow-sm overflow-hidden px-4 md:px-8 py-2 md:py-4">
+              <AccordionTrigger className="text-left text-base md:text-xl font-bold text-slate-900 hover:no-underline hover:text-primary transition-colors">
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent className="text-gray-600 text-base leading-relaxed pt-2 pb-4">

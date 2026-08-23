@@ -13,7 +13,7 @@ export function Hero() {
   const [location, setLocation] = useState('')
   
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-background">
+    <section className="relative pt-24 pb-12 md:pt-40 md:pb-28 overflow-hidden bg-background">
       {/* Abstract Background Elements */}
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
@@ -79,8 +79,9 @@ export function Hero() {
                 />
               </div>
               
-              <Button size="lg" className="h-12 rounded-xl bg-secondary hover:bg-secondary/90 text-white font-semibold px-8 shrink-0">
-                Search
+              <Button size="lg" className="h-14 md:h-12 rounded-xl bg-secondary hover:bg-secondary/90 text-white font-bold text-lg md:text-base px-8 shrink-0 shadow-md">
+                <span className="md:hidden">RENT NOW</span>
+                <span className="hidden md:inline">Search</span>
               </Button>
             </motion.div>
             
@@ -94,7 +95,7 @@ export function Hero() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative h-[500px] lg:h-[600px] w-full rounded-3xl"
+            className="relative h-[300px] sm:h-[400px] lg:h-[600px] w-full rounded-3xl mt-4 md:mt-0"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent rounded-[2.5rem] -rotate-3 scale-[1.02] -z-10" />
             
@@ -131,11 +132,11 @@ export function Hero() {
               </div>
             </motion.div>
 
-            {/* Floating Glass Card 2 */}
+            {/* Floating Glass Card 2 - Hidden on small mobile */}
             <motion.div 
               animate={{ y: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-              className="absolute bottom-20 -right-6 md:-right-12 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/50 flex flex-col gap-1"
+              className="hidden sm:flex absolute bottom-10 -right-4 md:bottom-20 md:-right-12 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/50 flex-col gap-1"
             >
               <Badge className="bg-primary text-white w-fit mb-1 border-transparent">Available Today</Badge>
               <p className="text-sm text-gray-500">Mahindra 575 DI</p>
