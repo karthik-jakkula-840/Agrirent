@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     const newStart = new Date(`${validatedData.start_date}T${validatedData.start_time}`)
     const newEnd = new Date(`${validatedData.end_date}T${validatedData.end_time}`)
 
-    const isConflict = existingBookings.some((b) => {
+    const isConflict = existingBookings.some((b: any) => {
       const bStart = new Date(b.start_time)
       const bEnd = new Date(b.end_time)
       return newStart < bEnd && newEnd > bStart
