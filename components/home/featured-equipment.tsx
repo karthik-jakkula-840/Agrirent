@@ -87,22 +87,23 @@ export async function FeaturedEquipment() {
         </div>
 
         {equipment.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="flex overflow-x-auto pb-8 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-4 gap-6 snap-x snap-mandatory">
             {equipment.map((item) => (
-              <EquipmentCard
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                ownerName={`${item.profiles?.first_name || 'Verified'} ${item.profiles?.last_name || 'Owner'}`}
-                categoryName={item.category || 'Machinery'}
-                pricePerDay={item.price_per_day}
-                pricePerHour={item.price_per_hour}
-                rating={item.rating || 5.0}
-                location={item.location || 'India'}
-                imageUrl={item.images?.[0] || 'https://images.unsplash.com/photo-1605335133649-14a51e1858c4?q=80&w=800&auto=format&fit=crop'}
-                isAvailable={item.is_available ?? true}
-                isVerifiedOwner={item.profiles?.is_verified ?? true}
-              />
+              <div key={item.id} className="w-[280px] min-w-[280px] max-w-[85vw] sm:w-auto sm:min-w-0 sm:max-w-none snap-start shrink-0">
+                <EquipmentCard
+                  id={item.id}
+                  name={item.name}
+                  ownerName={`${item.profiles?.first_name || 'Verified'} ${item.profiles?.last_name || 'Owner'}`}
+                  categoryName={item.category || 'Machinery'}
+                  pricePerDay={item.price_per_day}
+                  pricePerHour={item.price_per_hour}
+                  rating={item.rating || 5.0}
+                  location={item.location || 'India'}
+                  imageUrl={item.images?.[0] || 'https://images.unsplash.com/photo-1605335133649-14a51e1858c4?q=80&w=800&auto=format&fit=crop'}
+                  isAvailable={item.is_available ?? true}
+                  isVerifiedOwner={item.profiles?.is_verified ?? true}
+                />
+              </div>
             ))}
           </div>
         ) : (
