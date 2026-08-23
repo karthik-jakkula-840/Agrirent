@@ -81,15 +81,16 @@ export async function CategorySection() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {displayCategories.map((category) => (
-            <CategoryCard
-              key={category.id}
-              id={category.id}
-              name={category.name}
-              count={category.count}
-              icon={<category.icon className="h-6 w-6" />}
-            />
+            <div key={category.id} className="min-w-[280px] w-[75vw] sm:w-auto sm:min-w-0 snap-start shrink-0">
+              <CategoryCard
+                id={category.id}
+                name={category.name}
+                count={category.count}
+                icon={<category.icon className="h-6 w-6" />}
+              />
+            </div>
           ))}
         </div>
       </div>
