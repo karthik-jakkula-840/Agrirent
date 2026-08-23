@@ -25,6 +25,9 @@ export function handleApiError(error: any) {
 
   // Handle Supabase/PostgREST error object
   if (error && typeof error === 'object' && 'message' in error) {
+    if (error.message === 'EQUIPMENT_UNAVAILABLE') {
+      return errorResponse('Equipment is already booked for these dates.', 'CONFLICT', 409)
+    }
     return errorResponse(error.message, error.code || 'DATABASE_ERROR', 500)
   }
 

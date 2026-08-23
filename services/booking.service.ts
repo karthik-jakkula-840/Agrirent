@@ -5,7 +5,8 @@ export class BookingService {
   constructor(private supabase: SupabaseClient) {}
 
   async getEquipmentAvailability(equipmentId: string) {
-    const { data, error } = await this.supabase
+    const adminClient = createAdminClient()
+    const { data, error } = await adminClient
       .from('bookings')
       .select('start_time, end_time')
       .eq('equipment_id', equipmentId)
