@@ -80,6 +80,7 @@ export function LoginForm() {
         setSessionId(result.sessionId)
         if (result.sessionId === 'mock-session-id') {
           toast.success('OTP sent successfully! (Mock Mode: Use 123456)')
+          setOtp('123456') // Auto-fill for mock mode
         } else {
           toast.success('OTP sent successfully!')
         }
