@@ -78,7 +78,11 @@ export function LoginForm() {
       const result = await sendOtpAction(phoneNumber)
       if (result.sessionId) {
         setSessionId(result.sessionId)
-        toast.success('OTP sent successfully!')
+        if (result.sessionId === 'mock-session-id') {
+          toast.success('OTP sent successfully! (Mock Mode: Use 123456)')
+        } else {
+          toast.success('OTP sent successfully!')
+        }
       } else {
         toast.error(result.error || 'Failed to send OTP')
       }
