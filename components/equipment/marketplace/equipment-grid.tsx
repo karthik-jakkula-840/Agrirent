@@ -7,18 +7,30 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Search, Loader2, SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react'
 
-export function EquipmentGrid({ initialCategories, defaultCategory = '' }: { initialCategories: any[], defaultCategory?: string }) {
-  const [search, setSearch] = useState('')
+export function EquipmentGrid({ 
+  initialCategories, 
+  defaultCategory = '',
+  defaultSearch = '',
+  defaultDistrict = ''
+}: { 
+  initialCategories: any[], 
+  defaultCategory?: string,
+  defaultSearch?: string,
+  defaultDistrict?: string
+}) {
+  const [search, setSearch] = useState(defaultSearch)
+  const [district, setDistrict] = useState(defaultDistrict)
   const [category, setCategory] = useState(defaultCategory)
   const [sort, setSort] = useState('newest')
   const [page, setPage] = useState(1)
   const pageSize = 9
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['equipment', search, category, sort, page],
+    queryKey: ['equipment', search, district, category, sort, page],
     queryFn: async () => {
       const params = new URLSearchParams()
       if (search) params.append('search', search)
+      if (district) params.append('district', district)
       if (category) params.append('category', category)
       if (sort) params.append('sort', sort)
       params.append('page', page.toString())
@@ -84,14 +96,25 @@ export function EquipmentGrid({ initialCategories, defaultCategory = '' }: { ini
       <div className="flex-1 space-y-6">
         {/* Search & Sort Bar */}
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-          <form onSubmit={handleSearch} className="relative w-full sm:max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <Input 
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name, brand, or location..." 
-              className="pl-10 h-11 bg-gray-50 border-transparent focus:border-primary focus:bg-white transition-all"
-            />
+          <form onSubmit={handleSearch} className="relative w-full sm:max-w-md flex flex-col gap-2 sm:flex-row">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <Input 
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search by name or brand..." 
+                className="pl-10 h-11 bg-gray-50 border-transparent focus:border-primary focus:bg-white transition-all"
+              />
+            </div>
+            <div className="relative flex-1">
+              <Input 
+                value={district}
+                onChange={(e) => setDistrict(e.target.value)}
+                placeholder="District or location..." 
+                className="h-11 bg-gray-50 border-transparent focus:border-primary focus:bg-white transition-all"
+              />
+            </div>
+            <Button type="submit" className="h-11">Search</Button>
           </form>
 
           <div className="flex items-center gap-3 w-full sm:w-auto">

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Search, MapPin, Calendar, Star, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -9,8 +10,19 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 
 export function Hero() {
+  const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
   const [location, setLocation] = useState('')
+  const [date, setDate] = useState('')
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    const params = new URLSearchParams()
+    if (searchQuery) params.append('search', searchQuery)
+    if (location) params.append('district', location)
+    if (date) params.append('date', date)
+    router.push(`/equipment?${params.toString()}`)
+  }
   
   return (
     <section className="relative pt-24 pb-12 md:pt-40 md:pb-28 overflow-hidden bg-background">
@@ -43,10 +55,11 @@ export function Hero() {
             </p>
             
             {/* Search Box */}
-            <motion.div 
+            <motion.form 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
+              onSubmit={handleSearch}
               className="bg-white p-2 rounded-2xl shadow-lg border border-gray-100 flex flex-col md:flex-row gap-2 mt-4 max-w-2xl"
             >
               <div className="flex-1 flex items-center bg-gray-50 rounded-xl px-4 py-2 md:py-0 h-12">
@@ -76,14 +89,16 @@ export function Hero() {
                 <Input 
                   type="date" 
                   className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0 h-full w-full shadow-none text-gray-600"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
                 />
               </div>
               
-              <Button size="lg" className="h-14 md:h-12 rounded-xl bg-secondary hover:bg-secondary/90 text-white font-bold text-lg md:text-base px-8 shrink-0 shadow-md">
+              <Button type="submit" size="lg" className="h-14 md:h-12 rounded-xl bg-secondary hover:bg-secondary/90 text-white font-bold text-lg md:text-base px-8 shrink-0 shadow-md">
                 <span className="md:hidden">RENT NOW</span>
                 <span className="hidden md:inline">Search</span>
               </Button>
-            </motion.div>
+            </motion.form>
             
             <div className="flex items-center gap-4 mt-2">
               <span className="text-sm text-gray-500">Popular: Tractor, Harvester, Drone</span>

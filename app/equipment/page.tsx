@@ -21,6 +21,8 @@ interface Props {
 export default async function MarketplacePage(props: Props) {
   const searchParams = await props.searchParams
   const defaultCategory = typeof searchParams.category === 'string' ? searchParams.category : ''
+  const defaultSearch = typeof searchParams.search === 'string' ? searchParams.search : ''
+  const defaultDistrict = typeof searchParams.district === 'string' ? searchParams.district : ''
 
   const supabase = await createClient()
   
@@ -46,7 +48,12 @@ export default async function MarketplacePage(props: Props) {
         </div>
 
         <div className="container mx-auto px-4 md:px-6 pt-12">
-          <EquipmentGrid initialCategories={categories || []} defaultCategory={defaultCategory} />
+          <EquipmentGrid 
+            initialCategories={categories || []} 
+            defaultCategory={defaultCategory} 
+            defaultSearch={defaultSearch}
+            defaultDistrict={defaultDistrict}
+          />
         </div>
       </main>
 
