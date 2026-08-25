@@ -89,7 +89,7 @@ export default async function AdminEquipmentPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
-                        <Link href={`/equipment/${item.id}`} target="_blank">
+                        <Link href={`/dashboard/admin/equipment/${item.id}`}>
                           <Button variant="outline" size="sm" className="h-8">View Details</Button>
                         </Link>
                         <form action={approveEquipment}>
