@@ -77,32 +77,36 @@ export default async function AdminDashboard() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Card 1: Revenue (Green) */}
-          <div className="bg-green-50 rounded-2xl p-6 relative overflow-hidden border border-green-100">
-            <div className="text-gray-500 text-sm mb-4">Platform Revenue</div>
-            <div className="flex items-center justify-between">
-              <div className="text-3xl font-bold text-gray-900">
-                {stats.platformRevenue.toLocaleString('en-IN')}
+          <Link href="/dashboard/admin/transactions" className="block hover:-translate-y-1 transition-transform">
+            <div className="bg-green-50 rounded-2xl p-6 relative overflow-hidden border border-green-100 shadow-sm hover:shadow-md transition-shadow h-full cursor-pointer">
+              <div className="text-gray-500 text-sm mb-4">Platform Revenue</div>
+              <div className="flex items-center justify-between">
+                <div className="text-3xl font-bold text-gray-900">
+                  {stats.platformRevenue.toLocaleString('en-IN')}
+                </div>
+                <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center shadow-sm">
+                  <IndianRupee className="h-6 w-6 text-green-600" />
+                </div>
               </div>
-              <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center shadow-sm">
-                <IndianRupee className="h-6 w-6 text-green-600" />
-              </div>
+              <div className="text-gray-400 text-xs mt-4">Yesterday {stats.yesterdayPlatformRevenue.toLocaleString('en-IN')}</div>
             </div>
-            <div className="text-gray-400 text-xs mt-4">Yesterday {stats.yesterdayPlatformRevenue.toLocaleString('en-IN')}</div>
-          </div>
+          </Link>
 
           {/* Card 2: Bookings (Blue) */}
-          <div className="bg-blue-50 rounded-2xl p-6 relative overflow-hidden border border-blue-100">
-            <div className="text-gray-500 text-sm mb-4">Total Bookings</div>
-            <div className="flex items-center justify-between">
-              <div className="text-3xl font-bold text-gray-900">
-                {stats.totalBookings.toLocaleString('en-US')}
+          <Link href="/dashboard/admin/transactions" className="block hover:-translate-y-1 transition-transform">
+            <div className="bg-blue-50 rounded-2xl p-6 relative overflow-hidden border border-blue-100 shadow-sm hover:shadow-md transition-shadow h-full cursor-pointer">
+              <div className="text-gray-500 text-sm mb-4">Total Bookings</div>
+              <div className="flex items-center justify-between">
+                <div className="text-3xl font-bold text-gray-900">
+                  {stats.totalBookings.toLocaleString('en-US')}
+                </div>
+                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center shadow-sm">
+                  <FileText className="h-6 w-6 text-blue-600" />
+                </div>
               </div>
-              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center shadow-sm">
-                <FileText className="h-6 w-6 text-blue-600" />
-              </div>
+              <div className="text-gray-400 text-xs mt-4">Yesterday {stats.yesterdayBookings.toLocaleString('en-US')}</div>
             </div>
-            <div className="text-gray-400 text-xs mt-4">Yesterday {stats.yesterdayBookings.toLocaleString('en-US')}</div>
-          </div>
+          </Link>
 
           {/* Card 3: Users (Yellow) */}
           <Link href="/dashboard/admin/users" className="block hover:-translate-y-1 transition-transform">
@@ -121,43 +125,53 @@ export default async function AdminDashboard() {
           </Link>
 
           {/* Card 4: Pending Equipment (Red) */}
-          <div className="bg-red-50 rounded-2xl p-6 relative overflow-hidden border border-red-100">
-            <div className="text-gray-500 text-sm mb-4">Pending Equipment</div>
-            <div className="flex items-center justify-between">
-              <div className="text-3xl font-bold text-gray-900">
-                {stats.pendingEquipment.toLocaleString('en-US')}
+          <Link href="/dashboard/admin/equipment" className="block hover:-translate-y-1 transition-transform">
+            <div className="bg-red-50 rounded-2xl p-6 relative overflow-hidden border border-red-100 shadow-sm hover:shadow-md transition-shadow h-full cursor-pointer">
+              <div className="text-gray-500 text-sm mb-4">Pending Equipment</div>
+              <div className="flex items-center justify-between">
+                <div className="text-3xl font-bold text-gray-900">
+                  {stats.pendingEquipment.toLocaleString('en-US')}
+                </div>
+                <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center shadow-sm">
+                  <ShoppingBag className="h-6 w-6 text-red-600" />
+                </div>
               </div>
-              <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center shadow-sm">
-                <ShoppingBag className="h-6 w-6 text-red-600" />
-              </div>
+              <div className="text-gray-400 text-xs mt-4">Yesterday {stats.yesterdayPendingEquipment.toLocaleString('en-US')}</div>
             </div>
-            <div className="text-gray-400 text-xs mt-4">Yesterday {stats.yesterdayPendingEquipment.toLocaleString('en-US')}</div>
-          </div>
+          </Link>
 
           {/* Row 2: Plain White Cards */}
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-            <div className="text-gray-500 text-sm mb-4">Total Equipment</div>
-            <div className="text-3xl font-bold text-gray-900 mb-4">{stats.totalEquipment.toLocaleString('en-US')}</div>
-            <div className="text-gray-400 text-xs">Yesterday {stats.yesterdayEquipment.toLocaleString('en-US')}</div>
-          </div>
+          <Link href="/dashboard/admin/equipment" className="block hover:-translate-y-1 transition-transform">
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full cursor-pointer">
+              <div className="text-gray-500 text-sm mb-4">Total Equipment</div>
+              <div className="text-3xl font-bold text-gray-900 mb-4">{stats.totalEquipment.toLocaleString('en-US')}</div>
+              <div className="text-gray-400 text-xs">Yesterday {stats.yesterdayEquipment.toLocaleString('en-US')}</div>
+            </div>
+          </Link>
           
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-            <div className="text-gray-500 text-sm mb-4">Total Categories</div>
-            <div className="text-3xl font-bold text-gray-900 mb-4">{stats.totalCategories.toLocaleString('en-US')}</div>
-            <div className="text-gray-400 text-xs">Yesterday {stats.yesterdayCategories.toLocaleString('en-US')}</div>
-          </div>
+          <Link href="/dashboard/admin/categories" className="block hover:-translate-y-1 transition-transform">
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full cursor-pointer">
+              <div className="text-gray-500 text-sm mb-4">Total Categories</div>
+              <div className="text-3xl font-bold text-gray-900 mb-4">{stats.totalCategories.toLocaleString('en-US')}</div>
+              <div className="text-gray-400 text-xs">Yesterday {stats.yesterdayCategories.toLocaleString('en-US')}</div>
+            </div>
+          </Link>
 
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-            <div className="text-gray-500 text-sm mb-4">Total Reviews</div>
-            <div className="text-3xl font-bold text-gray-900 mb-4">{stats.totalReviews.toLocaleString('en-US')}</div>
-            <div className="text-gray-400 text-xs">Yesterday {stats.yesterdayReviews.toLocaleString('en-US')}</div>
-          </div>
+          <Link href="/dashboard/admin/reviews" className="block hover:-translate-y-1 transition-transform">
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full cursor-pointer">
+              <div className="text-gray-500 text-sm mb-4">Total Reviews</div>
+              <div className="text-3xl font-bold text-gray-900 mb-4">{stats.totalReviews.toLocaleString('en-US')}</div>
+              <div className="text-gray-400 text-xs">Yesterday {stats.yesterdayReviews.toLocaleString('en-US')}</div>
+            </div>
+          </Link>
 
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-            <div className="text-gray-500 text-sm mb-4">Total Customers</div>
-            <div className="text-3xl font-bold text-gray-900 mb-4">{stats.totalCustomers.toLocaleString('en-US')}</div>
-            <div className="text-gray-400 text-xs">Yesterday {stats.yesterdayCustomers.toLocaleString('en-US')}</div>
-          </div>
+          <Link href="/dashboard/admin/users" className="block hover:-translate-y-1 transition-transform">
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full cursor-pointer">
+              <div className="text-gray-500 text-sm mb-4">Total Customers</div>
+              <div className="text-3xl font-bold text-gray-900 mb-4">{stats.totalCustomers.toLocaleString('en-US')}</div>
+              <div className="text-gray-400 text-xs">Yesterday {stats.yesterdayCustomers.toLocaleString('en-US')}</div>
+            </div>
+          </Link>
         </div>
       </div>
 
