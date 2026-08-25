@@ -3,6 +3,7 @@ import { z } from 'zod'
 export const equipmentSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters').max(100, 'Title cannot exceed 100 characters'),
   category_id: z.string().min(1, 'Please select a category'),
+  custom_category: z.string().optional(),
   sub_category: z.string().optional(),
   brand: z.string().optional(),
   model: z.string().optional(),
@@ -32,6 +33,14 @@ export const equipmentSchema = z.object({
   video_url: z.string().url('Must be a valid URL').optional().or(z.literal('')),
   
   availability: z.enum(['available', 'booked', 'maintenance', 'unavailable']).default('available'),
+}).refine(data => {
+  if (data.category_id === 'other' && !data.custom_category?.trim()) {
+    return false
+  }
+  return true
+}, {
+  message: "Custom category name is required",
+  path: ["custom_category"]
 })
 
 export type EquipmentFormValues = z.infer<typeof equipmentSchema>

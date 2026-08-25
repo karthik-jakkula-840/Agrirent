@@ -27,10 +27,41 @@ export async function createEquipmentAction(prevState: any, formData: FormData) 
     // Check if the user is passing a category_id vs category slug. We expect category_id.
     const validatedData = equipmentSchema.parse(rawData)
 
+    let finalCategoryId = validatedData.category_id
+
+    if (validatedData.category_id === 'other' && validatedData.custom_category) {
+      const slug = validatedData.custom_category.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      
+      // Try to find if this custom category slug already exists
+      const { data: existingCat } = await supabase.from('categories').select('id').eq('slug', slug).single()
+      
+      if (existingCat) {
+        finalCategoryId = existingCat.id
+      } else {
+        // Insert new category
+        const { data: newCat, error: catError } = await supabase
+          .from('categories')
+          .insert({ name: validatedData.custom_category, slug, is_active: true })
+          .select('id')
+          .single()
+          
+        if (catError) {
+          console.error("Failed to insert custom category:", catError)
+          return { success: false, error: 'Failed to create custom category' }
+        } else if (newCat) {
+          finalCategoryId = newCat.id
+        }
+      }
+    }
+
     const equipmentService = new EquipmentService(supabase)
     
+    // Omit custom_category before passing to equipmentRecord
+    const { custom_category, category_id, ...restValidated } = validatedData
+    
     const equipmentRecord = {
-      ...validatedData,
+      ...restValidated,
+      category_id: finalCategoryId,
       owner_id: user.id,
       status: 'pending', // Requires admin approval
       // Ensure numeric fields are correctly typed
@@ -45,7 +76,7 @@ export async function createEquipmentAction(prevState: any, formData: FormData) 
       longitude: validatedData.longitude === '' ? null : validatedData.longitude,
     }
 
-    const newEquipment = await equipmentService.createEquipment(equipmentRecord)
+    const newEquipment = await equipmentService.createEquipment(equipmentRecord as any)
 
     // @ts-ignore
     const newEquipmentId = newEquipment.id
@@ -160,8 +191,31 @@ export async function updateEquipmentAction(id: string, prevState: any, formData
     const validatedData = equipmentSchema.parse(rawData)
     const equipmentService = new EquipmentService(supabase)
     
+    let finalCategoryId = validatedData.category_id
+
+    if (validatedData.category_id === 'other' && validatedData.custom_category) {
+      const slug = validatedData.custom_category.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      const { data: existingCat } = await supabase.from('categories').select('id').eq('slug', slug).single()
+      
+      if (existingCat) {
+        finalCategoryId = existingCat.id
+      } else {
+        const { data: newCat, error: catError } = await supabase
+          .from('categories')
+          .insert({ name: validatedData.custom_category, slug, is_active: true })
+          .select('id')
+          .single()
+          
+        if (catError) return { success: false, error: 'Failed to create custom category' }
+        if (newCat) finalCategoryId = newCat.id
+      }
+    }
+    
+    const { custom_category, category_id, ...restValidated } = validatedData
+    
     const equipmentRecord = {
-      ...validatedData,
+      ...restValidated,
+      category_id: finalCategoryId,
       status: 'pending', // Reset to pending after update
       hourly_price: validatedData.hourly_price === '' ? null : validatedData.hourly_price,
       daily_price: validatedData.daily_price,
@@ -174,7 +228,7 @@ export async function updateEquipmentAction(id: string, prevState: any, formData
       longitude: validatedData.longitude === '' ? null : validatedData.longitude,
     }
 
-    await equipmentService.updateEquipment(id, equipmentRecord)
+    await equipmentService.updateEquipment(id, equipmentRecord as any)
 
     // Handle images
     const imageUrlsRaw = formData.get('imageUrls')

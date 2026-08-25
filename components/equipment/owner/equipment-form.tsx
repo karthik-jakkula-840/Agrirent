@@ -119,9 +119,18 @@ export function EquipmentForm({ categories, initialData }: { categories: any[], 
               {categories.map(cat => (
                 <option key={cat.id} value={cat.id}>{cat.name}</option>
               ))}
+              <option value="other">+ Add Custom Category</option>
             </select>
             {errors.category_id && <p className="text-sm text-red-500">{String(errors.category_id.message)}</p>}
           </div>
+
+          {watch('category_id') === 'other' && (
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="custom_category">Custom Category Name <span className="text-red-500">*</span></Label>
+              <Input id="custom_category" {...register('custom_category')} placeholder="e.g. Grain Bins, Forestry Equipment" className="bg-gray-50 h-11" />
+              {errors.custom_category && <p className="text-sm text-red-500">{String(errors.custom_category.message)}</p>}
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="brand">Brand / Manufacturer</Label>
