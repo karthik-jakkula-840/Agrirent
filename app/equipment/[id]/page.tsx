@@ -59,15 +59,21 @@ export default async function EquipmentDetailsPage({ params }: Props) {
   // Ensure public visibility rules
   if (equipment.status !== 'approved') {
     const { data: { session } } = await supabase.auth.getSession()
-    if (!session) {
-      notFound()
-    }
-    if (session.user.id !== equipment.owner_id) {
-      const { getUserRole } = await import('@/lib/supabase/auth')
-      const role = await getUserRole()
-      if (role !== 'admin') {
-        notFound()
+    let isAllowed = false
+    
+    if (session) {
+      if (session.user.id === equipment.owner_id) {
+        isAllowed = true
+      } else {
+        const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single()
+        if (profile?.role === 'admin') {
+          isAllowed = true
+        }
       }
+    }
+
+    if (!isAllowed) {
+      notFound()
     }
   }
 
