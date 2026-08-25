@@ -4,80 +4,99 @@ export class AdminService {
   constructor(private supabase: SupabaseClient) {}
 
   async getDashboardStats() {
-    // Note: In a production app with millions of rows, you would use a materialized view
-    // or RPC function for these counts. For now, doing simple exact counts.
-    
-    // 1. Total Users (all profiles)
-    const { count: totalUsers } = await this.supabase
-      .from('profiles')
-      .select('*', { count: 'exact', head: true })
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const startOfToday = today.toISOString()
 
-    // 2. Customers
-    const { count: totalCustomers } = await this.supabase
-      .from('profiles')
-      .select('*', { count: 'exact', head: true })
-      .eq('role', 'customer')
+    const [
+      { count: totalUsers },
+      { count: yesterdayUsers },
+      { count: totalCustomers },
+      { count: yesterdayCustomers },
+      { count: totalOwners },
+      { count: yesterdayOwners },
+      { count: totalEquipment },
+      { count: yesterdayEquipment },
+      { count: pendingEquipment },
+      { count: yesterdayPendingEquipment },
+      { count: totalBookings },
+      { count: yesterdayBookings },
+      { data: transactions },
+      { data: yesterdayTransactions },
+      { count: totalReviews },
+      { count: yesterdayReviews },
+      { count: totalCategories },
+      { count: yesterdayCategories },
+    ] = await Promise.all([
+      this.supabase.from('profiles').select('*', { count: 'exact', head: true }),
+      this.supabase.from('profiles').select('*', { count: 'exact', head: true }).lt('created_at', startOfToday),
 
-    // 3. Owners
-    const { count: totalOwners } = await this.supabase
-      .from('profiles')
-      .select('*', { count: 'exact', head: true })
-      .eq('role', 'owner')
+      this.supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'customer'),
+      this.supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'customer').lt('created_at', startOfToday),
 
-    // 4. Equipment
-    const { count: totalEquipment } = await this.supabase
-      .from('equipment')
-      .select('*', { count: 'exact', head: true })
-      
-    // 5. Pending Equipment
-    const { count: pendingEquipment } = await this.supabase
-      .from('equipment')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'pending')
+      this.supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'owner'),
+      this.supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'owner').lt('created_at', startOfToday),
 
-    // 6. Bookings
-    const { count: totalBookings } = await this.supabase
-      .from('bookings')
-      .select('*', { count: 'exact', head: true })
+      this.supabase.from('equipment').select('*', { count: 'exact', head: true }),
+      this.supabase.from('equipment').select('*', { count: 'exact', head: true }).lt('created_at', startOfToday),
 
-    // 7. Revenue (sum of all completed payment transactions)
-    // Note: We use Postgres RPC or simply sum it up locally since we lack a pre-built RPC in this schema context.
-    const { data: transactions } = await this.supabase
-      .from('transactions')
-      .select('amount, transaction_type')
-      
+      this.supabase.from('equipment').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+      this.supabase.from('equipment').select('*', { count: 'exact', head: true }).eq('status', 'pending').lt('created_at', startOfToday),
+
+      this.supabase.from('bookings').select('*', { count: 'exact', head: true }),
+      this.supabase.from('bookings').select('*', { count: 'exact', head: true }).lt('created_at', startOfToday),
+
+      this.supabase.from('transactions').select('amount, transaction_type'),
+      this.supabase.from('transactions').select('amount, transaction_type').lt('created_at', startOfToday),
+
+      this.supabase.from('reviews').select('*', { count: 'exact', head: true }),
+      this.supabase.from('reviews').select('*', { count: 'exact', head: true }).lt('created_at', startOfToday),
+
+      this.supabase.from('categories').select('*', { count: 'exact', head: true }),
+      this.supabase.from('categories').select('*', { count: 'exact', head: true }).lt('created_at', startOfToday),
+    ])
+
     let totalRevenue = 0
-    let totalPlatformFee = 0 // Assuming 10% platform fee logic could be inferred here
-    
+    let totalPlatformFee = 0 
     transactions?.forEach((tx: any) => {
       if (tx.transaction_type === 'payment') {
         const amount = Number(tx.amount)
         totalRevenue += amount
-        totalPlatformFee += (amount * 0.1) // 10% mock platform fee calculation
+        totalPlatformFee += (amount * 0.1) 
       }
     })
 
-    // 8. Reviews
-    const { count: totalReviews } = await this.supabase
-      .from('reviews')
-      .select('*', { count: 'exact', head: true })
-
-    // 9. Categories
-    const { count: totalCategories } = await this.supabase
-      .from('categories')
-      .select('*', { count: 'exact', head: true })
+    let yesterdayTotalRevenue = 0
+    let yesterdayPlatformFee = 0 
+    yesterdayTransactions?.forEach((tx: any) => {
+      if (tx.transaction_type === 'payment') {
+        const amount = Number(tx.amount)
+        yesterdayTotalRevenue += amount
+        yesterdayPlatformFee += (amount * 0.1) 
+      }
+    })
 
     return {
       totalUsers: totalUsers || 0,
+      yesterdayUsers: yesterdayUsers || 0,
       totalCustomers: totalCustomers || 0,
+      yesterdayCustomers: yesterdayCustomers || 0,
       totalOwners: totalOwners || 0,
+      yesterdayOwners: yesterdayOwners || 0,
       totalEquipment: totalEquipment || 0,
+      yesterdayEquipment: yesterdayEquipment || 0,
       pendingEquipment: pendingEquipment || 0,
+      yesterdayPendingEquipment: yesterdayPendingEquipment || 0,
       totalBookings: totalBookings || 0,
+      yesterdayBookings: yesterdayBookings || 0,
       totalRevenue: totalRevenue || 0,
+      yesterdayRevenue: yesterdayTotalRevenue || 0,
       platformRevenue: totalPlatformFee || 0,
+      yesterdayPlatformRevenue: yesterdayPlatformFee || 0,
       totalReviews: totalReviews || 0,
+      yesterdayReviews: yesterdayReviews || 0,
       totalCategories: totalCategories || 0,
+      yesterdayCategories: yesterdayCategories || 0,
     }
   }
 

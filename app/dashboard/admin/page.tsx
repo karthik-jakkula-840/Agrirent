@@ -14,18 +14,6 @@ export default async function AdminDashboard() {
   
   const stats = await adminService.getDashboardStats()
 
-  // Calculate mock "Yesterday" stats for visual fidelity to design
-  const mockYesterday = {
-    revenue: Math.max(0, stats.platformRevenue - Math.floor(Math.random() * 500)),
-    bookings: Math.max(0, stats.totalBookings - Math.floor(Math.random() * 10)),
-    users: Math.max(0, stats.totalUsers - Math.floor(Math.random() * 5)),
-    pending: Math.max(0, stats.pendingEquipment + Math.floor(Math.random() * 2)),
-    equipment: Math.max(0, stats.totalEquipment - 1),
-    categories: stats.totalCategories,
-    reviews: Math.max(0, stats.totalReviews - 2),
-    customers: Math.max(0, stats.totalCustomers - 3),
-  }
-
   return (
     <div className="max-w-7xl mx-auto space-y-8 bg-[#F8FAFC] min-h-screen pb-12">
       
@@ -99,7 +87,7 @@ export default async function AdminDashboard() {
                 <IndianRupee className="h-6 w-6 text-green-600" />
               </div>
             </div>
-            <div className="text-gray-400 text-xs mt-4">Yesterday {mockYesterday.revenue.toLocaleString('en-IN')}</div>
+            <div className="text-gray-400 text-xs mt-4">Yesterday {stats.yesterdayPlatformRevenue.toLocaleString('en-IN')}</div>
           </div>
 
           {/* Card 2: Bookings (Blue) */}
@@ -113,7 +101,7 @@ export default async function AdminDashboard() {
                 <FileText className="h-6 w-6 text-blue-600" />
               </div>
             </div>
-            <div className="text-gray-400 text-xs mt-4">Yesterday {mockYesterday.bookings.toLocaleString('en-US')}</div>
+            <div className="text-gray-400 text-xs mt-4">Yesterday {stats.yesterdayBookings.toLocaleString('en-US')}</div>
           </div>
 
           {/* Card 3: Users (Yellow) */}
@@ -127,7 +115,7 @@ export default async function AdminDashboard() {
                 <Users className="h-6 w-6 text-yellow-600" />
               </div>
             </div>
-            <div className="text-gray-400 text-xs mt-4">Yesterday {mockYesterday.users.toLocaleString('en-US')}</div>
+            <div className="text-gray-400 text-xs mt-4">Yesterday {stats.yesterdayUsers.toLocaleString('en-US')}</div>
           </div>
 
           {/* Card 4: Pending Equipment (Red) */}
@@ -141,32 +129,32 @@ export default async function AdminDashboard() {
                 <ShoppingBag className="h-6 w-6 text-red-600" />
               </div>
             </div>
-            <div className="text-gray-400 text-xs mt-4">Yesterday {mockYesterday.pending.toLocaleString('en-US')}</div>
+            <div className="text-gray-400 text-xs mt-4">Yesterday {stats.yesterdayPendingEquipment.toLocaleString('en-US')}</div>
           </div>
 
           {/* Row 2: Plain White Cards */}
           <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
             <div className="text-gray-500 text-sm mb-4">Total Equipment</div>
             <div className="text-3xl font-bold text-gray-900 mb-4">{stats.totalEquipment.toLocaleString('en-US')}</div>
-            <div className="text-gray-400 text-xs">Yesterday {mockYesterday.equipment.toLocaleString('en-US')}</div>
+            <div className="text-gray-400 text-xs">Yesterday {stats.yesterdayEquipment.toLocaleString('en-US')}</div>
           </div>
           
           <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
             <div className="text-gray-500 text-sm mb-4">Total Categories</div>
             <div className="text-3xl font-bold text-gray-900 mb-4">{stats.totalCategories.toLocaleString('en-US')}</div>
-            <div className="text-gray-400 text-xs">Yesterday {mockYesterday.categories.toLocaleString('en-US')}</div>
+            <div className="text-gray-400 text-xs">Yesterday {stats.yesterdayCategories.toLocaleString('en-US')}</div>
           </div>
 
           <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
             <div className="text-gray-500 text-sm mb-4">Total Reviews</div>
             <div className="text-3xl font-bold text-gray-900 mb-4">{stats.totalReviews.toLocaleString('en-US')}</div>
-            <div className="text-gray-400 text-xs">Yesterday {mockYesterday.reviews.toLocaleString('en-US')}</div>
+            <div className="text-gray-400 text-xs">Yesterday {stats.yesterdayReviews.toLocaleString('en-US')}</div>
           </div>
 
           <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
             <div className="text-gray-500 text-sm mb-4">Total Customers</div>
             <div className="text-3xl font-bold text-gray-900 mb-4">{stats.totalCustomers.toLocaleString('en-US')}</div>
-            <div className="text-gray-400 text-xs">Yesterday {mockYesterday.customers.toLocaleString('en-US')}</div>
+            <div className="text-gray-400 text-xs">Yesterday {stats.yesterdayCustomers.toLocaleString('en-US')}</div>
           </div>
         </div>
       </div>
