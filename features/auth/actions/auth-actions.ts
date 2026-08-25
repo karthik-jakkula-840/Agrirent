@@ -89,7 +89,10 @@ export async function login(values: z.infer<typeof loginSchema>) {
 export async function signup(values: z.infer<typeof signupSchema>) {
   const supabase = await createClient()
 
-  console.log('[SIGNUP] Registering user:', values.email, 'Role:', values.role)
+  console.log('[SIGNUP] Registering user:', values.email, 'Requested Role:', values.role)
+
+  // Force actual role to customer initially if they want to be an owner
+  const assignedRole = values.role === 'owner' ? 'customer' : values.role
 
   const { data, error } = await supabase.auth.signUp({
     email: values.email,
@@ -98,7 +101,7 @@ export async function signup(values: z.infer<typeof signupSchema>) {
       data: {
         full_name: values.fullName,
         phone: values.phone,
-        role: values.role,
+        role: assignedRole,
       },
     },
   })
@@ -122,8 +125,28 @@ export async function signup(values: z.infer<typeof signupSchema>) {
       } else {
         console.log('[Signup] Email auto-confirmed successfully')
       }
+
+      // If they requested to be an owner, create a blank owner verification request
+      if (values.role === 'owner') {
+        const { error: reqError } = await adminClient.from('owner_requests').insert([
+          {
+            user_id: data.user.id,
+            business_name: 'Not provided at signup',
+            business_address: 'Not provided at signup',
+            identity_document_url: '#',
+            address_proof_url: '#',
+            status: 'pending'
+          }
+        ])
+        if (reqError) {
+          console.error('[Signup] Error creating owner request:', reqError)
+        } else {
+          console.log('[Signup] Created blank owner request for approval')
+        }
+      }
+
     } catch (err) {
-      console.error('[Signup] Error auto-confirming email:', err)
+      console.error('[Signup] Error in post-signup tasks:', err)
     }
   }
 
