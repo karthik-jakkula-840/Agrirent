@@ -77,7 +77,7 @@ export function OwnerSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen }:
         })}
       </nav>
 
-      <div className="p-4 border-t border-gray-100 mt-auto">
+      <div className="p-4 pb-safe border-t border-gray-100 mt-auto">
         <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-gray-50 mb-3">
           <div className="relative h-10 w-10 rounded-full overflow-hidden bg-gray-200 shrink-0">
             {profile?.avatar_url ? (
@@ -115,7 +115,7 @@ export function OwnerSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen }:
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
+        <div className="fixed inset-0 z-[100] lg:hidden">
           <div className="fixed inset-0 bg-gray-900/80 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
           <div className="fixed inset-y-0 left-0 w-72 bg-white shadow-xl flex flex-col">
             <button 
