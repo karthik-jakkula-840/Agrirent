@@ -32,7 +32,7 @@ export async function createEquipmentAction(prevState: any, formData: FormData) 
     const equipmentRecord = {
       ...validatedData,
       owner_id: user.id,
-      status: 'approved', // Automatically approved
+      status: 'pending', // Requires admin approval
       // Ensure numeric fields are correctly typed
       hourly_price: validatedData.hourly_price === '' ? null : validatedData.hourly_price,
       daily_price: validatedData.daily_price,
@@ -162,7 +162,7 @@ export async function updateEquipmentAction(id: string, prevState: any, formData
     
     const equipmentRecord = {
       ...validatedData,
-      status: 'approved',
+      status: 'pending', // Reset to pending after update
       hourly_price: validatedData.hourly_price === '' ? null : validatedData.hourly_price,
       daily_price: validatedData.daily_price,
       weekly_price: validatedData.weekly_price === '' ? null : validatedData.weekly_price,
