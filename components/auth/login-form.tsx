@@ -7,6 +7,7 @@ import { z } from 'zod'
 import { loginSchema } from '@/features/auth/schemas/auth-schemas'
 import { login } from '@/features/auth/actions/auth-actions'
 import { sendOtpAction, verifyOtpAction, handlePhoneLoginSession } from '@/app/actions/otp'
+import { sendEmailOtp, verifyEmailOtp } from '@/features/auth/actions/auth-actions'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
@@ -30,6 +31,7 @@ export function LoginForm() {
   const [contactValue, setContactValue] = useState('')
   const [otp, setOtp] = useState('')
   const [sessionId, setSessionId] = useState<string | null>(null)
+  const [emailOtpSent, setEmailOtpSent] = useState(false)
   
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -67,18 +69,27 @@ export function LoginForm() {
     setErrorMessage(null)
     setIsLoading(true)
     try {
-      // In a real app, this action would handle both email and phone based on the method
-      const result = await sendOtpAction(contactValue) 
-      if (result.sessionId) {
-        setSessionId(result.sessionId)
-        if (result.sessionId === 'mock-session-id') {
-          toast.success('OTP sent! (Mock Mode: Use 123456)')
-          setOtp('123456')
+      if (loginMethod === 'email_otp') {
+        const result = await sendEmailOtp(contactValue)
+        if (result.error) {
+          toast.error(result.error)
         } else {
-          toast.success('OTP sent successfully!')
+          toast.success('OTP sent successfully to your email!')
+          setEmailOtpSent(true)
         }
       } else {
-        toast.error(result.error || 'Failed to send OTP')
+        const result = await sendOtpAction(contactValue) 
+        if (result.sessionId) {
+          setSessionId(result.sessionId)
+          if (result.sessionId === 'mock-session-id') {
+            toast.success('OTP sent! (Mock Mode: Use 123456)')
+            setOtp('123456')
+          } else {
+            toast.success('OTP sent successfully!')
+          }
+        } else {
+          toast.error(result.error || 'Failed to send OTP')
+        }
       }
     } finally {
       setIsLoading(false)
@@ -93,18 +104,28 @@ export function LoginForm() {
     setErrorMessage(null)
     setIsLoading(true)
     try {
-      const verifyResult = await verifyOtpAction(sessionId!, otp)
-      if (verifyResult.success) {
-        toast.success('OTP Verified. Logging you in...')
-        const loginResult = await handlePhoneLoginSession(contactValue, currentRole)
-        
-        if (loginResult.success && loginResult.redirectUrl) {
-          window.location.href = loginResult.redirectUrl
+      if (loginMethod === 'email_otp') {
+        const verifyResult = await verifyEmailOtp(contactValue, otp)
+        if (verifyResult.success && verifyResult.redirectUrl) {
+          toast.success('OTP Verified. Logging you in...')
+          window.location.href = verifyResult.redirectUrl
         } else {
-          toast.error(loginResult.error || 'Login failed after verification.')
+          toast.error(verifyResult.error || 'Invalid OTP')
         }
       } else {
-        toast.error(verifyResult.error || 'Invalid OTP')
+        const verifyResult = await verifyOtpAction(sessionId!, otp)
+        if (verifyResult.success) {
+          toast.success('OTP Verified. Logging you in...')
+          const loginResult = await handlePhoneLoginSession(contactValue, currentRole)
+          
+          if (loginResult.success && loginResult.redirectUrl) {
+            window.location.href = loginResult.redirectUrl
+          } else {
+            toast.error(loginResult.error || 'Login failed after verification.')
+          }
+        } else {
+          toast.error(verifyResult.error || 'Invalid OTP')
+        }
       }
     } finally {
       setIsLoading(false)
@@ -243,7 +264,7 @@ export function LoginForm() {
                 className="pl-9 h-11 border-gray-200 focus-visible:ring-green-500"
                 value={contactValue}
                 onChange={(e) => setContactValue(e.target.value)}
-                disabled={sessionId !== null}
+                disabled={(loginMethod === 'mobile_otp' && sessionId !== null) || (loginMethod === 'email_otp' && emailOtpSent)}
               />
             </div>
           </div>
@@ -271,7 +292,7 @@ export function LoginForm() {
                 onClick={handleSendOTP} 
                 disabled={isLoading}
               >
-                {isLoading ? '...' : (sessionId ? 'Resend' : 'Send OTP')}
+                {isLoading ? '...' : ((loginMethod === 'mobile_otp' && sessionId) || (loginMethod === 'email_otp' && emailOtpSent) ? 'Resend' : 'Send OTP')}
               </Button>
             </div>
             <p className="text-xs text-gray-500 mt-1">
@@ -283,7 +304,7 @@ export function LoginForm() {
             type="button" 
             onClick={handleVerifyOTP} 
             className="w-full h-11 bg-green-700 hover:bg-green-800 text-white font-medium mt-6" 
-            disabled={isLoading || !sessionId}
+            disabled={isLoading || (loginMethod === 'mobile_otp' && !sessionId) || (loginMethod === 'email_otp' && !emailOtpSent)}
           >
             {isLoading ? 'Verifying...' : `Login as ${currentRole === 'owner' ? 'Owner' : 'Customer'}`}
           </Button>

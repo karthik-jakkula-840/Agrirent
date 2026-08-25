@@ -211,3 +211,56 @@ export async function signInWithGoogle() {
     redirect(data.url)
   }
 }
+
+export async function sendEmailOtp(email: string) {
+  const supabase = await createClient()
+  
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      shouldCreateUser: false, // We assume they must be signed up first, or we can set it to true if we want passwordless signup
+    }
+  })
+
+  if (error) {
+    console.error('[sendEmailOtp] Error:', error.message)
+    return { error: error.message }
+  }
+
+  return { success: true }
+}
+
+export async function verifyEmailOtp(email: string, otp: string) {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase.auth.verifyOtp({
+    email,
+    token: otp,
+    type: 'email',
+  })
+
+  if (error) {
+    console.error('[verifyEmailOtp] Error:', error.message)
+    return { success: false, error: error.message }
+  }
+  
+  if (!data.user) {
+    return { success: false, error: 'User not found after verification.' }
+  }
+
+  // Get user profile to determine redirect
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', data.user.id)
+    .single()
+
+  let destination = '/dashboard/user'
+  if (profile) {
+    if (profile.role === 'admin') destination = '/dashboard/admin'
+    else if (profile.role === 'owner' || profile.role === 'rental_owner') destination = '/dashboard/owner'
+  }
+
+  return { success: true, redirectUrl: destination }
+}
+
