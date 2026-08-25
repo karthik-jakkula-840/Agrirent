@@ -1,5 +1,8 @@
 export class TwoFactorService {
-  private static readonly API_KEY = process.env.TWO_FACTOR_API_KEY;
+  private static get API_KEY() {
+    return process.env.TWO_FACTOR_API_KEY;
+  }
+  
   private static readonly BASE_URL = 'https://2factor.in/API/V1';
 
   /**
