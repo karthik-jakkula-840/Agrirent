@@ -105,18 +105,20 @@ export default async function AdminDashboard() {
           </div>
 
           {/* Card 3: Users (Yellow) */}
-          <div className="bg-yellow-50 rounded-2xl p-6 relative overflow-hidden border border-yellow-100">
-            <div className="text-gray-500 text-sm mb-4">Total Users</div>
-            <div className="flex items-center justify-between">
-              <div className="text-3xl font-bold text-gray-900">
-                {stats.totalUsers.toLocaleString('en-US')}
+          <Link href="/dashboard/admin/users" className="block hover:-translate-y-1 transition-transform">
+            <div className="bg-yellow-50 rounded-2xl p-6 relative overflow-hidden border border-yellow-100 shadow-sm hover:shadow-md transition-shadow h-full cursor-pointer">
+              <div className="text-gray-500 text-sm mb-4">Total Users</div>
+              <div className="flex items-center justify-between">
+                <div className="text-3xl font-bold text-gray-900">
+                  {stats.totalUsers.toLocaleString('en-US')}
+                </div>
+                <div className="h-12 w-12 rounded-full bg-yellow-100 flex items-center justify-center shadow-sm">
+                  <Users className="h-6 w-6 text-yellow-600" />
+                </div>
               </div>
-              <div className="h-12 w-12 rounded-full bg-yellow-100 flex items-center justify-center shadow-sm">
-                <Users className="h-6 w-6 text-yellow-600" />
-              </div>
+              <div className="text-gray-400 text-xs mt-4">Yesterday {stats.yesterdayUsers.toLocaleString('en-US')}</div>
             </div>
-            <div className="text-gray-400 text-xs mt-4">Yesterday {stats.yesterdayUsers.toLocaleString('en-US')}</div>
-          </div>
+          </Link>
 
           {/* Card 4: Pending Equipment (Red) */}
           <div className="bg-red-50 rounded-2xl p-6 relative overflow-hidden border border-red-100">

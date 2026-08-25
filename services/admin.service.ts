@@ -174,4 +174,14 @@ export class AdminService {
     if (error) throw error
     return data || []
   }
+
+  async getAllUsers() {
+    const { data, error } = await this.supabase
+      .from('profiles')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return data || []
+  }
 }
