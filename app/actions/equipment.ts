@@ -27,10 +27,10 @@ export async function createEquipmentAction(prevState: any, formData: FormData) 
     // Check if the user is passing a category_id vs category slug. We expect category_id.
     const validatedData = equipmentSchema.parse(rawData)
 
-    let finalCategoryId = validatedData.category_id
+    let finalCategoryId = null
 
-    if (validatedData.category_id === 'other' && validatedData.custom_category) {
-      const slug = validatedData.custom_category.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    if (validatedData.category) {
+      const slug = validatedData.category.toLowerCase().replace(/[^a-z0-9]+/g, '-')
       
       // Try to find if this custom category slug already exists
       const { data: existingCat } = await supabase.from('categories').select('id').eq('slug', slug).single()
@@ -41,7 +41,7 @@ export async function createEquipmentAction(prevState: any, formData: FormData) 
         // Insert new category
         const { data: newCat, error: catError } = await supabase
           .from('categories')
-          .insert({ name: validatedData.custom_category, slug, is_active: true })
+          .insert({ name: validatedData.category, slug, is_active: true })
           .select('id')
           .single()
           
@@ -56,8 +56,8 @@ export async function createEquipmentAction(prevState: any, formData: FormData) 
 
     const equipmentService = new EquipmentService(supabase)
     
-    // Omit custom_category before passing to equipmentRecord
-    const { custom_category, category_id, ...restValidated } = validatedData
+    // Omit category before passing to equipmentRecord
+    const { category, ...restValidated } = validatedData
     
     const equipmentRecord = {
       ...restValidated,
@@ -191,10 +191,10 @@ export async function updateEquipmentAction(id: string, prevState: any, formData
     const validatedData = equipmentSchema.parse(rawData)
     const equipmentService = new EquipmentService(supabase)
     
-    let finalCategoryId = validatedData.category_id
+    let finalCategoryId = null
 
-    if (validatedData.category_id === 'other' && validatedData.custom_category) {
-      const slug = validatedData.custom_category.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    if (validatedData.category) {
+      const slug = validatedData.category.toLowerCase().replace(/[^a-z0-9]+/g, '-')
       const { data: existingCat } = await supabase.from('categories').select('id').eq('slug', slug).single()
       
       if (existingCat) {
@@ -202,7 +202,7 @@ export async function updateEquipmentAction(id: string, prevState: any, formData
       } else {
         const { data: newCat, error: catError } = await supabase
           .from('categories')
-          .insert({ name: validatedData.custom_category, slug, is_active: true })
+          .insert({ name: validatedData.category, slug, is_active: true })
           .select('id')
           .single()
           
@@ -211,7 +211,7 @@ export async function updateEquipmentAction(id: string, prevState: any, formData
       }
     }
     
-    const { custom_category, category_id, ...restValidated } = validatedData
+    const { category, ...restValidated } = validatedData
     
     const equipmentRecord = {
       ...restValidated,

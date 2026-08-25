@@ -50,25 +50,46 @@ export async function POST(req: NextRequest) {
     const supabase = await createClient()
     const equipmentService = new EquipmentService(supabase)
     
+    const { category, ...restData } = validatedData
+    let finalCategoryId = null
+
+    if (category) {
+      const slug = category.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      const { data: existingCat } = await supabase.from('categories').select('id').eq('slug', slug).single()
+      
+      if (existingCat) {
+        finalCategoryId = existingCat.id
+      } else {
+        const { data: newCat, error: catError } = await supabase
+          .from('categories')
+          .insert({ name: category, slug, is_active: true })
+          .select('id')
+          .single()
+          
+        if (!catError && newCat) finalCategoryId = newCat.id
+      }
+    }
+
     const cleanedData = {
-      ...validatedData,
-      hourly_price: validatedData.hourly_price === '' ? null : validatedData.hourly_price,
-      weekly_price: validatedData.weekly_price === '' ? null : validatedData.weekly_price,
-      monthly_price: validatedData.monthly_price === '' ? null : validatedData.monthly_price,
-      horsepower: validatedData.horsepower === '' ? null : validatedData.horsepower,
-      working_hours: validatedData.working_hours === '' ? null : validatedData.working_hours,
-      year: validatedData.year === '' ? null : validatedData.year,
-      latitude: validatedData.latitude === '' ? null : validatedData.latitude,
-      longitude: validatedData.longitude === '' ? null : validatedData.longitude,
+      ...restData,
+      hourly_price: restData.hourly_price === '' ? null : restData.hourly_price,
+      weekly_price: restData.weekly_price === '' ? null : restData.weekly_price,
+      monthly_price: restData.monthly_price === '' ? null : restData.monthly_price,
+      horsepower: restData.horsepower === '' ? null : restData.horsepower,
+      working_hours: restData.working_hours === '' ? null : restData.working_hours,
+      year: restData.year === '' ? null : restData.year,
+      latitude: restData.latitude === '' ? null : restData.latitude,
+      longitude: restData.longitude === '' ? null : restData.longitude,
     }
 
     const equipmentData = {
       ...cleanedData,
+      category_id: finalCategoryId,
       owner_id: user.id, // Strictly use authenticated user's ID
-      status: 'approved',
+      status: 'pending', // Set to pending to require admin approval
     }
 
-    const newEquipment = await equipmentService.createEquipment(equipmentData)
+    const newEquipment = await equipmentService.createEquipment(equipmentData as any)
     
     // Save images to equipment_images table
     const imageUrls = body.imageUrls

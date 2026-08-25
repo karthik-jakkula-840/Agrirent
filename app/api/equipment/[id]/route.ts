@@ -62,10 +62,31 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       }
     })
 
+    const { category, ...restData } = cleanedData
+    let finalCategoryId = equipment.category_id
+
+    if (category) {
+      const slug = category.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      const { data: existingCat } = await supabase.from('categories').select('id').eq('slug', slug).single()
+      
+      if (existingCat) {
+        finalCategoryId = existingCat.id
+      } else {
+        const { data: newCat, error: catError } = await supabase
+          .from('categories')
+          .insert({ name: category, slug, is_active: true })
+          .select('id')
+          .single()
+          
+        if (!catError && newCat) finalCategoryId = newCat.id
+      }
+    }
+
     const updatedEquipment = await equipmentService.updateEquipment(id, {
-      ...cleanedData,
-      status: 'approved',
-    })
+      ...restData,
+      category_id: finalCategoryId,
+      status: 'pending', // Reset to pending after update to require admin approval
+    } as any)
     
     // Update images in equipment_images table
     const imageUrls = body.imageUrls

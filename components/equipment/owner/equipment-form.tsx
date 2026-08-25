@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label'
 import { ImageUploader } from './image-uploader'
 import { Loader2 } from 'lucide-react'
 
-export function EquipmentForm({ categories, initialData }: { categories: any[], initialData?: any }) {
+export function EquipmentForm({ initialData }: { initialData?: any }) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null)
@@ -32,7 +32,7 @@ export function EquipmentForm({ categories, initialData }: { categories: any[], 
     resolver: zodResolver(equipmentSchema),
     defaultValues: initialData ? {
       ...initialData,
-      category_id: initialData.category_id || '',
+      category: initialData.categories?.name || '',
     } : {
       deposit: 0,
       availability: 'available',
@@ -109,28 +109,10 @@ export function EquipmentForm({ categories, initialData }: { categories: any[], 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="category_id">Category <span className="text-red-500">*</span></Label>
-            <select 
-              id="category_id" 
-              {...register('category_id')}
-              className="flex h-11 w-full rounded-md border border-input bg-gray-50 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <option value="">Select a category</option>
-              {categories.map(cat => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
-              ))}
-              <option value="other">+ Add Custom Category</option>
-            </select>
-            {errors.category_id && <p className="text-sm text-red-500">{String(errors.category_id.message)}</p>}
+            <Label htmlFor="category">Category <span className="text-red-500">*</span></Label>
+            <Input id="category" {...register('category')} placeholder="e.g. Tractors, Harvesters" className="bg-gray-50 h-11" />
+            {errors.category && <p className="text-sm text-red-500">{String(errors.category.message)}</p>}
           </div>
-
-          {watch('category_id') === 'other' && (
-            <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="custom_category">Custom Category Name <span className="text-red-500">*</span></Label>
-              <Input id="custom_category" {...register('custom_category')} placeholder="e.g. Grain Bins, Forestry Equipment" className="bg-gray-50 h-11" />
-              {errors.custom_category && <p className="text-sm text-red-500">{String(errors.custom_category.message)}</p>}
-            </div>
-          )}
 
           <div className="space-y-2">
             <Label htmlFor="brand">Brand / Manufacturer</Label>

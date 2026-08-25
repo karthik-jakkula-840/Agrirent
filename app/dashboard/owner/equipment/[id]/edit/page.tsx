@@ -30,12 +30,6 @@ export default async function EditEquipmentPage(props: { params: Promise<{ id: s
       redirect('/dashboard/owner/equipment')
     }
 
-    // Fetch categories for the form
-    const { data: categories } = await supabase
-      .from('categories')
-      .select('id, name')
-      .order('name')
-
     return (
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex items-center gap-4">
@@ -50,7 +44,7 @@ export default async function EditEquipmentPage(props: { params: Promise<{ id: s
           </div>
         </div>
 
-        <EquipmentForm categories={categories || []} initialData={equipment} />
+        <EquipmentForm initialData={equipment} />
       </div>
     )
   } catch (error) {
