@@ -163,39 +163,39 @@ export function LoginForm() {
       </div>
 
       {/* Login Method Selection */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="flex flex-col sm:grid sm:grid-cols-3 gap-2">
         <button
           type="button"
           onClick={() => setLoginMethod('email_password')}
-          className={`flex items-center justify-center gap-1 p-2 rounded-lg border text-xs font-medium transition-colors ${
+          className={`flex items-center justify-center gap-1.5 p-2.5 sm:p-2 rounded-lg border text-sm sm:text-xs font-medium transition-colors ${
             loginMethod === 'email_password' 
               ? 'border-green-600 bg-white text-green-700 shadow-sm' 
               : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
           }`}
         >
-          <Mail className="h-3.5 w-3.5" /> Email & Password
+          <Mail className="h-4 w-4 sm:h-3.5 sm:w-3.5" /> Email & Password
         </button>
         <button
           type="button"
           onClick={() => setLoginMethod('mobile_otp')}
-          className={`flex items-center justify-center gap-1 p-2 rounded-lg border text-xs font-medium transition-colors ${
+          className={`flex items-center justify-center gap-1.5 p-2.5 sm:p-2 rounded-lg border text-sm sm:text-xs font-medium transition-colors ${
             loginMethod === 'mobile_otp' 
               ? 'border-green-600 bg-white text-green-700 shadow-sm' 
               : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
           }`}
         >
-          <Smartphone className="h-3.5 w-3.5" /> Mobile OTP
+          <Smartphone className="h-4 w-4 sm:h-3.5 sm:w-3.5" /> Mobile OTP
         </button>
         <button
           type="button"
           onClick={() => setLoginMethod('email_otp')}
-          className={`flex items-center justify-center gap-1 p-2 rounded-lg border text-xs font-medium transition-colors ${
+          className={`flex items-center justify-center gap-1.5 p-2.5 sm:p-2 rounded-lg border text-sm sm:text-xs font-medium transition-colors ${
             loginMethod === 'email_otp' 
               ? 'border-green-600 bg-white text-green-700 shadow-sm' 
               : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
           }`}
         >
-          <Mail className="h-3.5 w-3.5" /> Email OTP
+          <Mail className="h-4 w-4 sm:h-3.5 sm:w-3.5" /> Email OTP
         </button>
       </div>
 
@@ -271,7 +271,7 @@ export function LoginForm() {
 
           <div className="space-y-1.5">
             <Label htmlFor="otp" className="text-sm font-medium text-gray-700">Enter OTP</Label>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <div className="relative flex-1">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <ShieldCheck className="h-4 w-4 text-gray-400" />
@@ -288,7 +288,7 @@ export function LoginForm() {
               <Button 
                 type="button" 
                 variant="outline" 
-                className="h-11 border-green-600 text-green-700 hover:bg-green-50"
+                className="h-11 border-green-600 text-green-700 hover:bg-green-50 sm:w-32"
                 onClick={handleSendOTP} 
                 disabled={isLoading}
               >
