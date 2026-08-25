@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { EquipmentService } from '@/services/equipment.service'
 import { successResponse, errorResponse, handleApiError } from '@/lib/api-response'
 import { requireRole, requireAuth } from '@/lib/api-auth'
@@ -72,13 +72,19 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       if (existingCat) {
         finalCategoryId = existingCat.id
       } else {
-        const { data: newCat, error: catError } = await supabase
+        const adminSupabase = createAdminClient()
+        const { data: newCat, error: catError } = await adminSupabase
           .from('categories')
-          .insert({ name: category, slug, is_active: true })
+          .insert({ name: category, slug, is_active: true } as any)
           .select('id')
           .single()
           
-        if (!catError && newCat) finalCategoryId = newCat.id
+        if (!catError && newCat) {
+          finalCategoryId = (newCat as any).id
+        } else {
+          console.error("Failed to create category:", catError)
+          return errorResponse('Failed to create category', 'BAD_REQUEST', 400)
+        }
       }
     }
 

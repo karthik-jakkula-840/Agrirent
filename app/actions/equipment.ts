@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { equipmentSchema } from '@/lib/validations/equipment'
 import { EquipmentService } from '@/services/equipment.service'
 import { revalidatePath } from 'next/cache'
@@ -38,10 +38,11 @@ export async function createEquipmentAction(prevState: any, formData: FormData) 
       if (existingCat) {
         finalCategoryId = existingCat.id
       } else {
+        const adminSupabase = createAdminClient()
         // Insert new category
-        const { data: newCat, error: catError } = await supabase
+        const { data: newCat, error: catError } = await adminSupabase
           .from('categories')
-          .insert({ name: validatedData.category, slug, is_active: true })
+          .insert({ name: validatedData.category, slug, is_active: true } as any)
           .select('id')
           .single()
           
@@ -49,7 +50,7 @@ export async function createEquipmentAction(prevState: any, formData: FormData) 
           console.error("Failed to insert custom category:", catError)
           return { success: false, error: 'Failed to create custom category' }
         } else if (newCat) {
-          finalCategoryId = newCat.id
+          finalCategoryId = (newCat as any).id
         }
       }
     }
@@ -200,14 +201,15 @@ export async function updateEquipmentAction(id: string, prevState: any, formData
       if (existingCat) {
         finalCategoryId = existingCat.id
       } else {
-        const { data: newCat, error: catError } = await supabase
+        const adminSupabase = createAdminClient()
+        const { data: newCat, error: catError } = await adminSupabase
           .from('categories')
-          .insert({ name: validatedData.category, slug, is_active: true })
+          .insert({ name: validatedData.category, slug, is_active: true } as any)
           .select('id')
           .single()
           
         if (catError) return { success: false, error: 'Failed to create custom category' }
-        if (newCat) finalCategoryId = newCat.id
+        if (newCat) finalCategoryId = (newCat as any).id
       }
     }
     
