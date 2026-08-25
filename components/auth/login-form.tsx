@@ -11,9 +11,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { Eye, EyeOff, Smartphone, Mail } from 'lucide-react'
-
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Eye, EyeOff, Smartphone, Mail, User, Store, Lock, ShieldCheck } from 'lucide-react'
+import { GoogleLoginButton } from './google-login-button'
+import Link from 'next/link'
 
 type LoginFormValues = z.infer<typeof loginSchema>
 
@@ -22,65 +22,58 @@ export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   
+  // Role & Method State
+  const [currentRole, setCurrentRole] = useState<'customer' | 'owner'>('customer')
+  const [loginMethod, setLoginMethod] = useState<'email_password' | 'mobile_otp' | 'email_otp'>('email_password')
+  
   // OTP State
-  const [loginMethod, setLoginMethod] = useState<'email' | 'phone'>('email')
-  const [phoneNumber, setPhoneNumber] = useState('')
+  const [contactValue, setContactValue] = useState('')
   const [otp, setOtp] = useState('')
   const [sessionId, setSessionId] = useState<string | null>(null)
   
-  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<LoginFormValues>({
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       role: 'customer'
     }
   })
 
-  const currentRole = watch('role')
-
   const onEmailSubmit = async (data: LoginFormValues) => {
     setErrorMessage(null)
     setIsLoading(true)
-
     try {
-      const result = await login(data)
-
+      const result = await login({...data, role: currentRole})
       if (result?.error) {
-        const friendlyMessage = /email not confirmed/i.test(result.error)
-          ? 'Please check your inbox and confirm your email before logging in.'
-          : result.error
-        setErrorMessage(friendlyMessage)
-        toast.error(friendlyMessage)
+        setErrorMessage(result.error)
+        toast.error(result.error)
         return
       }
-
       if (result?.success && result?.redirectUrl) {
         toast.success('Login successful.')
         window.location.href = result.redirectUrl
         return
       }
-
-      const fallbackMessage = 'Login did not complete. Please try again.'
-      setErrorMessage(fallbackMessage)
-      toast.error(fallbackMessage)
+      toast.error('Login did not complete. Please try again.')
     } finally {
       setIsLoading(false)
     }
   }
 
   const handleSendOTP = async () => {
-    if (!phoneNumber || phoneNumber.length < 10) {
-      toast.error('Please enter a valid phone number.')
+    if (!contactValue) {
+      toast.error(`Please enter a valid ${loginMethod === 'mobile_otp' ? 'phone number' : 'email address'}.`)
       return
     }
     setErrorMessage(null)
     setIsLoading(true)
     try {
-      const result = await sendOtpAction(phoneNumber)
+      // In a real app, this action would handle both email and phone based on the method
+      const result = await sendOtpAction(contactValue) 
       if (result.sessionId) {
         setSessionId(result.sessionId)
         if (result.sessionId === 'mock-session-id') {
-          toast.success('OTP sent successfully! (Mock Mode: Use 123456)')
-          setOtp('123456') // Auto-fill for mock mode
+          toast.success('OTP sent! (Mock Mode: Use 123456)')
+          setOtp('123456')
         } else {
           toast.success('OTP sent successfully!')
         }
@@ -103,7 +96,7 @@ export function LoginForm() {
       const verifyResult = await verifyOtpAction(sessionId!, otp)
       if (verifyResult.success) {
         toast.success('OTP Verified. Logging you in...')
-        const loginResult = await handlePhoneLoginSession(phoneNumber, currentRole)
+        const loginResult = await handlePhoneLoginSession(contactValue, currentRole)
         
         if (loginResult.success && loginResult.redirectUrl) {
           window.location.href = loginResult.redirectUrl
@@ -119,64 +112,104 @@ export function LoginForm() {
   }
 
   return (
-    <div className="space-y-4">
-      {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
-      <Tabs
-        value={currentRole}
-        defaultValue="customer"
-        onValueChange={(v: string) => setValue('role', v as 'customer' | 'owner')}
-        className="w-full mb-4"
-      >
-        <input type="hidden" value={currentRole || 'customer'} {...register('role')} />
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="customer">Customer</TabsTrigger>
-          <TabsTrigger value="owner">Owner</TabsTrigger>
-        </TabsList>
-      </Tabs>
-
-      <div className="flex justify-center space-x-2 mb-4">
-        <Button 
-          type="button" 
-          variant={loginMethod === 'email' ? 'default' : 'outline'} 
-          size="sm"
-          onClick={() => setLoginMethod('email')}
+    <div className="space-y-6 w-full">
+      {errorMessage && <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg">{errorMessage}</div>}
+      
+      {/* Role Selection */}
+      <div className="grid grid-cols-2 gap-3">
+        <button
+          type="button"
+          onClick={() => setCurrentRole('customer')}
+          className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-colors ${
+            currentRole === 'customer' 
+              ? 'border-green-600 bg-green-50 text-green-700' 
+              : 'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100'
+          }`}
         >
-          <Mail className="w-4 h-4 mr-2" />
-          Email Login
-        </Button>
-        <Button 
-          type="button" 
-          variant={loginMethod === 'phone' ? 'default' : 'outline'} 
-          size="sm"
-          onClick={() => setLoginMethod('phone')}
+          <User className="h-4 w-4" /> Customer
+        </button>
+        <button
+          type="button"
+          onClick={() => setCurrentRole('owner')}
+          className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-colors ${
+            currentRole === 'owner' 
+              ? 'border-green-600 bg-green-50 text-green-700' 
+              : 'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100'
+          }`}
         >
-          <Smartphone className="w-4 h-4 mr-2" />
-          Mobile OTP
-        </Button>
+          <Store className="h-4 w-4" /> Owner
+        </button>
       </div>
 
-      {loginMethod === 'email' ? (
+      {/* Login Method Selection */}
+      <div className="grid grid-cols-3 gap-2">
+        <button
+          type="button"
+          onClick={() => setLoginMethod('email_password')}
+          className={`flex items-center justify-center gap-1 p-2 rounded-lg border text-xs font-medium transition-colors ${
+            loginMethod === 'email_password' 
+              ? 'border-green-600 bg-white text-green-700 shadow-sm' 
+              : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+          }`}
+        >
+          <Mail className="h-3.5 w-3.5" /> Email & Password
+        </button>
+        <button
+          type="button"
+          onClick={() => setLoginMethod('mobile_otp')}
+          className={`flex items-center justify-center gap-1 p-2 rounded-lg border text-xs font-medium transition-colors ${
+            loginMethod === 'mobile_otp' 
+              ? 'border-green-600 bg-white text-green-700 shadow-sm' 
+              : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+          }`}
+        >
+          <Smartphone className="h-3.5 w-3.5" /> Mobile OTP
+        </button>
+        <button
+          type="button"
+          onClick={() => setLoginMethod('email_otp')}
+          className={`flex items-center justify-center gap-1 p-2 rounded-lg border text-xs font-medium transition-colors ${
+            loginMethod === 'email_otp' 
+              ? 'border-green-600 bg-white text-green-700 shadow-sm' 
+              : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+          }`}
+        >
+          <Mail className="h-3.5 w-3.5" /> Email OTP
+        </button>
+      </div>
+
+      {/* Form Fields */}
+      {loginMethod === 'email_password' ? (
         <form onSubmit={handleSubmit(onEmailSubmit)} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input 
-              id="email" 
-              type="email" 
-              placeholder="Enter your email" 
-              {...register('email')}
-            />
-            {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+          <div className="space-y-1.5">
+            <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address</Label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Mail className="h-4 w-4 text-gray-400" />
+              </div>
+              <Input 
+                id="email" 
+                type="email" 
+                placeholder="Enter your email address" 
+                className="pl-9 h-11 border-gray-200 focus-visible:ring-green-500"
+                {...register('email')}
+              />
+            </div>
+            {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="password" className="text-sm font-medium text-gray-700">Password</Label>
             <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Lock className="h-4 w-4 text-gray-400" />
+              </div>
               <Input 
                 id="password" 
                 type={showPassword ? 'text' : 'password'} 
                 placeholder="Enter your password" 
+                className="pl-9 pr-10 h-11 border-gray-200 focus-visible:ring-green-500"
                 {...register('password')}
-                className="pr-10"
               />
               <button 
                 type="button" 
@@ -186,59 +219,99 @@ export function LoginForm() {
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
-            {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+            {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
           </div>
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="w-full h-11 bg-green-700 hover:bg-green-800 text-white font-medium mt-6" disabled={isLoading}>
             {isLoading ? 'Logging in...' : `Login as ${currentRole === 'owner' ? 'Owner' : 'Customer'}`}
           </Button>
         </form>
       ) : (
         <div className="space-y-4">
-          {!sessionId ? (
-            <>
-              <div className="space-y-2">
-                <Label htmlFor="phone">Mobile Number</Label>
-                <Input 
-                  id="phone" 
-                  type="tel" 
-                  placeholder="Enter 10-digit mobile number" 
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                />
+          <div className="space-y-1.5">
+            <Label htmlFor="contact" className="text-sm font-medium text-gray-700">
+              {loginMethod === 'mobile_otp' ? 'Mobile Number' : 'Email Address'}
+            </Label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                {loginMethod === 'mobile_otp' ? <Smartphone className="h-4 w-4 text-gray-400" /> : <Mail className="h-4 w-4 text-gray-400" />}
               </div>
-              <Button type="button" onClick={handleSendOTP} className="w-full" disabled={isLoading}>
-                {isLoading ? 'Sending...' : 'Send OTP'}
-              </Button>
-            </>
-          ) : (
-            <>
-              <div className="space-y-2">
-                <Label htmlFor="otp">Enter OTP</Label>
+              <Input 
+                id="contact" 
+                type={loginMethod === 'mobile_otp' ? 'tel' : 'email'} 
+                placeholder={`Enter your ${loginMethod === 'mobile_otp' ? 'mobile number' : 'email'}`} 
+                className="pl-9 h-11 border-gray-200 focus-visible:ring-green-500"
+                value={contactValue}
+                onChange={(e) => setContactValue(e.target.value)}
+                disabled={sessionId !== null}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="otp" className="text-sm font-medium text-gray-700">Enter OTP</Label>
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <ShieldCheck className="h-4 w-4 text-gray-400" />
+                </div>
                 <Input 
                   id="otp" 
                   type="text" 
-                  placeholder="Enter the OTP received" 
+                  placeholder="Enter 6-digit OTP" 
+                  className="pl-9 h-11 border-gray-200 focus-visible:ring-green-500"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
                 />
               </div>
-              <Button type="button" onClick={handleVerifyOTP} className="w-full" disabled={isLoading}>
-                {isLoading ? 'Verifying...' : 'Verify & Login'}
-              </Button>
               <Button 
                 type="button" 
-                variant="link" 
-                onClick={() => setSessionId(null)} 
-                className="w-full" 
+                variant="outline" 
+                className="h-11 border-green-600 text-green-700 hover:bg-green-50"
+                onClick={handleSendOTP} 
                 disabled={isLoading}
               >
-                Change Mobile Number
+                {isLoading ? '...' : (sessionId ? 'Resend' : 'Send OTP')}
               </Button>
-            </>
-          )}
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              We will send a 6-digit OTP to your registered {loginMethod === 'mobile_otp' ? 'phone' : 'email'}.
+            </p>
+          </div>
+
+          <Button 
+            type="button" 
+            onClick={handleVerifyOTP} 
+            className="w-full h-11 bg-green-700 hover:bg-green-800 text-white font-medium mt-6" 
+            disabled={isLoading || !sessionId}
+          >
+            {isLoading ? 'Verifying...' : `Login as ${currentRole === 'owner' ? 'Owner' : 'Customer'}`}
+          </Button>
         </div>
       )}
+
+      <div className="relative mt-6">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-gray-200" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-white px-3 text-gray-500 font-medium">Or continue with</span>
+        </div>
+      </div>
+
+      <GoogleLoginButton />
+      
+      <div className="flex flex-col items-center space-y-3 pt-2">
+        <Link href="/forgot-password" className="text-sm font-medium text-green-700 hover:underline">
+          Forgot password?
+        </Link>
+        <div className="text-sm text-gray-500">
+          Don't have an account?{' '}
+          <Link href="/signup" className="font-medium text-green-700 hover:underline">
+            Sign up
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }
