@@ -6,38 +6,38 @@ const MOCK_REVIEWS = [
   {
     id: 1,
     rating: 5,
-    service_type: 'GENERAL SERVICE',
-    comment: 'Super convenient doorstep service. The mechanic changed the engine oil and adjusted the brakes right in my apartment parking lot. Very clean work!',
+    service_type: 'TRACTOR RENTAL',
+    comment: 'Super convenient service. Booked a Mahindra tractor for ploughing my 5-acre field. The owner delivered it on time and in perfect condition.',
     author_initials: 'RV',
     author_name: 'Rahul Verma',
-    equipment_info: 'Honda Activa 6G • Kondapur'
+    equipment_info: 'Mahindra 575 DI • Guntur'
   },
   {
     id: 2,
     rating: 5,
-    service_type: 'EMERGENCY REPAIR',
-    comment: 'Broke down near Kukatpally and booked emergency service. The mechanic reached in 25 minutes and fixed the minor wiring issue immediately.',
+    service_type: 'HARVESTER RENTAL',
+    comment: 'Booked a harvester during the peak season when local ones were unavailable. The process was completely transparent and saved my crop.',
     author_initials: 'SK',
     author_name: 'Sai Kiran',
-    equipment_info: 'Bajaj Pulsar 150 • Kukatpally'
+    equipment_info: 'Kubota Harvester • Nizamabad'
   },
   {
     id: 3,
     rating: 5,
-    service_type: 'PERIODIC MAINTENANCE',
-    comment: 'Regular servicing at local garages always felt sketchy. Motronx was extremely transparent. Showed me the genuine spare parts list before installing.',
+    service_type: 'ROTAVATOR RENTAL',
+    comment: 'Renting equipment locally always felt sketchy with hidden charges. Agrirent was extremely transparent. The rotavator was attached and ready to use.',
     author_initials: 'VR',
     author_name: 'Vikram Reddy',
-    equipment_info: 'Royal Enfield Classic 350 • Jubilee Hills'
+    equipment_info: 'Shaktiman Rotavator • Kurnool'
   },
   {
     id: 4,
     rating: 5,
-    service_type: 'GENERAL SERVICE',
-    comment: 'The whole experience was seamless. Saved me a trip to the service center on a weekend. Highly professional and polite staff.',
+    service_type: 'TRACTOR RENTAL',
+    comment: 'The whole experience was seamless. Saved me a lot of money compared to buying new equipment. Highly professional owners.',
     author_initials: 'AK',
     author_name: 'Arun Kumar',
-    equipment_info: 'TVS Jupiter • Madhapur'
+    equipment_info: 'John Deere 5310 • Warangal'
   }
 ]
 
@@ -88,7 +88,7 @@ export async function Testimonials() {
                   
                   {/* Service Badge */}
                   {review.service_type && (
-                    <span className="text-[10px] md:text-xs font-bold text-red-500 bg-red-50 px-3 py-1 rounded-full uppercase tracking-wide">
+                    <span className="text-[10px] md:text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full uppercase tracking-wide">
                       {review.service_type}
                     </span>
                   )}
@@ -104,7 +104,7 @@ export async function Testimonials() {
               <div>
                 <div className="w-full h-px bg-gray-100 mb-6" />
                 <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-red-50 flex items-center justify-center text-red-500 font-bold text-lg shrink-0">
+                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg shrink-0">
                     {review.author_initials || review.author_name?.substring(0, 2).toUpperCase() || 'AN'}
                   </div>
                   <div>
@@ -119,7 +119,7 @@ export async function Testimonials() {
               </div>
               
               {/* Decorative Quote mark in background */}
-              <div className="absolute top-6 right-8 text-9xl text-red-50 opacity-50 font-serif leading-none pointer-events-none select-none z-0">
+              <div className="absolute top-6 right-8 text-9xl text-primary/5 opacity-50 font-serif leading-none pointer-events-none select-none z-0">
                 "
               </div>
             </div>
