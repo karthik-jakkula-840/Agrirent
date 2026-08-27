@@ -91,6 +91,21 @@ export class BookingService {
       .eq('id', bookingId)
 
     if (error) throw error
+
+    // Attempt to send an SMS to the customer
+    if (['accepted', 'confirmed', 'rejected', 'cancelled'].includes(status)) {
+      try {
+        const booking = await this.getBookingById(bookingId)
+        if (booking && booking.customer && booking.customer.phone) {
+          const { TwoFactorService } = await import('@/lib/2factor')
+          const message = `Agrirent Update: Your booking for ${booking.equipment?.title || 'equipment'} has been ${status}.`
+          await TwoFactorService.sendTransactionalSMS(booking.customer.phone, message)
+        }
+      } catch (err) {
+        console.error('Failed to send status update SMS:', err)
+      }
+    }
+
     return true
   }
 

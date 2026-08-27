@@ -12,7 +12,10 @@ import {
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { RevenueChart } from './revenue-chart'
+import { OwnerCalendar } from '@/components/dashboard/owner-calendar'
 import { format } from 'date-fns'
+import { cookies } from 'next/headers'
+import { translations, LanguageCode } from '@/lib/translations'
 
 export const metadata = {
   title: 'Dashboard | Owner Portal | Agriform',
@@ -22,6 +25,10 @@ export default async function OwnerDashboardPage() {
   const user = await getCurrentUser()
   const supabase = await createClient()
   const ownerService = new OwnerService(supabase)
+
+  const cookieStore = await cookies()
+  const locale = (cookieStore.get('NEXT_LOCALE')?.value as LanguageCode) || 'en'
+  const t = translations[locale]?.dashboard || translations['en'].dashboard
 
   const { data: profile } = await supabase
     .from('profiles')
@@ -40,42 +47,45 @@ export default async function OwnerDashboardPage() {
   // Fetch chart data (last 30 days)
   const revenueData = await ownerService.getRevenueAnalytics(user!.id, 30)
 
+  // Fetch active bookings for calendar
+  const activeBookings = await ownerService.getActiveBookings(user!.id)
+
   return (
     <div className="space-y-8 pb-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-          Welcome back, {typedProfile?.full_name?.split(' ')[0] || 'Owner'}
+          {t.welcome}, {typedProfile?.full_name?.split(' ')[0] || 'Owner'}
         </h1>
-        <p className="text-gray-500 mt-1">Manage your equipment, bookings and rental business from one place.</p>
+        <p className="text-gray-500 mt-1">{t.ownerDescription}</p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <StatCard 
-          title="Total Equipment" 
+          title={t.totalEquipment} 
           value={stats.totalEquipment.toString()} 
-          subtitle={`${stats.availableEquipment} currently available`}
+          subtitle={`${stats.availableEquipment} ${t.currentlyAvailable}`}
           icon={Tractor} 
           color="bg-blue-50 text-blue-600" 
         />
         <StatCard 
-          title="Active Bookings" 
+          title={t.activeBookings} 
           value={stats.activeBookings.toString()} 
-          subtitle={`${stats.completedRentals} completed rentals`}
+          subtitle={`${stats.completedRentals} ${t.completedRentals}`}
           icon={CheckCircle2} 
           color="bg-green-50 text-green-600" 
         />
         <StatCard 
-          title="Pending Requests" 
+          title={t.pendingRequests} 
           value={stats.pendingRequests.toString()} 
-          subtitle="Requires your action"
+          subtitle={t.requiresAction}
           icon={CalendarClock} 
           color="bg-amber-50 text-amber-600" 
         />
         <StatCard 
-          title="Total Revenue" 
+          title={t.totalRevenue} 
           value={`₹${stats.totalRevenue.toLocaleString()}`} 
-          subtitle="From completed bookings"
+          subtitle={t.fromCompleted}
           icon={IndianRupee} 
           color="bg-purple-50 text-purple-600" 
         />
@@ -87,11 +97,11 @@ export default async function OwnerDashboardPage() {
         <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Revenue Overview</h2>
-              <p className="text-sm text-gray-500">Last 30 days earnings</p>
+              <h2 className="text-lg font-bold text-gray-900">{t.revenueOverview}</h2>
+              <p className="text-sm text-gray-500">{t.last30Days}</p>
             </div>
             <Link href="/dashboard/owner/analytics">
-              <Button variant="outline" size="sm">View Full Report</Button>
+              <Button variant="outline" size="sm">{t.viewFullReport}</Button>
             </Link>
           </div>
           
@@ -99,7 +109,7 @@ export default async function OwnerDashboardPage() {
             {revenueData.every(d => d.revenue === 0) ? (
               <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-gray-50/50 rounded-xl border border-dashed border-gray-200">
                 <LineChartIcon className="h-8 w-8 mb-2 opacity-50" />
-                <p>Not enough revenue data yet.</p>
+                <p>{t.noRevenueData}</p>
               </div>
             ) : (
               <RevenueChart data={revenueData} />
@@ -111,8 +121,8 @@ export default async function OwnerDashboardPage() {
         <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Recent Requests</h2>
-              <p className="text-sm text-gray-500">Pending your approval</p>
+              <h2 className="text-lg font-bold text-gray-900">{t.recentRequests}</h2>
+              <p className="text-sm text-gray-500">{t.pendingApproval}</p>
             </div>
           </div>
 
@@ -122,8 +132,8 @@ export default async function OwnerDashboardPage() {
                 <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center mb-3">
                   <CheckCircle2 className="h-6 w-6 text-gray-400" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1">All caught up!</h3>
-                <p className="text-sm text-gray-500">No pending booking requests.</p>
+                <h3 className="font-semibold text-gray-900 mb-1">{t.allCaughtUp}</h3>
+                <p className="text-sm text-gray-500">{t.noPendingRequests}</p>
               </div>
             ) : (
               recentRequests.map((req: any) => (
@@ -131,7 +141,7 @@ export default async function OwnerDashboardPage() {
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <h4 className="font-semibold text-gray-900 line-clamp-1">{req.equipment?.title}</h4>
-                      <p className="text-sm text-gray-500 line-clamp-1">by {req.customer?.full_name}</p>
+                      <p className="text-sm text-gray-500 line-clamp-1">{t.by} {req.customer?.full_name}</p>
                     </div>
                     <span className="font-semibold text-primary shrink-0">₹{req.total_amount}</span>
                   </div>
@@ -143,7 +153,7 @@ export default async function OwnerDashboardPage() {
                   </div>
                   <Link href={`/dashboard/owner/bookings/${req.id}`}>
                     <Button variant="secondary" className="w-full text-sm h-9 bg-primary/10 text-primary hover:bg-primary hover:text-white group-hover:bg-primary group-hover:text-white transition-colors">
-                      Review Request <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                      {t.reviewRequest} <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                     </Button>
                   </Link>
                 </div>
@@ -153,9 +163,18 @@ export default async function OwnerDashboardPage() {
           
           {recentRequests.length > 0 && (
             <Link href="/dashboard/owner/bookings" className="mt-4 block text-center text-sm font-medium text-primary hover:underline">
-              View all bookings
+              {t.viewAllBookings}
             </Link>
           )}
+        </div>
+
+        {/* Calendar Widget */}
+        <div className="lg:col-span-3 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-bold text-gray-900">Equipment Schedule</h2>
+            <p className="text-sm text-gray-500">Your active bookings this month</p>
+          </div>
+          <OwnerCalendar bookings={activeBookings} />
         </div>
 
       </div>

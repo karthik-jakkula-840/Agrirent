@@ -70,4 +70,34 @@ export class TwoFactorService {
       return { success: false, error: 'An unexpected error occurred while verifying OTP.' };
     }
   }
+
+  /**
+   * Sends a transactional SMS (e.g. for booking updates)
+   * @param phoneNumber The mobile number
+   * @param message The SMS text to send
+   */
+  static async sendTransactionalSMS(phoneNumber: string, message: string): Promise<{ success: boolean; error?: string }> {
+    if (!this.API_KEY) {
+      console.warn('TWO_FACTOR_API_KEY not defined. Mock sending SMS:', message);
+      return { success: true };
+    }
+
+    try {
+      const cleanNumber = phoneNumber.replace(/\D/g, '');
+      const encodedMessage = encodeURIComponent(message);
+      const url = `https://2factor.in/API/V1/${this.API_KEY}/ADDON_SERVICES/SEND/TSMS?From=AGRIRENT&To=${cleanNumber}&Msg=${encodedMessage}`;
+
+      const response = await fetch(url, { method: 'GET' });
+      const data = await response.json();
+
+      if (data.Status === 'Success') {
+        return { success: true };
+      } else {
+        return { success: false, error: data.Details || 'Failed to send SMS.' };
+      }
+    } catch (error: any) {
+      console.error('Error sending transactional SMS:', error);
+      return { success: false, error: 'An unexpected error occurred while sending SMS.' };
+    }
+  }
 }

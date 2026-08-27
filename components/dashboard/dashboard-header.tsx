@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import Image from 'next/image'
+import { LanguageToggle } from '@/components/language-toggle'
 
 export function DashboardHeader({ profile, unreadCount, onMenuClick }: any) {
   return (
@@ -26,6 +27,7 @@ export function DashboardHeader({ profile, unreadCount, onMenuClick }: any) {
       </div>
 
       <div className="flex items-center gap-4">
+        <LanguageToggle />
         <Link href="/dashboard/user/notifications">
           <Button variant="ghost" size="icon" className="relative text-gray-600 hover:text-primary hover:bg-primary/5 rounded-full">
             <Bell className="h-5 w-5" />

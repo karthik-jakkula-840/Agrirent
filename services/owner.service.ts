@@ -143,4 +143,15 @@ export class OwnerService {
 
     return result || []
   }
+
+  async getActiveBookings(ownerId: string) {
+    const { data, error } = await this.supabase
+      .from('bookings')
+      .select('id, start_time, end_time, equipment_id, booking_status')
+      .eq('owner_id', ownerId)
+      .in('booking_status', ['accepted', 'confirmed'])
+
+    if (error) throw error
+    return data || []
+  }
 }

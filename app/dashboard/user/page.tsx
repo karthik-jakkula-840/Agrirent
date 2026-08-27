@@ -7,11 +7,18 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { format } from 'date-fns'
+import { WeatherWidget } from '@/components/dashboard/weather-widget'
+import { cookies } from 'next/headers'
+import { translations, LanguageCode } from '@/lib/translations'
 
 export default async function CustomerDashboardPage() {
   const user = await getCurrentUser()
   const supabase = await createClient()
   
+  const cookieStore = await cookies()
+  const locale = (cookieStore.get('NEXT_LOCALE')?.value as LanguageCode) || 'en'
+  const t = translations[locale]?.dashboard || translations['en'].dashboard
+
   const { data: profile } = await supabase.from('profiles').select('full_name').eq('id', user!.id).single()
   const typedProfile = profile as any
   
@@ -24,10 +31,10 @@ export default async function CustomerDashboardPage() {
   ])
 
   const STAT_CARDS = [
-    { title: 'Active Rentals', value: stats.activeRentals, icon: Activity, color: 'text-blue-600', bg: 'bg-blue-100' },
-    { title: 'Completed', value: stats.completedRentals, icon: CheckCircle2, color: 'text-green-600', bg: 'bg-green-100' },
-    { title: 'Pending Bookings', value: stats.pendingBookings, icon: Clock, color: 'text-yellow-600', bg: 'bg-yellow-100' },
-    { title: 'Cancelled', value: stats.cancelledBookings, icon: XCircle, color: 'text-red-600', bg: 'bg-red-100' },
+    { title: t.activeRentals, value: stats.activeRentals, icon: Activity, color: 'text-blue-600', bg: 'bg-blue-100' },
+    { title: t.completed, value: stats.completedRentals, icon: CheckCircle2, color: 'text-green-600', bg: 'bg-green-100' },
+    { title: t.pendingBookings, value: stats.pendingBookings, icon: Clock, color: 'text-yellow-600', bg: 'bg-yellow-100' },
+    { title: t.cancelled, value: stats.cancelledBookings, icon: XCircle, color: 'text-red-600', bg: 'bg-red-100' },
   ]
 
   const getStatusColor = (status: string) => {
@@ -45,9 +52,9 @@ export default async function CustomerDashboardPage() {
     <div className="space-y-8 pb-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-          Welcome back, {typedProfile?.full_name?.split(' ')[0] || 'User'}
+          {t.welcome}, {typedProfile?.full_name?.split(' ')[0] || 'User'}
         </h1>
-        <p className="text-gray-500 mt-1">Manage your equipment rentals, bookings, and account from one place.</p>
+        <p className="text-gray-500 mt-1">{t.manageDescription}</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -70,11 +77,11 @@ export default async function CustomerDashboardPage() {
           {/* Active Rentals */}
           <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="p-6 border-b border-gray-100">
-              <h2 className="text-xl font-bold text-gray-900">Active Rentals</h2>
+              <h2 className="text-xl font-bold text-gray-900">{t.activeRentals}</h2>
             </div>
             {activeRentals.length === 0 ? (
               <div className="p-8 text-center text-gray-500">
-                You don't have any active rentals right now.
+                {t.noActiveRentals}
               </div>
             ) : (
               <div className="divide-y divide-gray-100">
@@ -84,18 +91,18 @@ export default async function CustomerDashboardPage() {
                       <div key={item.id} className="flex flex-col sm:flex-row justify-between gap-4">
                         <div>
                           <h3 className="font-bold text-gray-900">{item.equipment?.title}</h3>
-                          <p className="text-sm text-gray-500 mb-2">Owner: {item.equipment?.profiles?.full_name}</p>
+                          <p className="text-sm text-gray-500 mb-2">{t.owner}: {item.equipment?.profiles?.full_name}</p>
                           <div className="flex gap-4 text-sm font-medium">
                             <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md">
-                              Started: {format(new Date(item.start_date), 'MMM dd')}
+                              {t.started}: {format(new Date(item.start_date), 'MMM dd')}
                             </span>
                             <span className="bg-purple-50 text-purple-700 px-2 py-1 rounded-md">
-                              Ends: {format(new Date(item.end_date), 'MMM dd')}
+                              {t.ends}: {format(new Date(item.end_date), 'MMM dd')}
                             </span>
                           </div>
                         </div>
                         <div className="sm:text-right">
-                          <Button variant="outline" size="sm">View Rental</Button>
+                          <Button variant="outline" size="sm">{t.viewRental}</Button>
                         </div>
                       </div>
                     ))}
@@ -108,17 +115,17 @@ export default async function CustomerDashboardPage() {
           {/* Recent Bookings */}
           <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-900">Recent Bookings</h2>
+              <h2 className="text-xl font-bold text-gray-900">{t.recentBookings}</h2>
               <Link href="/dashboard/user/bookings" className="text-sm font-medium text-primary hover:underline">
-                View All
+                {t.viewAll}
               </Link>
             </div>
             {recentBookings.length === 0 ? (
               <div className="p-10 text-center flex flex-col items-center">
                 <CalendarClock className="h-10 w-10 text-gray-300 mb-3" />
-                <p className="text-gray-500 mb-4">No bookings yet.</p>
+                <p className="text-gray-500 mb-4">{t.noBookings}</p>
                 <Link href="/equipment">
-                  <Button className="bg-primary hover:bg-primary/90 text-white">Browse Equipment</Button>
+                  <Button className="bg-primary hover:bg-primary/90 text-white">{t.browseEquipment}</Button>
                 </Link>
               </div>
             ) : (
@@ -152,13 +159,15 @@ export default async function CustomerDashboardPage() {
 
         {/* Right Sidebar (Upcoming / Ads / Quick Links) */}
         <div className="space-y-6">
+          <WeatherWidget />
+          
           <div className="bg-primary p-6 rounded-3xl text-white shadow-lg">
-            <h3 className="font-bold text-xl mb-2">Need Help?</h3>
+            <h3 className="font-bold text-xl mb-2">{t.needHelp}</h3>
             <p className="text-primary-foreground/80 text-sm mb-6">
-              Our support team is here to help with your rental questions and machinery issues.
+              {t.supportText}
             </p>
             <Button className="w-full bg-white text-primary hover:bg-gray-100">
-              Contact Support
+              {t.contactSupport}
             </Button>
           </div>
         </div>
