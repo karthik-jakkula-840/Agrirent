@@ -91,6 +91,16 @@ export async function handlePhoneLoginSession(phoneNumber: string, role: string)
         .single()
         
       if (profile) {
+        if (role === 'customer' && (profile.role === 'owner' || profile.role === 'rental_owner')) {
+          await supabase.auth.signOut()
+          return { success: false, error: 'You are registered as an Owner. Please use the Owner login tab.' }
+        }
+
+        if (role === 'owner' && profile.role === 'customer') {
+          await supabase.auth.signOut()
+          return { success: false, error: 'You are registered as a Customer. Please use the Customer login tab.' }
+        }
+
         if (profile.role === 'admin') destination = '/dashboard/admin'
         else if (profile.role === 'owner' || profile.role === 'rental_owner') destination = '/dashboard/owner'
       }
