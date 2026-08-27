@@ -35,7 +35,7 @@ export function ReviewsSection({ equipmentId }: { equipmentId: string }) {
   }
 
   return (
-    <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm mt-10">
+    <div id="reviews" className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm mt-10 scroll-mt-24">
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-2xl font-bold text-gray-900">Reviews & Ratings</h2>
         <Button variant="outline" onClick={() => setShowForm(!showForm)}>

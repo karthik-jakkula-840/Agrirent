@@ -84,9 +84,16 @@ export default async function CustomerBookingsPage() {
                     </div>
                   </div>
 
-                  <div className="shrink-0 self-end sm:self-center">
+                  <div className="shrink-0 self-end sm:self-center flex flex-col gap-2">
+                    {booking.booking_status === 'completed' && (
+                      <Link href={`/equipment/${booking.equipment_id}#reviews`}>
+                        <Button variant="default" className="w-full gap-2 bg-green-600 hover:bg-green-700 text-white">
+                          Leave Review
+                        </Button>
+                      </Link>
+                    )}
                     <Link href={`/dashboard/user/bookings/${booking.id}`}>
-                      <Button variant="outline" className="gap-2">
+                      <Button variant="outline" className="w-full gap-2">
                         View Details <ChevronRight className="h-4 w-4" />
                       </Button>
                     </Link>
