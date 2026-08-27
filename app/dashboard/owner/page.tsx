@@ -67,6 +67,7 @@ export default async function OwnerDashboardPage() {
           subtitle={`${stats.availableEquipment} ${t.currentlyAvailable}`}
           icon={Tractor} 
           color="bg-blue-50 text-blue-600" 
+          href="/dashboard/owner/equipment"
         />
         <StatCard 
           title={t.activeBookings} 
@@ -74,6 +75,7 @@ export default async function OwnerDashboardPage() {
           subtitle={`${stats.completedRentals} ${t.completedRentals}`}
           icon={CheckCircle2} 
           color="bg-green-50 text-green-600" 
+          href="/dashboard/owner/bookings"
         />
         <StatCard 
           title={t.pendingRequests} 
@@ -81,6 +83,7 @@ export default async function OwnerDashboardPage() {
           subtitle={t.requiresAction}
           icon={CalendarClock} 
           color="bg-amber-50 text-amber-600" 
+          href="/dashboard/owner/bookings"
         />
         <StatCard 
           title={t.totalRevenue} 
@@ -88,6 +91,7 @@ export default async function OwnerDashboardPage() {
           subtitle={t.fromCompleted}
           icon={IndianRupee} 
           color="bg-purple-50 text-purple-600" 
+          href="/dashboard/owner/analytics"
         />
       </div>
 
@@ -182,21 +186,32 @@ export default async function OwnerDashboardPage() {
   )
 }
 
-function StatCard({ title, value, subtitle, icon: Icon, color }: any) {
-  return (
-    <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+function StatCard({ title, value, subtitle, icon: Icon, color, href }: any) {
+  const CardContent = (
+    <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group h-full">
       <div className="flex items-center justify-between mb-4">
         <div className={`p-3 rounded-xl ${color}`}>
-          <Icon className="h-6 w-6" />
+          <Icon className="h-6 w-6 group-hover:scale-110 transition-transform" />
         </div>
+        {href && <ArrowRight className="h-5 w-5 text-gray-300 group-hover:text-primary transition-colors" />}
       </div>
       <div>
         <h3 className="text-gray-500 text-sm font-medium mb-1">{title}</h3>
-        <p className="text-3xl font-bold text-gray-900 mb-1">{value}</p>
+        <p className="text-3xl font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors">{value}</p>
         <p className="text-xs text-gray-500">{subtitle}</p>
       </div>
     </div>
   )
+
+  if (href) {
+    return (
+      <Link href={href} className="block h-full">
+        {CardContent}
+      </Link>
+    )
+  }
+
+  return CardContent
 }
 
 function LineChartIcon(props: any) {
