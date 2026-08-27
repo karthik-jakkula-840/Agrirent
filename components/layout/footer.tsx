@@ -7,67 +7,77 @@ export function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300 py-12 md:py-16">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 mb-12">
           
-          <div className="lg:col-span-2">
+          {/* Brand & Social - Takes 2 cols on lg */}
+          <div className="lg:col-span-2 flex flex-col items-center text-center md:items-start md:text-left">
             <Link href="/" className="flex items-center gap-2 text-white mb-6">
-              <Tractor className="h-8 w-8 text-primary" />
+              <div className="bg-primary/20 p-2 rounded-xl">
+                <Tractor className="h-7 w-7 text-primary" />
+              </div>
               <span className="text-2xl font-bold tracking-tight">AGRIFORM</span>
             </Link>
-            <p className="text-gray-400 mb-6 max-w-sm">
+            <p className="text-gray-400 mb-8 max-w-sm text-sm leading-relaxed">
               India's smart agricultural equipment rental marketplace. Connecting farmers with equipment owners for a better harvest.
             </p>
-            <div className="flex items-center gap-4">
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors"><Globe className="h-5 w-5" /></a>
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors"><Camera className="h-5 w-5" /></a>
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors"><MessageCircle className="h-5 w-5" /></a>
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors"><Video className="h-5 w-5" /></a>
+            <div className="flex items-center gap-5">
+              <Link href="/" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Globe className="h-4 w-4" /></Link>
+              <Link href="/" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Camera className="h-4 w-4" /></Link>
+              <Link href="/" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><MessageCircle className="h-4 w-4" /></Link>
+              <Link href="/" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Video className="h-4 w-4" /></Link>
             </div>
           </div>
 
-          <div>
-            <h3 className="text-white font-semibold mb-4">Services</h3>
-            <ul className="space-y-3">
-              <li><Link href="/equipment" className="hover:text-primary transition-colors">Equipment Rental</Link></li>
-              <li><Link href="/signup?type=owner" className="hover:text-primary transition-colors">Equipment Owners</Link></li>
-              <li><Link href="/bookings" className="hover:text-primary transition-colors">Booking</Link></li>
-              <li><Link href="/payments" className="hover:text-primary transition-colors">Payments</Link></li>
-            </ul>
+          {/* Links Grid - 2 columns on mobile, 3 on lg */}
+          <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-8">
+            <div>
+              <h3 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">Services</h3>
+              <ul className="space-y-3.5 text-sm">
+                <li><Link href="/equipment" className="hover:text-primary transition-colors text-gray-400">Equipment Rental</Link></li>
+                <li><Link href="/signup?type=owner" className="hover:text-primary transition-colors text-gray-400">Equipment Owners</Link></li>
+                <li><Link href="/dashboard/user/bookings" className="hover:text-primary transition-colors text-gray-400">My Bookings</Link></li>
+                <li><Link href="/dashboard/user/payments" className="hover:text-primary transition-colors text-gray-400">Payments</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">Categories</h3>
+              <ul className="space-y-3.5 text-sm">
+                <li><Link href="/equipment?category=tractors" className="hover:text-primary transition-colors text-gray-400">Tractors</Link></li>
+                <li><Link href="/equipment?category=harvesters" className="hover:text-primary transition-colors text-gray-400">Harvesters</Link></li>
+                <li><Link href="/equipment?category=sprayers" className="hover:text-primary transition-colors text-gray-400">Sprayers</Link></li>
+                <li><Link href="/equipment?category=seeders" className="hover:text-primary transition-colors text-gray-400">Seeders</Link></li>
+              </ul>
+            </div>
+
+            <div className="col-span-2 sm:col-span-1">
+              <h3 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">Company</h3>
+              <ul className="space-y-3.5 text-sm">
+                <li><Link href="/about" className="hover:text-primary transition-colors text-gray-400">About Us</Link></li>
+                <li><Link href="/contact" className="hover:text-primary transition-colors text-gray-400">Contact</Link></li>
+                <li><Link href="/careers" className="hover:text-primary transition-colors text-gray-400">Careers</Link></li>
+              </ul>
+            </div>
           </div>
 
-          <div>
-            <h3 className="text-white font-semibold mb-4">Categories</h3>
-            <ul className="space-y-3">
-              <li><Link href="/categories/tractors" className="hover:text-primary transition-colors">Tractors</Link></li>
-              <li><Link href="/categories/harvesters" className="hover:text-primary transition-colors">Harvesters</Link></li>
-              <li><Link href="/categories/sprayers" className="hover:text-primary transition-colors">Sprayers</Link></li>
-              <li><Link href="/categories/seeders" className="hover:text-primary transition-colors">Seeders</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-white font-semibold mb-4">Company</h3>
-            <ul className="space-y-3 mb-6">
-              <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
-              <li><Link href="/careers" className="hover:text-primary transition-colors">Careers</Link></li>
-            </ul>
-            <h3 className="text-white font-semibold mb-4">Newsletter</h3>
-            <form className="flex flex-col gap-2">
+          {/* Newsletter - 1 col on lg */}
+          <div className="lg:col-span-1 flex flex-col items-center md:items-start">
+            <h3 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">Newsletter</h3>
+            <form className="flex flex-col gap-3 w-full max-w-sm">
               <Input 
                 type="email" 
                 placeholder="Your email address" 
-                className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-primary"
+                className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-primary h-11"
               />
-              <Button className="bg-primary hover:bg-primary/90 text-white w-full">Subscribe</Button>
+              <Button className="bg-primary hover:bg-primary/90 text-white w-full h-11">Subscribe</Button>
             </form>
           </div>
 
         </div>
 
-        <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-gray-500 text-sm">
-            &copy; 2026 Agriform. All rights reserved.
+            &copy; {new Date().getFullYear()} Agriform. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-gray-500">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
