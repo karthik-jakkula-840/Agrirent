@@ -35,9 +35,10 @@ export async function POST(req: NextRequest) {
       .insert([
         {
           equipment_id: validatedData.equipment_id,
+          booking_id: bookings[0].id,
           customer_id: user.id,
           rating: validatedData.rating,
-          comment: validatedData.comment,
+          review: validatedData.comment,
         }
       ])
       .select()

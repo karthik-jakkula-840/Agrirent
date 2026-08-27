@@ -86,10 +86,10 @@ export function ReviewsSection({ equipmentId }: { equipmentId: string }) {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-600">
-                    {review.profiles?.full_name?.charAt(0) || 'U'}
+                    {review.customer?.full_name?.charAt(0) || 'U'}
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900">{review.profiles?.full_name || 'Anonymous User'}</div>
+                    <div className="font-semibold text-gray-900">{review.customer?.full_name || 'Anonymous User'}</div>
                     <div className="text-xs text-gray-500">{format(new Date(review.created_at), 'MMMM d, yyyy')}</div>
                   </div>
                 </div>
@@ -99,7 +99,7 @@ export function ReviewsSection({ equipmentId }: { equipmentId: string }) {
                   ))}
                 </div>
               </div>
-              <p className="text-gray-700 mt-3">{review.comment}</p>
+              <p className="text-gray-700 mt-3">{review.review}</p>
             </div>
           ))}
         </div>
