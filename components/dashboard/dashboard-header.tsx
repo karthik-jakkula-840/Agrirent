@@ -7,7 +7,13 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { LanguageToggle } from '@/components/language-toggle'
 
-export function DashboardHeader({ profile, unreadCount, onMenuClick }: any) {
+export function DashboardHeader({ 
+  profile, 
+  unreadCount, 
+  onMenuClick,
+  notificationHref = "/dashboard/user/notifications",
+  profileHref = "/dashboard/user/profile"
+}: any) {
   return (
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 h-16 flex items-center justify-between lg:px-8">
       <div className="flex items-center gap-4">
@@ -28,7 +34,7 @@ export function DashboardHeader({ profile, unreadCount, onMenuClick }: any) {
 
       <div className="flex items-center gap-4">
         <LanguageToggle />
-        <Link href="/dashboard/user/notifications">
+        <Link href={notificationHref}>
           <Button variant="ghost" size="icon" className="relative text-gray-600 hover:text-primary hover:bg-primary/5 rounded-full">
             <Bell className="h-5 w-5" />
             {unreadCount > 0 && (
@@ -37,7 +43,7 @@ export function DashboardHeader({ profile, unreadCount, onMenuClick }: any) {
           </Button>
         </Link>
         
-        <Link href="/dashboard/user/profile" className="relative h-9 w-9 rounded-full overflow-hidden bg-gray-100 border border-gray-200">
+        <Link href={profileHref} className="relative h-9 w-9 rounded-full overflow-hidden bg-gray-100 border border-gray-200">
           {profile?.avatar_url ? (
             <Image src={profile.avatar_url} alt="Profile" fill className="object-cover" />
           ) : (

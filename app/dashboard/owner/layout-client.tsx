@@ -29,6 +29,7 @@ export function DashboardLayoutClient({
           unreadCount={unreadCount} 
           onMenuClick={() => setIsMobileMenuOpen(true)} 
           notificationHref="/dashboard/owner/notifications"
+          profileHref="/dashboard/owner/profile"
         />
         
         <main className="flex-1 w-full max-w-7xl mx-auto p-4 lg:p-8">
