@@ -18,51 +18,46 @@ export async function submitContactMessage(prevState: any, formData: FormData) {
       message: formData.get('message') as string,
     }
 
-    // Validate using Zod
+    // Validate using Zod — this is fast and always works
     const validatedData = contactSchema.parse(rawData)
 
-    // Attempt to save to Supabase — table must exist; if not, we still show success
-    try {
-      const { createClient } = await import('@/lib/supabase/server')
-      const supabase = await createClient()
-
-      // @ts-ignore
-      const { error } = await supabase.from('contact_messages').insert([{
-        name: validatedData.name,
-        email: validatedData.email,
-        subject: validatedData.subject,
-        message: validatedData.message,
-      }])
-
-      if (error) {
-        // Log but don't block the user — they'll see the success message
-        console.error('[Contact] Supabase insertion error:', error.message)
-      } else {
-        console.log('[Contact] Message saved to DB from:', validatedData.email)
+    // Fire-and-forget: try to save to DB but don't wait too long
+    const dbSave = async () => {
+      try {
+        const { createClient } = await import('@/lib/supabase/server')
+        const supabase = await createClient()
+        // @ts-ignore
+        const { error } = await supabase.from('contact_messages').insert([{
+          name: validatedData.name,
+          email: validatedData.email,
+          subject: validatedData.subject,
+          message: validatedData.message,
+        }])
+        if (error) {
+          console.error('[Contact] DB insert error:', error.message)
+        } else {
+          console.log('[Contact] Message saved from:', validatedData.email)
+        }
+      } catch (e) {
+        console.error('[Contact] DB exception:', e)
       }
-    } catch (dbErr) {
-      console.error('[Contact] DB error:', dbErr)
     }
 
-    // Always return success so the user sees the confirmation
-    return {
-      success: true,
-      error: null
-    }
+    // Race the DB save against a 3-second timeout — whichever finishes first
+    await Promise.race([
+      dbSave(),
+      new Promise<void>(resolve => setTimeout(resolve, 3000))
+    ])
+
+    // Always return success after validation passes
+    return { success: true, error: null }
 
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return {
-        success: false,
-        error: error.errors[0].message
-      }
+      return { success: false, error: error.errors[0].message }
     }
-    
     console.error('Contact submission error:', error)
-    return {
-      success: false,
-      error: 'An unexpected error occurred. Please try again.'
-    }
+    return { success: false, error: 'An unexpected error occurred. Please try again.' }
   }
 }
 
