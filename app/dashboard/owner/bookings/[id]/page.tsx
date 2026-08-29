@@ -2,9 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/supabase/auth'
 import { BookingService } from '@/services/booking.service'
 import { format } from 'date-fns'
-import Link from 'next/link'
+import { BackButton } from '@/components/dashboard/back-button'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, MapPin, User, Calendar, CreditCard, Clock, Tractor, CheckCircle2, XCircle } from 'lucide-react'
+import { MapPin, User, Calendar, CreditCard, Clock, Tractor, CheckCircle2, XCircle } from 'lucide-react'
 import { notFound, redirect } from 'next/navigation'
 import Image from 'next/image'
 import { acceptBookingAction, rejectBookingAction } from '@/app/actions/booking'
@@ -33,16 +33,10 @@ export default async function OwnerBookingDetailsPage(props: { params: Promise<{
 
     return (
       <div className="max-w-4xl mx-auto space-y-6">
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard/owner/bookings">
-            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-gray-100">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Booking Details</h1>
-            <p className="text-gray-500 mt-1 font-mono text-sm">ID: {booking.id}</p>
-          </div>
+        <div>
+          <BackButton href="/dashboard/owner/bookings" label="Back to Bookings" className="mb-4" />
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Booking Details</h1>
+          <p className="text-gray-500 mt-1 font-mono text-sm">ID: {booking.id}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

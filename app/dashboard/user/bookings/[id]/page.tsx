@@ -3,7 +3,8 @@ import { BookingService } from '@/services/booking.service'
 import { getCurrentUser } from '@/lib/supabase/auth'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ChevronLeft, Receipt, CalendarClock, Shield, AlertCircle } from 'lucide-react'
+import { BackButton } from '@/components/dashboard/back-button'
+import { Receipt, CalendarClock, Shield, AlertCircle } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { format } from 'date-fns'
@@ -45,9 +46,7 @@ export default async function CustomerBookingDetailsPage({ params }: Props) {
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
       <div className="mb-8">
-        <Link href="/dashboard/user/bookings" className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 mb-4 transition-colors">
-          <ChevronLeft className="mr-1 h-4 w-4" /> Back to My Bookings
-        </Link>
+        <BackButton href="/dashboard/user/bookings" label="Back to My Bookings" className="mb-4" />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">Booking {booking.booking_number}</h1>

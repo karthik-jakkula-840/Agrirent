@@ -4,8 +4,8 @@ import { AdminService } from '@/services/admin.service'
 import { format } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
 import { OwnerActionButtons } from './action-buttons'
-import Link from 'next/link'
-import { ChevronLeft } from 'lucide-react'
+import { BackButton } from '@/components/dashboard/back-button'
+import { Users } from 'lucide-react'
 
 export default async function OwnerRequestsPage() {
   await requireRole('admin')
@@ -16,13 +16,20 @@ export default async function OwnerRequestsPage() {
   const requests = await adminService.getOwnerRequests()
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
+    <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 pb-12 px-4 sm:px-6 lg:px-8 pt-4">
       <div>
-        <Link href="/dashboard/admin" className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 mb-4 transition-colors">
-          <ChevronLeft className="mr-1 h-4 w-4" /> Back to Admin Dashboard
-        </Link>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Owner Verifications</h1>
-        <p className="text-gray-500 mt-1">Review and approve applications for equipment owners.</p>
+        <BackButton href="/dashboard/admin" className="mb-6" />
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-2xl shadow-lg shadow-indigo-100">
+            <Users className="h-6 w-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900">
+              Owner Verifications
+            </h1>
+            <p className="text-gray-500 mt-1 text-sm font-medium">Review and approve applications for equipment owners.</p>
+          </div>
+        </div>
       </div>
 
       <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">

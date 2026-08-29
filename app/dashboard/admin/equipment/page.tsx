@@ -2,7 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { requireRole } from '@/lib/supabase/auth'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { CheckCircle2, XCircle, AlertCircle } from 'lucide-react'
+import { CheckCircle2, XCircle, AlertCircle, ShieldAlert } from 'lucide-react'
+import { BackButton } from '@/components/dashboard/back-button'
 import Link from 'next/link'
 import { revalidatePath } from 'next/cache'
 
@@ -38,10 +39,20 @@ export default async function AdminEquipmentPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Equipment Approvals</h1>
-        <p className="text-gray-500 mt-1">Review and approve new equipment listings before they go live on the marketplace.</p>
+    <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 pb-12 px-4 sm:px-6 lg:px-8 pt-4">
+      <div>
+        <BackButton href="/dashboard/admin" className="mb-6" />
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl shadow-lg shadow-blue-100">
+            <ShieldAlert className="h-6 w-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900">
+              Equipment Approvals
+            </h1>
+            <p className="text-gray-500 mt-1 text-sm font-medium">Review and approve new equipment listings before they go live on the marketplace.</p>
+          </div>
+        </div>
       </div>
 
       <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">

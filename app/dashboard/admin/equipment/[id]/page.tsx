@@ -2,9 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import { requireRole } from '@/lib/supabase/auth'
 import { EquipmentService } from '@/services/equipment.service'
 import { notFound, redirect } from 'next/navigation'
-import Link from 'next/link'
+import { BackButton } from '@/components/dashboard/back-button'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, CheckCircle2, XCircle } from 'lucide-react'
+import { CheckCircle2, XCircle, ShieldAlert } from 'lucide-react'
 import { revalidatePath } from 'next/cache'
 
 export default async function AdminEquipmentDetailsPage({ params }: { params: Promise<{ id: string }> }) {
@@ -40,16 +40,17 @@ export default async function AdminEquipmentDetailsPage({ params }: { params: Pr
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4 space-y-6">
-      <div className="flex items-center gap-4">
-        <Link href="/dashboard/admin/equipment">
-          <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-gray-100">
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-        </Link>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Equipment Details</h1>
-          <p className="text-gray-500 mt-1">Review equipment information for approval.</p>
+    <div className="max-w-4xl mx-auto space-y-6 pb-12 px-4 sm:px-6 pt-4">
+      <div>
+        <BackButton href="/dashboard/admin/equipment" label="Back to Equipment Approvals" className="mb-6" />
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl shadow-lg shadow-blue-100">
+            <ShieldAlert className="h-6 w-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900">Equipment Details</h1>
+            <p className="text-gray-500 mt-1 text-sm font-medium">Review equipment information for approval.</p>
+          </div>
         </div>
       </div>
 

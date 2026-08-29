@@ -165,6 +165,35 @@ export class AdminService {
     return data || []
   }
 
+  async getCategoriesPaginated(page: number = 1, limit: number = 5, search?: string, status?: string) {
+    let query = this.supabase
+      .from('categories')
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false })
+
+    if (status && status !== 'all') {
+      query = query.eq('is_active', status === 'active')
+    }
+
+    if (search) {
+      query = query.or(`name.ilike.%${search}%,slug.ilike.%${search}%,description.ilike.%${search}%`)
+    }
+
+    const from = (page - 1) * limit
+    const to = from + limit - 1
+
+    const { data, count, error } = await query.range(from, to)
+
+    if (error) throw error
+    return {
+      categories: data || [],
+      totalCount: count || 0,
+      totalPages: Math.ceil((count || 0) / limit),
+      currentPage: page,
+      limit
+    }
+  }
+
   async getAllReviews() {
     const { data, error } = await this.supabase
       .from('reviews')
@@ -183,5 +212,34 @@ export class AdminService {
 
     if (error) throw error
     return data || []
+  }
+
+  async getUsersPaginated(page: number = 1, limit: number = 5, role?: string, search?: string) {
+    let query = this.supabase
+      .from('profiles')
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false })
+
+    if (role && role !== 'all') {
+      query = query.eq('role', role)
+    }
+
+    if (search) {
+      query = query.or(`full_name.ilike.%${search}%,email.ilike.%${search}%`)
+    }
+
+    const from = (page - 1) * limit
+    const to = from + limit - 1
+
+    const { data, count, error } = await query.range(from, to)
+
+    if (error) throw error
+    return {
+      users: data || [],
+      totalCount: count || 0,
+      totalPages: Math.ceil((count || 0) / limit),
+      currentPage: page,
+      limit
+    }
   }
 }
