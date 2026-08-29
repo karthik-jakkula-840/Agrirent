@@ -138,64 +138,115 @@ export default async function AdminUsersPage(props: PageProps) {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-gray-50/70 text-gray-500 font-semibold border-b border-gray-100">
-                <tr>
-                  <th className="px-6 py-4">User</th>
-                  <th className="px-6 py-4">Contact Details</th>
-                  <th className="px-6 py-4">Role</th>
-                  <th className="px-6 py-4 text-right">Joined Date</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {users.map((user: any) => (
-                  <tr key={user.id} className="hover:bg-gray-50/60 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className={`h-10 w-10 rounded-full border flex items-center justify-center flex-shrink-0 font-bold text-sm ${
-                          user.role === 'admin' 
-                            ? 'bg-purple-50 border-purple-100 text-purple-600' 
-                            : user.role === 'owner' 
-                            ? 'bg-blue-50 border-blue-100 text-blue-600' 
-                            : 'bg-emerald-50 border-emerald-100 text-emerald-600'
-                        }`}>
-                          {user.full_name ? user.full_name.charAt(0).toUpperCase() : <User className="h-4 w-4" />}
-                        </div>
-                        <div>
-                          <div className="font-semibold text-gray-900">{user.full_name || 'Anonymous User'}</div>
-                          <div className="text-xs text-gray-400 font-mono mt-0.5">{user.id.split('-')[0]}...</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 space-y-1">
-                      <div className="flex items-center text-gray-600 text-xs gap-2">
-                        <Mail className="h-3.5 w-3.5 text-gray-400" /> {user.email || 'N/A'}
-                      </div>
-                      <div className="flex items-center text-gray-600 text-xs gap-2">
-                        <Phone className="h-3.5 w-3.5 text-gray-400" /> {user.phone || 'N/A'}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <Badge variant="outline" className={`capitalize font-medium text-xs px-2.5 py-0.5 rounded-full border ${
-                        user.role === 'admin' ? 'bg-purple-50 text-purple-700 border-purple-200' :
-                        user.role === 'owner' ? 'bg-blue-50 text-blue-700 border-blue-200' :
-                        'bg-emerald-50 text-emerald-700 border-emerald-200'
+          <>
+            {/* Mobile View */}
+            <div className="divide-y divide-gray-100 md:hidden">
+              {users.map((user: any) => (
+                <div key={user.id} className="p-4 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`h-10 w-10 rounded-full border flex items-center justify-center flex-shrink-0 font-bold text-sm ${
+                        user.role === 'admin' 
+                          ? 'bg-purple-50 border-purple-100 text-purple-600' 
+                          : user.role === 'owner' 
+                          ? 'bg-blue-50 border-blue-100 text-blue-600' 
+                          : 'bg-emerald-50 border-emerald-100 text-emerald-600'
                       }`}>
-                        {user.role}
-                      </Badge>
-                    </td>
-                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap text-right text-xs">
-                      <div className="inline-flex items-center gap-1.5">
-                        <Calendar className="h-3.5 w-3.5 text-gray-400" />
-                        {format(new Date(user.created_at), 'MMM dd, yyyy')}
+                        {user.full_name ? user.full_name.charAt(0).toUpperCase() : <User className="h-4 w-4" />}
                       </div>
-                    </td>
+                      <div>
+                        <div className="font-semibold text-gray-900 text-sm">{user.full_name || 'Anonymous User'}</div>
+                        <div className="text-[11px] text-gray-400 font-mono">{user.id.split('-')[0]}...</div>
+                      </div>
+                    </div>
+                    <Badge variant="outline" className={`capitalize font-medium text-xs px-2.5 py-0.5 rounded-full border ${
+                      user.role === 'admin' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                      user.role === 'owner' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                      'bg-emerald-50 text-emerald-700 border-emerald-200'
+                    }`}>
+                      {user.role}
+                    </Badge>
+                  </div>
+
+                  <div className="text-xs space-y-1 text-gray-600 bg-gray-50 p-2.5 rounded-xl">
+                    <div className="flex items-center gap-2">
+                      <Mail className="h-3.5 w-3.5 text-gray-400 shrink-0" />
+                      <span className="truncate">{user.email || 'N/A'}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Phone className="h-3.5 w-3.5 text-gray-400 shrink-0" />
+                      <span>{user.phone || 'N/A'}</span>
+                    </div>
+                  </div>
+
+                  <div className="text-[11px] text-gray-400 flex items-center justify-between pt-1">
+                    <span className="text-gray-400">Joined Date</span>
+                    <span>{format(new Date(user.created_at), 'MMM dd, yyyy')}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead className="bg-gray-50/70 text-gray-500 font-semibold border-b border-gray-100">
+                  <tr>
+                    <th className="px-6 py-4">User</th>
+                    <th className="px-6 py-4">Contact Details</th>
+                    <th className="px-6 py-4">Role</th>
+                    <th className="px-6 py-4 text-right">Joined Date</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {users.map((user: any) => (
+                    <tr key={user.id} className="hover:bg-gray-50/60 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className={`h-10 w-10 rounded-full border flex items-center justify-center flex-shrink-0 font-bold text-sm ${
+                            user.role === 'admin' 
+                              ? 'bg-purple-50 border-purple-100 text-purple-600' 
+                              : user.role === 'owner' 
+                              ? 'bg-blue-50 border-blue-100 text-blue-600' 
+                              : 'bg-emerald-50 border-emerald-100 text-emerald-600'
+                          }`}>
+                            {user.full_name ? user.full_name.charAt(0).toUpperCase() : <User className="h-4 w-4" />}
+                          </div>
+                          <div>
+                            <div className="font-semibold text-gray-900">{user.full_name || 'Anonymous User'}</div>
+                            <div className="text-xs text-gray-400 font-mono mt-0.5">{user.id.split('-')[0]}...</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 space-y-1">
+                        <div className="flex items-center text-gray-600 text-xs gap-2">
+                          <Mail className="h-3.5 w-3.5 text-gray-400" /> {user.email || 'N/A'}
+                        </div>
+                        <div className="flex items-center text-gray-600 text-xs gap-2">
+                          <Phone className="h-3.5 w-3.5 text-gray-400" /> {user.phone || 'N/A'}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <Badge variant="outline" className={`capitalize font-medium text-xs px-2.5 py-0.5 rounded-full border ${
+                          user.role === 'admin' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                          user.role === 'owner' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                          'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        }`}>
+                          {user.role}
+                        </Badge>
+                      </td>
+                      <td className="px-6 py-4 text-gray-500 whitespace-nowrap text-right text-xs">
+                        <div className="inline-flex items-center gap-1.5">
+                          <Calendar className="h-3.5 w-3.5 text-gray-400" />
+                          {format(new Date(user.created_at), 'MMM dd, yyyy')}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
 
         {/* Pagination Controls */}

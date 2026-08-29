@@ -144,6 +144,31 @@ export class AdminService {
     return data
   }
 
+  async getTransactionsPaginated(page: number = 1, limit: number = 5, type?: string) {
+    let query = this.supabase
+      .from('transactions')
+      .select('*, user:user_id(full_name, email), booking:booking_id(booking_number, equipment:equipment_id(title))', { count: 'exact' })
+      .order('created_at', { ascending: false })
+
+    if (type && type !== 'all') {
+      query = query.eq('transaction_type', type)
+    }
+
+    const from = (page - 1) * limit
+    const to = from + limit - 1
+
+    const { data, count, error } = await query.range(from, to)
+
+    if (error) throw error
+    return {
+      transactions: data || [],
+      totalCount: count || 0,
+      totalPages: Math.ceil((count || 0) / limit),
+      currentPage: page,
+      limit
+    }
+  }
+
   async getAllActivityLogs() {
     const { data, error } = await this.supabase
       .from('activity_logs')

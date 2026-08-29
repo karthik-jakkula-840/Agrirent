@@ -145,58 +145,99 @@ export default async function CategoriesPage(props: PageProps) {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto relative z-10">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-gray-50/80 backdrop-blur-sm text-gray-500 font-semibold border-b border-gray-100">
-                <tr>
-                  <th className="px-8 py-5">Category Name</th>
-                  <th className="px-6 py-5">Slug</th>
-                  <th className="px-6 py-5 hidden md:table-cell">Description</th>
-                  <th className="px-6 py-5">Status</th>
-                  <th className="px-8 py-5 text-right">Created</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {categories.map((category: any) => (
-                  <tr key={category.id} className="hover:bg-green-50/30 transition-all duration-200 group">
-                    <td className="px-8 py-5">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center border border-green-100 group-hover:bg-green-600 group-hover:text-white transition-colors">
-                          <Leaf className="h-5 w-5" />
-                        </div>
-                        <span className="font-semibold text-gray-900 text-base">{category.name}</span>
+          <>
+            {/* Mobile View */}
+            <div className="divide-y divide-gray-100 md:hidden relative z-10">
+              {categories.map((category: any) => (
+                <div key={category.id} className="p-4 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <div className="h-9 w-9 rounded-xl bg-green-50 text-green-600 flex items-center justify-center border border-green-100">
+                        <Leaf className="h-4 w-4" />
                       </div>
-                    </td>
-                    <td className="px-6 py-5">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-600 font-mono">
-                        {category.slug}
-                      </span>
-                    </td>
-                    <td className="px-6 py-5 text-gray-500 max-w-xs truncate hidden md:table-cell">
-                      {category.description || <span className="text-gray-300 italic">No description provided</span>}
-                    </td>
-                    <td className="px-6 py-5">
-                      <Badge variant="outline" className={`capitalize px-3 py-1 rounded-full border ${
-                        category.is_active 
-                          ? 'bg-green-50 text-green-700 border-green-200/60 shadow-sm' 
-                          : 'bg-red-50 text-red-700 border-red-200/60 shadow-sm'
-                      }`}>
-                        {category.is_active ? (
-                          <span className="flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                            Active
-                          </span>
-                        ) : 'Inactive'}
-                      </Badge>
-                    </td>
-                    <td className="px-8 py-5 text-gray-400 font-medium whitespace-nowrap text-right">
+                      <span className="font-semibold text-gray-900 text-sm">{category.name}</span>
+                    </div>
+                    <Badge variant="outline" className={`capitalize text-[10px] px-2 py-0.5 rounded-full border ${
+                      category.is_active 
+                        ? 'bg-green-50 text-green-700 border-green-200' 
+                        : 'bg-red-50 text-red-700 border-red-200'
+                    }`}>
+                      {category.is_active ? 'Active' : 'Inactive'}
+                    </Badge>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <span className="bg-gray-100 px-2 py-0.5 rounded font-mono text-[10px] text-gray-600">
+                      {category.slug}
+                    </span>
+                    <span className="text-[11px] text-gray-400">
                       {format(new Date(category.created_at), 'MMM dd, yyyy')}
-                    </td>
+                    </span>
+                  </div>
+
+                  {category.description && (
+                    <p className="text-xs text-gray-600 bg-gray-50 p-2 rounded-xl">
+                      {category.description}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop View */}
+            <div className="hidden md:block overflow-x-auto relative z-10">
+              <table className="w-full text-sm text-left">
+                <thead className="bg-gray-50/80 backdrop-blur-sm text-gray-500 font-semibold border-b border-gray-100">
+                  <tr>
+                    <th className="px-8 py-5">Category Name</th>
+                    <th className="px-6 py-5">Slug</th>
+                    <th className="px-6 py-5 hidden md:table-cell">Description</th>
+                    <th className="px-6 py-5">Status</th>
+                    <th className="px-8 py-5 text-right">Created</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {categories.map((category: any) => (
+                    <tr key={category.id} className="hover:bg-green-50/30 transition-all duration-200 group">
+                      <td className="px-8 py-5">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center border border-green-100 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                            <Leaf className="h-5 w-5" />
+                          </div>
+                          <span className="font-semibold text-gray-900 text-base">{category.name}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-5">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-600 font-mono">
+                          {category.slug}
+                        </span>
+                      </td>
+                      <td className="px-6 py-5 text-gray-500 max-w-xs truncate hidden md:table-cell">
+                        {category.description || <span className="text-gray-300 italic">No description provided</span>}
+                      </td>
+                      <td className="px-6 py-5">
+                        <Badge variant="outline" className={`capitalize px-3 py-1 rounded-full border ${
+                          category.is_active 
+                            ? 'bg-green-50 text-green-700 border-green-200/60 shadow-sm' 
+                            : 'bg-red-50 text-red-700 border-red-200/60 shadow-sm'
+                        }`}>
+                          {category.is_active ? (
+                            <span className="flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                              Active
+                            </span>
+                          ) : 'Inactive'}
+                        </Badge>
+                      </td>
+                      <td className="px-8 py-5 text-gray-400 font-medium whitespace-nowrap text-right">
+                        {format(new Date(category.created_at), 'MMM dd, yyyy')}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
 
         {/* Pagination Controls */}
