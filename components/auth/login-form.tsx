@@ -13,7 +13,6 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { Eye, EyeOff, Smartphone, Mail, User, Store, Lock, ShieldCheck } from 'lucide-react'
-import { GoogleLoginButton } from './google-login-button'
 import Link from 'next/link'
 
 type LoginFormValues = z.infer<typeof loginSchema>
@@ -311,17 +310,6 @@ export function LoginForm() {
         </div>
       )}
 
-      <div className="relative mt-6">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t border-gray-200" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-white px-3 text-gray-500 font-medium">Or continue with</span>
-        </div>
-      </div>
-
-      <GoogleLoginButton />
-      
       <div className="flex flex-col items-center space-y-3 pt-2">
         <Link href="/forgot-password" className="text-sm font-medium text-green-700 hover:underline">
           Forgot password?

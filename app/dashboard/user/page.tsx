@@ -57,15 +57,15 @@ export default async function CustomerDashboardPage() {
         <p className="text-gray-500 mt-1">{t.manageDescription}</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         {STAT_CARDS.map((stat, idx) => (
-          <div key={idx} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-4">
-            <div className={`h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 ${stat.bg} ${stat.color}`}>
-              <stat.icon className="h-6 w-6" />
+          <div key={idx} className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+            <div className={`h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 ${stat.bg} ${stat.color}`}>
+              <stat.icon className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
-            <div>
-              <p className="text-sm font-medium text-gray-500">{stat.title}</p>
-              <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+            <div className="min-w-0 w-full">
+              <p className="text-xs sm:text-sm font-medium text-gray-500 truncate" title={stat.title}>{stat.title}</p>
+              <p className="text-lg sm:text-2xl font-bold text-gray-900">{stat.value}</p>
             </div>
           </div>
         ))}
