@@ -36,7 +36,46 @@ export default async function OwnerBookingsPage() {
         </div>
       ) : (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile View */}
+          <div className="divide-y divide-gray-100 md:hidden">
+            {bookings.map((booking: any) => (
+              <div key={booking.id} className="p-4 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h4 className="font-semibold text-gray-900 text-sm">{booking.equipment?.title || 'Equipment'}</h4>
+                    <p className="text-xs text-gray-500">Customer: {booking.customer?.full_name || 'Anonymous'}</p>
+                  </div>
+                  <StatusBadge status={booking.booking_status} />
+                </div>
+
+                <div className="flex items-center justify-between text-xs text-gray-600 bg-gray-50 p-2.5 rounded-xl">
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="h-3.5 w-3.5 text-gray-400" />
+                    <span>
+                      {format(new Date(booking.start_time), 'MMM d')} - {format(new Date(booking.end_time), 'MMM d, yyyy')}
+                    </span>
+                  </div>
+                  <div className="font-bold text-gray-900 text-sm">
+                    ₹{booking.total_amount}
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-1">
+                  <span className="text-[11px] font-mono text-gray-400">
+                    ID: {booking.id.split('-')[0]}...
+                  </span>
+                  <Link href={`/dashboard/owner/bookings/${booking.id}`}>
+                    <Button size="sm" variant="outline" className="h-8 text-xs font-semibold text-primary border-primary/20 hover:bg-primary/10">
+                      View Details <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop View */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-sm text-left">
               <thead className="bg-gray-50 text-gray-600 font-medium border-b border-gray-100">
                 <tr>

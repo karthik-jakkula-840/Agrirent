@@ -93,47 +93,85 @@ export default async function OwnerPaymentsPage() {
             <p className="text-gray-500">Your payments will appear here once customers book your equipment.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-gray-50 text-gray-600 font-medium border-b border-gray-100">
-                <tr>
-                  <th className="px-6 py-4">Transaction ID</th>
-                  <th className="px-6 py-4">Date</th>
-                  <th className="px-6 py-4">Booking / Equipment</th>
-                  <th className="px-6 py-4">Customer</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4 text-right">Amount</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {transactions.map((tx: any) => (
-                  <tr key={tx.id} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="px-6 py-4 font-mono text-xs text-gray-500 uppercase">
-                      {tx.id.split('-')[0]}
-                    </td>
-                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
-                      {format(new Date(tx.created_at), 'MMM d, yyyy h:mm a')}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="font-medium text-gray-900">{tx.booking?.equipment?.title || 'Unknown'}</div>
-                      <div className="text-xs text-gray-500 font-mono">Booking: {tx.booking_id?.split('-')[0]}</div>
-                    </td>
-                    <td className="px-6 py-4 text-gray-600">
-                      {tx.booking?.customer?.full_name || 'Unknown'}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize bg-green-100 text-green-700`}>
-                        Completed
-                      </span>
-                    </td>
-                    <td className={`px-6 py-4 font-bold text-right ${tx.transaction_type === 'refund' ? 'text-red-600' : 'text-primary'}`}>
+          <>
+            {/* Mobile View */}
+            <div className="divide-y divide-gray-100 md:hidden">
+              {transactions.map((tx: any) => (
+                <div key={tx.id} className="p-4 space-y-2.5">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-semibold text-gray-900 text-sm">
+                        {tx.booking?.equipment?.title || 'Equipment Rental'}
+                      </h4>
+                      <p className="text-xs text-gray-500">Customer: {tx.booking?.customer?.full_name || 'Customer'}</p>
+                    </div>
+                    <span className={`font-bold text-base ${tx.transaction_type === 'refund' ? 'text-red-600' : 'text-green-600'}`}>
                       {tx.transaction_type === 'refund' ? '-' : '+'}₹{tx.amount}
-                    </td>
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs text-gray-500 bg-gray-50 p-2.5 rounded-xl">
+                    <span className="font-mono text-[11px] text-gray-400">ID: {tx.id.split('-')[0]}...</span>
+                    <span>{format(new Date(tx.created_at), 'MMM d, yyyy h:mm a')}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium capitalize bg-green-100 text-green-700">
+                      Completed
+                    </span>
+                    {tx.booking_id && (
+                      <span className="text-[11px] text-gray-400 font-mono">
+                        Booking: {tx.booking_id.split('-')[0]}...
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead className="bg-gray-50 text-gray-600 font-medium border-b border-gray-100">
+                  <tr>
+                    <th className="px-6 py-4">Transaction ID</th>
+                    <th className="px-6 py-4">Date</th>
+                    <th className="px-6 py-4">Booking / Equipment</th>
+                    <th className="px-6 py-4">Customer</th>
+                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4 text-right">Amount</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {transactions.map((tx: any) => (
+                    <tr key={tx.id} className="hover:bg-gray-50/50 transition-colors">
+                      <td className="px-6 py-4 font-mono text-xs text-gray-500 uppercase">
+                        {tx.id.split('-')[0]}
+                      </td>
+                      <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
+                        {format(new Date(tx.created_at), 'MMM d, yyyy h:mm a')}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="font-medium text-gray-900">{tx.booking?.equipment?.title || 'Unknown'}</div>
+                        <div className="text-xs text-gray-500 font-mono">Booking: {tx.booking_id?.split('-')[0]}</div>
+                      </td>
+                      <td className="px-6 py-4 text-gray-600">
+                        {tx.booking?.customer?.full_name || 'Unknown'}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize bg-green-100 text-green-700`}>
+                          Completed
+                        </span>
+                      </td>
+                      <td className={`px-6 py-4 font-bold text-right ${tx.transaction_type === 'refund' ? 'text-red-600' : 'text-primary'}`}>
+                        {tx.transaction_type === 'refund' ? '-' : '+'}₹{tx.amount}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </div>

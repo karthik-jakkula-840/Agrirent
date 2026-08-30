@@ -48,7 +48,55 @@ export default async function OwnerEquipmentPage() {
         </div>
       ) : (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile View */}
+          <div className="divide-y divide-gray-100 md:hidden">
+            {equipment.map((item: any) => (
+              <div key={item.id} className="p-4 space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="h-14 w-14 rounded-xl bg-gray-100 overflow-hidden relative shrink-0 border border-gray-100">
+                    {item.equipment_images?.[0] ? (
+                      <Image 
+                        src={item.equipment_images[0].image_url} 
+                        alt={item.title} 
+                        fill 
+                        className="object-cover" 
+                      />
+                    ) : (
+                      <Calendar className="h-6 w-6 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-400" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-gray-900 text-sm truncate">{item.title}</h4>
+                    <p className="text-xs text-gray-500 truncate">{item.categories?.name} · {item.location}</p>
+                    <p className="text-xs font-bold text-gray-900 mt-0.5">₹{item.daily_price} <span className="font-normal text-gray-500">/ day</span></p>
+                  </div>
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium capitalize shrink-0
+                    ${item.status === 'approved' ? 'bg-green-100 text-green-700' : 
+                      item.status === 'pending' ? 'bg-amber-100 text-amber-700' : 
+                      'bg-red-100 text-red-700'}
+                  `}>
+                    {item.status}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
+                  <Link href={`/equipment/${item.id}`}>
+                    <Button size="sm" variant="ghost" className="h-8 text-xs text-gray-600">
+                      View Listing
+                    </Button>
+                  </Link>
+                  <Link href={`/dashboard/owner/equipment/${item.id}/edit`}>
+                    <Button size="sm" variant="outline" className="h-8 text-xs font-semibold text-primary border-primary/20 hover:bg-primary/10">
+                      <Edit className="h-3.5 w-3.5 mr-1" /> Edit Equipment
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop View */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-sm text-left">
               <thead className="bg-gray-50 text-gray-600 font-medium border-b border-gray-100">
                 <tr>

@@ -65,45 +65,85 @@ export default async function PaymentsPage() {
             <p className="text-gray-500">Your payments for rentals will appear here.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-gray-50/50 text-gray-500 font-medium border-b border-gray-100">
-                <tr>
-                  <th className="px-6 py-4">Transaction ID</th>
-                  <th className="px-6 py-4">Date</th>
-                  <th className="px-6 py-4">Booking</th>
-                  <th className="px-6 py-4">Type</th>
-                  <th className="px-6 py-4 text-right">Amount</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {typedTransactions.map((tx: any) => (
-                  <tr key={tx.id} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="px-6 py-4 font-mono text-xs text-gray-500">{tx.id.split('-')[0]}...</td>
-                    <td className="px-6 py-4 text-gray-600">{format(new Date(tx.created_at), 'MMM dd, yyyy h:mm a')}</td>
-                    <td className="px-6 py-4">
-                      {tx.booking ? (
-                        <Link href={`/dashboard/user/bookings/${tx.booking_id}`} className="hover:underline">
-                          <div className="font-medium text-gray-900">{tx.booking.equipment?.title}</div>
-                          <div className="text-xs text-gray-500">{tx.booking.booking_number}</div>
-                        </Link>
-                      ) : (
-                        <span className="text-gray-400">N/A</span>
+          <>
+            {/* Mobile View */}
+            <div className="divide-y divide-gray-100 md:hidden">
+              {typedTransactions.map((tx: any) => (
+                <div key={tx.id} className="p-4 space-y-2.5">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-semibold text-gray-900 text-sm">
+                        {tx.booking?.equipment?.title || 'Equipment Rental'}
+                      </h4>
+                      {tx.booking?.booking_number && (
+                        <p className="text-xs text-gray-500 font-mono">No: {tx.booking.booking_number}</p>
                       )}
-                    </td>
-                    <td className="px-6 py-4">
-                      <Badge variant="outline" className={`capitalize ${tx.transaction_type === 'refund' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-green-50 text-green-700 border-green-200'}`}>
-                        {tx.transaction_type}
-                      </Badge>
-                    </td>
-                    <td className={`px-6 py-4 text-right font-bold ${tx.transaction_type === 'refund' ? 'text-blue-600' : 'text-gray-900'}`}>
+                    </div>
+                    <span className={`font-bold text-base ${tx.transaction_type === 'refund' ? 'text-blue-600' : 'text-gray-900'}`}>
                       {tx.transaction_type === 'refund' ? '+' : ''}₹{tx.amount}
-                    </td>
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs text-gray-500 bg-gray-50 p-2.5 rounded-xl">
+                    <span className="font-mono text-[11px] text-gray-400">ID: {tx.id.split('-')[0]}...</span>
+                    <span>{format(new Date(tx.created_at), 'MMM dd, yyyy h:mm a')}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <Badge variant="outline" className={`capitalize text-[10px] ${tx.transaction_type === 'refund' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-green-50 text-green-700 border-green-200'}`}>
+                      {tx.transaction_type}
+                    </Badge>
+                    {tx.booking_id && (
+                      <Link href={`/dashboard/user/bookings/${tx.booking_id}`} className="text-xs font-semibold text-primary hover:underline">
+                        View Booking Details →
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead className="bg-gray-50/50 text-gray-500 font-medium border-b border-gray-100">
+                  <tr>
+                    <th className="px-6 py-4">Transaction ID</th>
+                    <th className="px-6 py-4">Date</th>
+                    <th className="px-6 py-4">Booking</th>
+                    <th className="px-6 py-4">Type</th>
+                    <th className="px-6 py-4 text-right">Amount</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {typedTransactions.map((tx: any) => (
+                    <tr key={tx.id} className="hover:bg-gray-50/50 transition-colors">
+                      <td className="px-6 py-4 font-mono text-xs text-gray-500">{tx.id.split('-')[0]}...</td>
+                      <td className="px-6 py-4 text-gray-600">{format(new Date(tx.created_at), 'MMM dd, yyyy h:mm a')}</td>
+                      <td className="px-6 py-4">
+                        {tx.booking ? (
+                          <Link href={`/dashboard/user/bookings/${tx.booking_id}`} className="hover:underline">
+                            <div className="font-medium text-gray-900">{tx.booking.equipment?.title}</div>
+                            <div className="text-xs text-gray-500">{tx.booking.booking_number}</div>
+                          </Link>
+                        ) : (
+                          <span className="text-gray-400">N/A</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4">
+                        <Badge variant="outline" className={`capitalize ${tx.transaction_type === 'refund' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-green-50 text-green-700 border-green-200'}`}>
+                          {tx.transaction_type}
+                        </Badge>
+                      </td>
+                      <td className={`px-6 py-4 text-right font-bold ${tx.transaction_type === 'refund' ? 'text-blue-600' : 'text-gray-900'}`}>
+                        {tx.transaction_type === 'refund' ? '+' : ''}₹{tx.amount}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </div>
