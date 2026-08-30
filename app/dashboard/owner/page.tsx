@@ -173,10 +173,15 @@ export default async function OwnerDashboardPage() {
         </div>
 
         {/* Calendar Widget */}
-        <div className="lg:col-span-3 space-y-4">
+        <div className="lg:col-span-3 space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-gray-900">Equipment Schedule</h2>
-            <p className="text-sm text-gray-500">Your active bookings this month</p>
+            <div>
+              <h2 className="text-lg font-bold text-gray-900">Equipment Schedule</h2>
+              <p className="text-xs sm:text-sm text-gray-500">Overview of active rentals and equipment availability</p>
+            </div>
+            <Link href="/dashboard/owner/calendar" className="text-xs sm:text-sm font-semibold text-green-700 hover:underline">
+              View Detailed Calendar →
+            </Link>
           </div>
           <OwnerCalendar bookings={activeBookings} />
         </div>
