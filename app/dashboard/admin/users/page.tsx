@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { BackButton } from '@/components/dashboard/back-button'
+import { AdminEditUserDialog } from '@/components/dashboard/admin-edit-user-dialog'
 import { Users, User, Mail, Phone, Calendar, ChevronLeft, ChevronRight, Search } from 'lucide-react'
 import Link from 'next/link'
 
@@ -179,9 +180,11 @@ export default async function AdminUsersPage(props: PageProps) {
                     </div>
                   </div>
 
-                  <div className="text-[11px] text-gray-400 flex items-center justify-between pt-1">
-                    <span className="text-gray-400">Joined Date</span>
-                    <span>{format(new Date(user.created_at), 'MMM dd, yyyy')}</span>
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-[11px] text-gray-400">
+                      Joined {format(new Date(user.created_at), 'MMM dd, yyyy')}
+                    </span>
+                    <AdminEditUserDialog user={user} variant="card" />
                   </div>
                 </div>
               ))}
@@ -195,7 +198,8 @@ export default async function AdminUsersPage(props: PageProps) {
                     <th className="px-6 py-4">User</th>
                     <th className="px-6 py-4">Contact Details</th>
                     <th className="px-6 py-4">Role</th>
-                    <th className="px-6 py-4 text-right">Joined Date</th>
+                    <th className="px-6 py-4">Joined Date</th>
+                    <th className="px-6 py-4 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
@@ -235,11 +239,14 @@ export default async function AdminUsersPage(props: PageProps) {
                           {user.role}
                         </Badge>
                       </td>
-                      <td className="px-6 py-4 text-gray-500 whitespace-nowrap text-right text-xs">
+                      <td className="px-6 py-4 text-gray-500 whitespace-nowrap text-xs">
                         <div className="inline-flex items-center gap-1.5">
                           <Calendar className="h-3.5 w-3.5 text-gray-400" />
                           {format(new Date(user.created_at), 'MMM dd, yyyy')}
                         </div>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <AdminEditUserDialog user={user} variant="table" />
                       </td>
                     </tr>
                   ))}
