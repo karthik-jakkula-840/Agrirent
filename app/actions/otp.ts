@@ -65,6 +65,14 @@ export async function handlePhoneLoginSession(phoneNumber: string, role: string)
     } else if (createError) {
       console.error('Error creating user:', createError)
       return { success: false, error: createError.message }
+    } else if (newUser?.user) {
+      userId = newUser.user.id
+    }
+
+    if (userId) {
+      await (adminClient.from('profiles') as any)
+        .update({ phone: cleanNumber })
+        .eq('id', userId)
     }
 
     // 4. Use the standard client to log in and set cookies

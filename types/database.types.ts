@@ -13,9 +13,14 @@ export interface Database {
         Row: {
           id: string
           role: string
-          first_name: string | null
-          last_name: string | null
-          avatar_url: string | null
+          full_name: string | null
+          email: string | null
+          phone: string | null
+          first_name?: string | null
+          last_name?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          updated_at?: string
         }
         Insert: Record<string, any>
         Update: Record<string, any>

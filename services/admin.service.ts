@@ -250,7 +250,7 @@ export class AdminService {
     }
 
     if (search) {
-      query = query.or(`full_name.ilike.%${search}%,email.ilike.%${search}%`)
+      query = query.or(`full_name.ilike.%${search}%,email.ilike.%${search}%,phone.ilike.%${search}%`)
     }
 
     const from = (page - 1) * limit

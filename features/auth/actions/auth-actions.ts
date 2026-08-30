@@ -136,6 +136,15 @@ export async function signup(values: z.infer<typeof signupSchema>) {
         console.log('[Signup] Email auto-confirmed successfully')
       }
 
+      // Explicitly update profile with phone number and full name
+      await adminClient
+        .from('profiles')
+        .update({
+          phone: values.phone,
+          full_name: values.fullName,
+        })
+        .eq('id', data.user.id)
+
       // If they requested to be an owner, create a blank owner verification request
       if (values.role === 'owner') {
         const { error: reqError } = await adminClient.from('owner_requests').insert([

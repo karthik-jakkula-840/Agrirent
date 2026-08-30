@@ -117,7 +117,7 @@ export default async function AdminUsersPage(props: PageProps) {
             type="text"
             name="search"
             defaultValue={currentSearch}
-            placeholder="Search by name or email..."
+            placeholder="Search by name, email, or phone..."
             className="pl-9 pr-4 h-9 text-xs rounded-xl border-gray-200 bg-gray-50/50 focus-visible:bg-white focus-visible:ring-green-500"
           />
         </form>
