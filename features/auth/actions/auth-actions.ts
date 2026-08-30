@@ -96,6 +96,67 @@ export async function login(values: z.infer<typeof loginSchema>) {
   }
 }
 
+export async function uploadAadhaarDocumentAction(formData: FormData) {
+  try {
+    const file = formData.get('file') as File
+    if (!file) {
+      return { success: false, error: 'No file selected' }
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      return { success: false, error: 'File size exceeds 10MB limit' }
+    }
+
+    const adminClient = createAdminClient()
+
+    const { data: buckets } = await adminClient.storage.listBuckets()
+    const bucketExists = buckets?.some(b => b.name === 'documents')
+    if (!bucketExists) {
+      await adminClient.storage.createBucket('documents', { public: true })
+    }
+
+    const fileExt = file.name.split('.').pop() || 'jpg'
+    const fileName = `aadhar_${Date.now()}_${Math.random().toString(36).substring(2, 9)}.${fileExt}`
+    const filePath = `aadhaar/${fileName}`
+
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    let bucketName = 'documents'
+    const { error: uploadError } = await adminClient.storage
+      .from(bucketName)
+      .upload(filePath, buffer, {
+        contentType: file.type || 'image/jpeg',
+        upsert: true,
+      })
+
+    if (uploadError) {
+      bucketName = 'equipment-images'
+      const { error: fbErr } = await adminClient.storage
+        .from(bucketName)
+        .upload(filePath, buffer, {
+          contentType: file.type || 'image/jpeg',
+          upsert: true,
+        })
+      if (fbErr) {
+        bucketName = 'avatars'
+        await adminClient.storage
+          .from(bucketName)
+          .upload(filePath, buffer, {
+            contentType: file.type || 'image/jpeg',
+            upsert: true,
+          })
+      }
+    }
+
+    const { data: urlData } = adminClient.storage.from(bucketName).getPublicUrl(filePath)
+    return { success: true, url: urlData.publicUrl }
+  } catch (err: any) {
+    console.error('[Upload Aadhaar Error]:', err)
+    return { success: false, error: err?.message || 'Failed to upload document' }
+  }
+}
+
 export async function signup(values: z.infer<typeof signupSchema>) {
   const supabase = await createClient()
 
@@ -145,22 +206,23 @@ export async function signup(values: z.infer<typeof signupSchema>) {
         })
         .eq('id', data.user.id)
 
-      // If they requested to be an owner, create a blank owner verification request
+      // If they requested to be an owner, create owner verification request with Aadhaar document
       if (values.role === 'owner') {
+        const aadharDocUrl = values.aadharDocumentUrl || '#'
         const { error: reqError } = await adminClient.from('owner_requests').insert([
           {
             user_id: data.user.id,
-            business_name: 'Not provided at signup',
-            business_address: 'Not provided at signup',
-            identity_document_url: '#',
-            address_proof_url: '#',
+            business_name: `${values.fullName}'s Farm Equipment`,
+            business_address: 'Verified via Aadhaar at signup',
+            identity_document_url: aadharDocUrl,
+            address_proof_url: aadharDocUrl !== '#' ? aadharDocUrl : '#',
             status: 'pending'
           }
         ])
         if (reqError) {
           console.error('[Signup] Error creating owner request:', reqError)
         } else {
-          console.log('[Signup] Created blank owner request for approval')
+          console.log('[Signup] Created owner request for approval with Aadhaar:', aadharDocUrl)
         }
       }
 
