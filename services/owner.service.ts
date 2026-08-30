@@ -62,7 +62,7 @@ export class OwnerService {
       .from('bookings')
       .select('total_amount, created_at')
       .eq('owner_id', ownerId)
-      .in('booking_status', ['completed', 'confirmed'])
+      .in('booking_status', ['completed', 'confirmed', 'accepted'])
       .gte('created_at', startDate.toISOString())
       .order('created_at', { ascending: true })
 
