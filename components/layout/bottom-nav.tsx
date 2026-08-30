@@ -1,13 +1,62 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Tractor, Calendar, User } from 'lucide-react'
+import { Home, Tractor, Calendar, User, LayoutDashboard } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 export function BottomNav() {
   const pathname = usePathname()
+  const [role, setRole] = useState<string | null>(null)
 
-  const navItems = [
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single()
+          .then(({ data }) => {
+            const userRole = (data as any)?.role
+            if (userRole) {
+              setRole(userRole)
+            }
+          })
+      }
+    })
+  }, [pathname])
+
+  const isOwner = role === 'owner' || role === 'rental_owner'
+
+  const navItems = isOwner ? [
+    { 
+      name: 'Dashboard', 
+      href: '/dashboard/owner', 
+      icon: LayoutDashboard,
+      isActive: pathname === '/dashboard/owner'
+    },
+    { 
+      name: 'My Fleet', 
+      href: '/dashboard/owner/equipment', 
+      icon: Tractor,
+      isActive: pathname.startsWith('/dashboard/owner/equipment')
+    },
+    { 
+      name: 'Bookings', 
+      href: '/dashboard/owner/bookings', 
+      icon: Calendar,
+      isActive: pathname.startsWith('/dashboard/owner/bookings')
+    },
+    { 
+      name: 'Profile', 
+      href: '/dashboard/owner/profile', 
+      icon: User,
+      isActive: pathname.startsWith('/dashboard/owner/profile')
+    },
+  ] : [
     { 
       name: 'Home', 
       href: '/', 

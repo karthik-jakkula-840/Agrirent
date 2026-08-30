@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { EquipmentService } from '@/services/equipment.service'
 import { Navbar } from '@/components/layout/navbar'
@@ -56,17 +57,19 @@ export default async function EquipmentDetailsPage({ params }: Props) {
     notFound()
   }
 
+  const { data: { session } } = await supabase.auth.getSession()
+  const isOwnerOfEquipment = session?.user?.id === equipment.owner_id
+
   // Ensure public visibility rules
   if (equipment.status !== 'approved') {
-    const { data: { session } } = await supabase.auth.getSession()
     let isAllowed = false
     
     if (session) {
-      if (session.user.id === equipment.owner_id) {
+      if (isOwnerOfEquipment) {
         isAllowed = true
       } else {
         const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single()
-        if (profile?.role === 'admin') {
+        if ((profile as any)?.role === 'admin') {
           isAllowed = true
         }
       }
@@ -213,7 +216,20 @@ export default async function EquipmentDetailsPage({ params }: Props) {
                   )}
                 </div>
 
-                <BookingModal equipment={equipment} />
+                {isOwnerOfEquipment ? (
+                  <div className="space-y-3">
+                    <div className="p-3 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-2xl text-center border border-emerald-200">
+                      You are the owner of this equipment
+                    </div>
+                    <Link href={`/dashboard/owner/equipment/${equipment.id}/edit`} className="block">
+                      <Button className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold text-base shadow-sm">
+                        Manage & Edit Equipment
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <BookingModal equipment={equipment} />
+                )}
 
                 {/* Owner Info Snippet */}
                 <div className="mt-8 pt-8 border-t border-gray-100">
