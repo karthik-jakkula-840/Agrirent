@@ -40,6 +40,24 @@ export const translations = {
       by: "by",
       reviewRequest: "Review Request",
       viewAllBookings: "View all bookings"
+    },
+    sidebar: {
+      dashboard: "Dashboard",
+      myEquipment: "My Equipment",
+      myBookings: "My Bookings",
+      bookings: "Bookings",
+      calendar: "Calendar",
+      customers: "Customers",
+      reviews: "Reviews",
+      payments: "Payments",
+      analytics: "Analytics",
+      notifications: "Notifications",
+      profile: "Profile",
+      settings: "Settings",
+      favorites: "Favorites",
+      logout: "Log out",
+      ownerPortal: "Owner Portal",
+      searchPlaceholder: "Search bookings, equipment..."
     }
   },
   hi: {
@@ -83,6 +101,24 @@ export const translations = {
       by: "द्वारा",
       reviewRequest: "अनुरोध की समीक्षा करें",
       viewAllBookings: "सभी बुकिंग देखें"
+    },
+    sidebar: {
+      dashboard: "डैशबोर्ड",
+      myEquipment: "मेरे उपकरण",
+      myBookings: "मेरी बुकिंग",
+      bookings: "बुकिंग",
+      calendar: "कैलेंडर",
+      customers: "ग्राहक",
+      reviews: "समीक्षाएं",
+      payments: "भुगतान",
+      analytics: "एनालिटिक्स",
+      notifications: "सूचनाएं",
+      profile: "प्रोफ़ाइल",
+      settings: "सेटिंग्स",
+      favorites: "पसंदीदा",
+      logout: "लॉग आउट",
+      ownerPortal: "मालिक पोर्टल",
+      searchPlaceholder: "बुकिंग, उपकरण खोजें..."
     }
   },
   te: {
@@ -126,6 +162,24 @@ export const translations = {
       by: "ద్వారా",
       reviewRequest: "అభ్యర్థనను సమీక్షించండి",
       viewAllBookings: "అన్ని బుకింగ్‌లను వీక్షించండి"
+    },
+    sidebar: {
+      dashboard: "డ్యాష్‌బోర్డ్",
+      myEquipment: "నా పరికరాలు",
+      myBookings: "నా బుకింగ్‌లు",
+      bookings: "బుకింగ్‌లు",
+      calendar: "క్యాలెండర్",
+      customers: "కస్టమర్లు",
+      reviews: "సమీక్షలు",
+      payments: "చెల్లింపులు",
+      analytics: "విశ్లేషణలు",
+      notifications: "నోటిఫికేషన్‌లు",
+      profile: "ప్రొఫైల్",
+      settings: "సెట్టింగ్‌లు",
+      favorites: "ఇష్టమైనవి",
+      logout: "లాగ్ అవుట్",
+      ownerPortal: "యజమాని పోర్టల్",
+      searchPlaceholder: "బుకింగ్‌లు, పరికరాలను శోధించండి..."
     }
   }
 }

@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation'
 import { getCurrentUser } from '@/lib/supabase/auth'
 import { createClient } from '@/lib/supabase/server'
 import { DashboardLayoutClient } from './layout-client'
+import { cookies } from 'next/headers'
+import { LanguageCode } from '@/lib/translations'
 
 export const metadata = {
   title: 'Owner Dashboard | Agriform',
@@ -40,8 +42,11 @@ export default async function OwnerDashboardLayout({
     .eq('user_id', user.id)
     .eq('is_read', false)
 
+  const cookieStore = await cookies()
+  const locale = (cookieStore.get('NEXT_LOCALE')?.value as LanguageCode) || 'en'
+
   return (
-    <DashboardLayoutClient profile={profile} unreadCount={unreadCount || 0}>
+    <DashboardLayoutClient profile={profile} unreadCount={unreadCount || 0} locale={locale}>
       {children}
     </DashboardLayoutClient>
   )

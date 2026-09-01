@@ -1,9 +1,11 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { Bell, Search, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
+import { translations, LanguageCode } from '@/lib/translations'
 import Image from 'next/image'
 import { LanguageToggle } from '@/components/language-toggle'
 
@@ -12,8 +14,11 @@ export function DashboardHeader({
   unreadCount, 
   onMenuClick,
   notificationHref = "/dashboard/user/notifications",
-  profileHref = "/dashboard/user/profile"
+  profileHref = "/dashboard/user/profile",
+  locale = 'en'
 }: any) {
+  const t = translations[locale as LanguageCode]?.sidebar || translations['en'].sidebar
+
   return (
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 h-16 flex items-center justify-between lg:px-8">
       <div className="flex items-center gap-4">
@@ -27,7 +32,7 @@ export function DashboardHeader({
         <div className="relative hidden md:flex items-center">
           <Search className="absolute left-3 h-4 w-4 text-gray-400" />
           <Input 
-            placeholder="Search bookings, equipment..." 
+            placeholder={t.searchPlaceholder} 
             aria-label="Search bookings and equipment"
             className="pl-9 w-64 bg-gray-50 border-transparent focus:bg-white transition-colors rounded-full"
           />

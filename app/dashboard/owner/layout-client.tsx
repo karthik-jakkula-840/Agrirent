@@ -7,11 +7,13 @@ import { DashboardHeader } from '@/components/dashboard/dashboard-header'
 export function DashboardLayoutClient({ 
   children, 
   profile, 
-  unreadCount 
+  unreadCount,
+  locale
 }: { 
   children: React.ReactNode
   profile: any
-  unreadCount: number 
+  unreadCount: number
+  locale?: string
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -20,7 +22,8 @@ export function DashboardLayoutClient({
       <OwnerSidebar 
         profile={profile} 
         isMobileMenuOpen={isMobileMenuOpen} 
-        setIsMobileMenuOpen={setIsMobileMenuOpen} 
+        setIsMobileMenuOpen={setIsMobileMenuOpen}
+        locale={locale} 
       />
       
       <div className="lg:pl-72 flex flex-col min-h-screen">
@@ -30,6 +33,7 @@ export function DashboardLayoutClient({
           onMenuClick={() => setIsMobileMenuOpen(true)} 
           notificationHref="/dashboard/owner/notifications"
           profileHref="/dashboard/owner/profile"
+          locale={locale}
         />
         
         <main className="flex-1 w-full max-w-7xl mx-auto p-4 lg:p-8">

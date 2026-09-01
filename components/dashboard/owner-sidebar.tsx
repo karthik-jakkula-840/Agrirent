@@ -1,7 +1,9 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { translations, LanguageCode } from '@/lib/translations'
 import { 
   LayoutDashboard, 
   Tractor,
@@ -23,23 +25,25 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 
 const NAV_ITEMS = [
-  { name: 'Dashboard', href: '/dashboard/owner', icon: LayoutDashboard },
-  { name: 'My Equipment', href: '/dashboard/owner/equipment', icon: Tractor },
-  { name: 'Bookings', href: '/dashboard/owner/bookings', icon: CalendarCheck },
-  { name: 'Calendar', href: '/dashboard/owner/calendar', icon: CalendarDays },
-  { name: 'Customers', href: '/dashboard/owner/customers', icon: Users },
-  { name: 'Reviews', href: '/dashboard/owner/reviews', icon: Star },
-  { name: 'Payments', href: '/dashboard/owner/payments', icon: CreditCard },
-  { name: 'Analytics', href: '/dashboard/owner/analytics', icon: LineChart },
-  { name: 'Notifications', href: '/dashboard/owner/notifications', icon: Bell },
-  { name: 'Profile', href: '/dashboard/owner/profile', icon: User },
-  { name: 'Settings', href: '/dashboard/owner/settings', icon: Settings },
+  { translationKey: 'dashboard', href: '/dashboard/owner', icon: LayoutDashboard },
+  { translationKey: 'myEquipment', href: '/dashboard/owner/equipment', icon: Tractor },
+  { translationKey: 'bookings', href: '/dashboard/owner/bookings', icon: CalendarCheck },
+  { translationKey: 'calendar', href: '/dashboard/owner/calendar', icon: CalendarDays },
+  { translationKey: 'customers', href: '/dashboard/owner/customers', icon: Users },
+  { translationKey: 'reviews', href: '/dashboard/owner/reviews', icon: Star },
+  { translationKey: 'payments', href: '/dashboard/owner/payments', icon: CreditCard },
+  { translationKey: 'analytics', href: '/dashboard/owner/analytics', icon: LineChart },
+  { translationKey: 'notifications', href: '/dashboard/owner/notifications', icon: Bell },
+  { translationKey: 'profile', href: '/dashboard/owner/profile', icon: User },
+  { translationKey: 'settings', href: '/dashboard/owner/settings', icon: Settings },
 ]
 
-export function OwnerSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen }: any) {
+export function OwnerSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen, locale = 'en' }: any) {
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClient()
+
+  const t = translations[locale as LanguageCode]?.sidebar || translations['en'].sidebar
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -53,7 +57,7 @@ export function OwnerSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen }:
           <span className="bg-primary text-white p-1.5 rounded-lg">A</span>
           Agriform
         </Link>
-        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider block mt-2">Owner Portal</span>
+        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider block mt-2">{t.ownerPortal}</span>
       </div>
 
       <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
@@ -61,7 +65,7 @@ export function OwnerSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen }:
           const isActive = pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/dashboard/owner')
           return (
             <Link
-              key={item.name}
+              key={item.translationKey}
               href={item.href}
               onClick={() => setIsMobileMenuOpen?.(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${
@@ -71,7 +75,7 @@ export function OwnerSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen }:
               }`}
             >
               <item.icon className={`h-5 w-5 ${isActive ? 'text-primary' : 'text-gray-400'}`} />
-              {item.name}
+              {t[item.translationKey as keyof typeof t]}
             </Link>
           )
         })}
@@ -100,7 +104,7 @@ export function OwnerSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen }:
           className="w-full justify-start text-gray-600 hover:text-red-600 hover:bg-red-50"
         >
           <LogOut className="mr-2 h-4 w-4" />
-          Log out
+          {t.logout}
         </Button>
       </div>
     </div>

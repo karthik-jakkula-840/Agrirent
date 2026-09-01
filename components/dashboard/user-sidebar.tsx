@@ -1,7 +1,9 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { translations, LanguageCode } from '@/lib/translations'
 import { 
   LayoutDashboard, 
   CalendarClock, 
@@ -20,19 +22,21 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 
 const NAV_ITEMS = [
-  { name: 'Dashboard', href: '/dashboard/user', icon: LayoutDashboard },
-  { name: 'My Bookings', href: '/dashboard/user/bookings', icon: CalendarClock },
-  { name: 'Favorites', href: '/dashboard/user/favorites', icon: Heart },
-  { name: 'Notifications', href: '/dashboard/user/notifications', icon: Bell },
-  { name: 'Payments', href: '/dashboard/user/payments', icon: CreditCard },
-  { name: 'Profile', href: '/dashboard/user/profile', icon: User },
-  { name: 'Settings', href: '/dashboard/user/settings', icon: Settings },
+  { translationKey: 'dashboard', href: '/dashboard/user', icon: LayoutDashboard },
+  { translationKey: 'myBookings', href: '/dashboard/user/bookings', icon: CalendarClock },
+  { translationKey: 'favorites', href: '/dashboard/user/favorites', icon: Heart },
+  { translationKey: 'notifications', href: '/dashboard/user/notifications', icon: Bell },
+  { translationKey: 'payments', href: '/dashboard/user/payments', icon: CreditCard },
+  { translationKey: 'profile', href: '/dashboard/user/profile', icon: User },
+  { translationKey: 'settings', href: '/dashboard/user/settings', icon: Settings },
 ]
 
-export function UserSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen }: any) {
+export function UserSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen, locale = 'en' }: any) {
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClient()
+
+  const t = translations[locale as LanguageCode]?.sidebar || translations['en'].sidebar
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -53,7 +57,7 @@ export function UserSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen }: 
           const isActive = pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/dashboard/user')
           return (
             <Link
-              key={item.name}
+              key={item.translationKey}
               href={item.href}
               onClick={() => setIsMobileMenuOpen?.(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${
@@ -63,7 +67,7 @@ export function UserSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen }: 
               }`}
             >
               <item.icon className={`h-5 w-5 ${isActive ? 'text-primary' : 'text-gray-400'}`} />
-              {item.name}
+              {t[item.translationKey as keyof typeof t]}
             </Link>
           )
         })}
@@ -92,7 +96,7 @@ export function UserSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen }: 
           className="w-full justify-start text-gray-600 hover:text-red-600 hover:bg-red-50"
         >
           <LogOut className="mr-2 h-4 w-4" />
-          Log out
+          {t.logout}
         </Button>
       </div>
     </div>
