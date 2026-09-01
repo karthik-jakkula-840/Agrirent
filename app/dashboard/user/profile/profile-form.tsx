@@ -100,7 +100,7 @@ export function ProfileForm({ initialProfile }: { initialProfile: any }) {
       <div className="flex flex-col sm:flex-row items-center gap-6 pb-8 border-b border-gray-100">
         <div className="relative h-24 w-24 rounded-full overflow-hidden bg-gray-100 border-2 border-white shadow-md">
           {avatarUrl ? (
-            <Image src={avatarUrl} alt="Profile" fill className="object-cover" />
+            <Image src={avatarUrl} alt="Profile" fill sizes="96px" className="object-cover" />
           ) : (
             <div className="flex items-center justify-center h-full w-full bg-primary/10 text-primary font-bold text-2xl">
               {initialProfile.full_name?.charAt(0) || 'U'}
@@ -114,13 +114,14 @@ export function ProfileForm({ initialProfile }: { initialProfile: any }) {
         </div>
         
         <div className="text-center sm:text-left">
-          <h3 className="font-semibold text-gray-900 mb-1">Profile Photo</h3>
+          <h2 className="font-semibold text-gray-900 mb-1 text-base">Profile Photo</h2>
           <p className="text-sm text-gray-500 mb-3">JPG, PNG or WEBP. Max size 5MB.</p>
           <input 
             type="file" 
             ref={fileInputRef} 
             onChange={handleImageUpload} 
             accept="image/*" 
+            aria-label="Upload profile photo"
             className="hidden" 
           />
           <Button 
@@ -156,7 +157,7 @@ export function ProfileForm({ initialProfile }: { initialProfile: any }) {
       </div>
 
       <div className="space-y-6 pt-6 border-t border-gray-100">
-        <h3 className="font-semibold text-gray-900">Address Information</h3>
+        <h2 className="font-semibold text-gray-900 text-base">Address Information</h2>
         
         <div className="space-y-2">
           <Label htmlFor="address" className="flex items-center gap-2"><MapPin className="h-4 w-4 text-gray-400" /> Street Address</Label>

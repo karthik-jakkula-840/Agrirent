@@ -65,8 +65,10 @@ export function Hero() {
               <div className="flex-1 flex items-center bg-gray-50 rounded-xl px-4 py-2 md:py-0 h-12">
                 <Search className="h-5 w-5 text-gray-400 mr-2 shrink-0" />
                 <Input 
+                  id="hero-search-query"
                   type="text" 
                   placeholder="What equipment do you need?" 
+                  aria-label="Equipment search query"
                   className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0 h-full w-full shadow-none"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -76,8 +78,10 @@ export function Hero() {
               <div className="flex-1 flex items-center bg-gray-50 rounded-xl px-4 py-2 md:py-0 h-12">
                 <MapPin className="h-5 w-5 text-gray-400 mr-2 shrink-0" />
                 <Input 
+                  id="hero-search-location"
                   type="text" 
                   placeholder="Location" 
+                  aria-label="Location"
                   className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0 h-full w-full shadow-none"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
@@ -87,7 +91,9 @@ export function Hero() {
               <div className="flex-1 flex items-center bg-gray-50 rounded-xl px-4 py-2 md:py-0 h-12">
                 <Calendar className="h-5 w-5 text-gray-400 mr-2 shrink-0" />
                 <Input 
+                  id="hero-search-date"
                   type="date" 
+                  aria-label="Rental date"
                   className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0 h-full w-full shadow-none text-gray-600"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
@@ -120,6 +126,7 @@ export function Hero() {
                 alt="Modern Tractor in Field"
                 fill
                 priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />

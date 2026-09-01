@@ -33,9 +33,9 @@ export function Stats() {
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
                 <stat.icon className="h-6 w-6" />
               </div>
-              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              <p className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
                 {stat.value}
-              </h3>
+              </p>
               <p className="text-sm md:text-base font-medium text-gray-500">
                 {stat.name}
               </p>

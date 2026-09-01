@@ -163,6 +163,7 @@ export function SignupForm() {
                 <button
                   type="button"
                   onClick={handleRemoveAadhaar}
+                  aria-label="Remove Aadhaar document"
                   className="p-1 text-gray-400 hover:text-red-500 transition-colors"
                 >
                   <X className="h-4 w-4" />
@@ -176,6 +177,7 @@ export function SignupForm() {
                   accept="image/*,.pdf"
                   onChange={handleAadhaarUpload}
                   disabled={isUploadingAadhaar}
+                  aria-label="Upload Aadhaar Card or ID Proof"
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                 />
                 <div className="border border-dashed border-emerald-300 rounded-xl p-3 bg-white text-center hover:bg-emerald-50/50 transition-colors flex items-center justify-center gap-2">
@@ -212,6 +214,7 @@ export function SignupForm() {
             <button 
               type="button" 
               onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
               className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -233,6 +236,7 @@ export function SignupForm() {
             <button 
               type="button" 
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
               className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
             >
               {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

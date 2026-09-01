@@ -27,6 +27,7 @@ export function LanguageToggle() {
       <select 
         value={language} 
         onChange={setLanguage}
+        aria-label="Select Language"
         className="text-sm bg-white border border-gray-200 rounded-md px-2 py-1 outline-none focus:ring-2 focus:ring-primary/20"
       >
         <option value="en">English</option>

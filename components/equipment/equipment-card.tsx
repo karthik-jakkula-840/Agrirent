@@ -23,6 +23,7 @@ export interface EquipmentCardProps {
   imageUrl: string
   isAvailable: boolean
   isVerifiedOwner?: boolean
+  priority?: boolean
 }
 
 export function EquipmentCard({
@@ -37,6 +38,7 @@ export function EquipmentCard({
   imageUrl,
   isAvailable,
   isVerifiedOwner = true,
+  priority = false,
 }: EquipmentCardProps) {
   const { data: favorites } = useFavorites()
   const { mutate: toggleFavorite, isPending } = useToggleFavorite()
@@ -80,6 +82,7 @@ export function EquipmentCard({
             src={imageUrl}
             alt={name}
             fill
+            priority={priority}
             className="object-cover transition-transform duration-500 hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
@@ -87,6 +90,7 @@ export function EquipmentCard({
             <button 
               onClick={handleFavoriteClick}
               disabled={isPending}
+              aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
               className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center transition-all shadow-sm group hover:scale-110 active:scale-95"
             >
               <Heart className={`h-4 w-4 transition-colors ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-600 group-hover:text-red-500'}`} />

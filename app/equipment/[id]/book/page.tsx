@@ -67,14 +67,14 @@ export default async function BookEquipmentPage({ params }: Props) {
             {/* Right Column: Equipment Summary */}
             <div className="lg:col-span-4">
               <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm sticky top-24">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">Equipment Summary</h3>
+                <h2 className="text-lg font-bold text-gray-900 mb-4">Equipment Summary</h2>
                 
                 <div className="flex gap-4 mb-6 pb-6 border-b border-gray-100">
                   <div className="relative h-20 w-20 rounded-xl overflow-hidden shrink-0 border border-gray-200">
-                    <Image src={primaryImage} alt={equipment.title} fill className="object-cover" />
+                    <Image src={primaryImage} alt={equipment.title} fill sizes="80px" className="object-cover" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 line-clamp-2">{equipment.title}</h4>
+                    <h3 className="font-semibold text-gray-900 line-clamp-2 text-base">{equipment.title}</h3>
                     <p className="text-sm text-gray-500 mt-1">{equipment.location}</p>
                     <div className="flex items-center gap-1 mt-1 text-sm font-medium">
                       <StarIcon className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />

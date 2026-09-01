@@ -39,7 +39,7 @@ export function Contact() {
                       <Phone className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-1">Phone</h4>
+                      <h3 className="font-semibold mb-1 text-base">Phone</h3>
                       <p className="text-gray-400">+91 1800 123 4567</p>
                     </div>
                   </div>
@@ -49,7 +49,7 @@ export function Contact() {
                       <Mail className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-1">Email</h4>
+                      <h3 className="font-semibold mb-1 text-base">Email</h3>
                       <p className="text-gray-400">support@agriform.in</p>
                     </div>
                   </div>
@@ -59,7 +59,7 @@ export function Contact() {
                       <MapPin className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-1">Location</h4>
+                      <h3 className="font-semibold mb-1 text-base">Location</h3>
                       <p className="text-gray-400">123 Agri Business Park,<br />New Delhi, India 110001</p>
                     </div>
                   </div>
@@ -69,10 +69,10 @@ export function Contact() {
               <div className="mt-16 pt-8 border-t border-white/10">
                 <p className="font-semibold mb-4">Follow Us</p>
                 <div className="flex gap-4">
-                  <a href="#" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><Globe className="h-5 w-5" /></a>
-                  <a href="#" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><Camera className="h-5 w-5" /></a>
-                  <a href="#" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><MessageCircle className="h-5 w-5" /></a>
-                  <a href="#" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><Video className="h-5 w-5" /></a>
+                  <a href="#" aria-label="Website" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><Globe className="h-5 w-5" /></a>
+                  <a href="#" aria-label="Instagram" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><Camera className="h-5 w-5" /></a>
+                  <a href="#" aria-label="WhatsApp" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><MessageCircle className="h-5 w-5" /></a>
+                  <a href="#" aria-label="YouTube" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><Video className="h-5 w-5" /></a>
                 </div>
               </div>
             </div>

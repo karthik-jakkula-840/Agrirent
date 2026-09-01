@@ -111,6 +111,7 @@ export function ImageUploader({ value, onChange, maxImages = 5 }: ImageUploaderP
                 type="button"
                 variant="destructive"
                 size="icon"
+                aria-label="Remove image"
                 className="h-8 w-8 rounded-full"
                 onClick={() => removeImage(index)}
               >

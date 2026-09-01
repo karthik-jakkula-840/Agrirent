@@ -113,6 +113,7 @@ export function NavbarClient({ user, role }: NavbarClientProps) {
             <div className="relative">
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="Open profile menu"
                 className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold"
               >
                 {user?.email?.[0].toUpperCase() || 'U'}

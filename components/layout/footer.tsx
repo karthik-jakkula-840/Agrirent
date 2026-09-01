@@ -21,10 +21,10 @@ export function Footer() {
               India's smart agricultural equipment rental marketplace. Connecting farmers with equipment owners for a better harvest.
             </p>
             <div className="flex items-center gap-5">
-              <Link href="/" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Globe className="h-4 w-4" /></Link>
-              <Link href="/" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Camera className="h-4 w-4" /></Link>
-              <Link href="/" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><MessageCircle className="h-4 w-4" /></Link>
-              <Link href="/" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Video className="h-4 w-4" /></Link>
+              <Link href="/" aria-label="Website" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Globe className="h-4 w-4" /></Link>
+              <Link href="/" aria-label="Instagram" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Camera className="h-4 w-4" /></Link>
+              <Link href="/" aria-label="WhatsApp" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><MessageCircle className="h-4 w-4" /></Link>
+              <Link href="/" aria-label="YouTube" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Video className="h-4 w-4" /></Link>
             </div>
           </div>
 
@@ -67,6 +67,7 @@ export function Footer() {
               <Input 
                 type="email" 
                 placeholder="Your email address" 
+                aria-label="Newsletter email address"
                 className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-primary h-11"
               />
               <Button className="bg-primary hover:bg-primary/90 text-white w-full h-11">Subscribe</Button>

@@ -81,7 +81,7 @@ export function OwnerSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen }:
         <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-gray-50 mb-3">
           <div className="relative h-10 w-10 rounded-full overflow-hidden bg-gray-200 shrink-0">
             {profile?.avatar_url ? (
-              <Image src={profile.avatar_url} alt={profile.full_name || 'Owner'} fill className="object-cover" />
+              <Image src={profile.avatar_url} alt={profile.full_name || 'Owner'} fill sizes="40px" className="object-cover" />
             ) : (
               <div className="flex items-center justify-center h-full w-full bg-primary/20 text-primary font-bold">
                 {profile?.full_name?.charAt(0) || 'O'}
@@ -120,6 +120,7 @@ export function OwnerSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen }:
           <div className="fixed inset-y-0 left-0 w-72 bg-white shadow-xl flex flex-col">
             <button 
               onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Close menu"
               className="absolute top-6 right-4 p-2 text-gray-500 hover:text-gray-900"
             >
               <X className="h-5 w-5" />

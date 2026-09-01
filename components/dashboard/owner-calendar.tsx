@@ -55,10 +55,10 @@ export function OwnerCalendar({ bookings = [] }: OwnerCalendarProps) {
           <Button variant="outline" size="sm" onClick={goToToday} className="h-8 px-2.5 text-xs text-gray-600 hover:text-green-700 border-gray-200">
             Today
           </Button>
-          <Button variant="outline" size="icon" onClick={prevMonth} className="h-8 w-8 rounded-lg border-gray-200 hover:bg-gray-50">
+          <Button variant="outline" size="icon" aria-label="Previous month" onClick={prevMonth} className="h-8 w-8 rounded-lg border-gray-200 hover:bg-gray-50">
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="icon" onClick={nextMonth} className="h-8 w-8 rounded-lg border-gray-200 hover:bg-gray-50">
+          <Button variant="outline" size="icon" aria-label="Next month" onClick={nextMonth} className="h-8 w-8 rounded-lg border-gray-200 hover:bg-gray-50">
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>

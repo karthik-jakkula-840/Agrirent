@@ -51,10 +51,10 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
         {sortedImages.length > 1 && (
           <>
             <div className="absolute inset-0 flex items-center justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Button variant="secondary" size="icon" className="h-10 w-10 rounded-full shadow-lg" onClick={prev}>
+              <Button variant="secondary" size="icon" aria-label="Previous image" className="h-10 w-10 rounded-full shadow-lg" onClick={prev}>
                 <ChevronLeft className="h-5 w-5" />
               </Button>
-              <Button variant="secondary" size="icon" className="h-10 w-10 rounded-full shadow-lg" onClick={next}>
+              <Button variant="secondary" size="icon" aria-label="Next image" className="h-10 w-10 rounded-full shadow-lg" onClick={next}>
                 <ChevronRight className="h-5 w-5" />
               </Button>
             </div>
@@ -64,6 +64,7 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
         <Button 
           variant="secondary" 
           size="icon" 
+          aria-label="View fullscreen image"
           className="absolute top-4 right-4 h-10 w-10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg bg-white/90 hover:bg-white"
           onClick={() => setIsFullscreen(true)}
         >
@@ -78,6 +79,7 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
             <button 
               key={img.id}
               onClick={() => setCurrentIndex(idx)}
+              aria-label={`View image ${idx + 1}`}
               className={`relative aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all ${
                 idx === currentIndex ? 'border-primary shadow-sm' : 'border-transparent hover:border-gray-300 opacity-70 hover:opacity-100'
               }`}
@@ -100,6 +102,7 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
           <Button 
             variant="ghost" 
             size="icon" 
+            aria-label="Close fullscreen view"
             className="absolute top-6 right-6 text-white hover:bg-white/10 rounded-full"
             onClick={() => setIsFullscreen(false)}
           >
@@ -115,10 +118,10 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
             />
             {sortedImages.length > 1 && (
               <div className="absolute inset-0 flex items-center justify-between p-4">
-                <Button variant="secondary" size="icon" className="h-12 w-12 rounded-full shadow-lg" onClick={prev}>
+                <Button variant="secondary" size="icon" aria-label="Previous image" className="h-12 w-12 rounded-full shadow-lg" onClick={prev}>
                   <ChevronLeft className="h-6 w-6" />
                 </Button>
-                <Button variant="secondary" size="icon" className="h-12 w-12 rounded-full shadow-lg" onClick={next}>
+                <Button variant="secondary" size="icon" aria-label="Next image" className="h-12 w-12 rounded-full shadow-lg" onClick={next}>
                   <ChevronRight className="h-6 w-6" />
                 </Button>
               </div>

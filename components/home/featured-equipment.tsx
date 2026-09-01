@@ -88,7 +88,7 @@ export async function FeaturedEquipment() {
 
         {equipment.length > 0 ? (
           <div className="flex overflow-x-auto pb-8 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-4 gap-6 snap-x snap-mandatory">
-            {equipment.map((item) => (
+            {equipment.map((item, index) => (
               <div key={item.id} className="w-[280px] min-w-[280px] max-w-[85vw] sm:w-auto sm:min-w-0 sm:max-w-none snap-start shrink-0">
                 <EquipmentCard
                   id={item.id}
@@ -102,6 +102,7 @@ export async function FeaturedEquipment() {
                   imageUrl={item.images?.[0] || 'https://images.unsplash.com/photo-1605335133649-14a51e1858c4?q=80&w=800&auto=format&fit=crop'}
                   isAvailable={item.is_available ?? true}
                   isVerifiedOwner={item.profiles?.is_verified ?? true}
+                  priority={index < 2}
                 />
               </div>
             ))}
