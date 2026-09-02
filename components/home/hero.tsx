@@ -8,6 +8,13 @@ import { Search, MapPin, Calendar, Star, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export function Hero() {
   const router = useRouter()
@@ -82,15 +89,21 @@ export function Hero() {
             >
               <div className="flex-1 flex items-center bg-white/60 hover:bg-white/90 focus-within:bg-white/90 transition-all rounded-xl px-4 py-2 md:py-0 h-12 shadow-sm border border-white/60 focus-within:ring-2 focus-within:ring-emerald-500/20">
                 <Search className="h-5 w-5 text-gray-400 mr-2 shrink-0" />
-                <Input 
-                  id="hero-search-query"
-                  type="text" 
-                  placeholder="What equipment do you need?" 
-                  aria-label="Equipment search query"
-                  className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0 h-full w-full shadow-none"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+                <Select value={searchQuery} onValueChange={(val) => setSearchQuery(val || '')}>
+                  <SelectTrigger className="border-0 bg-transparent focus:ring-0 focus:ring-offset-0 px-0 h-full w-full shadow-none whitespace-nowrap overflow-hidden">
+                    <SelectValue placeholder="What equipment do you need?" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Tractor">Tractor</SelectItem>
+                    <SelectItem value="Harvester">Harvester</SelectItem>
+                    <SelectItem value="Rotavator">Rotavator</SelectItem>
+                    <SelectItem value="Drone">Agriculture Drone</SelectItem>
+                    <SelectItem value="Trailer">Trailer</SelectItem>
+                    <SelectItem value="Plough">Plough</SelectItem>
+                    <SelectItem value="Seeder">Seeder</SelectItem>
+                    <SelectItem value="Sprayer">Sprayer</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               
               <div className="flex-1 flex items-center bg-white/60 hover:bg-white/90 focus-within:bg-white/90 transition-all rounded-xl px-4 py-2 md:py-0 h-12 shadow-sm border border-white/60 focus-within:ring-2 focus-within:ring-emerald-500/20">
