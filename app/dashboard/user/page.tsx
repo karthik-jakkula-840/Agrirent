@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/supabase/auth'
 import { UserService } from '@/services/user.service'
-import { CalendarClock, CheckCircle2, Clock, XCircle, ChevronRight, Activity } from 'lucide-react'
+import { CalendarClock, CheckCircle2, Clock, XCircle, ChevronRight, Activity, Heart } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
@@ -24,11 +24,19 @@ export default async function CustomerDashboardPage() {
   
   const userService = new UserService(supabase)
   
-  const [stats, recentBookings, activeRentals] = await Promise.all([
+  const [stats, recentBookings, activeRentals, favoritesResult] = await Promise.all([
     userService.getCustomerDashboardStats(user!.id),
     userService.getRecentBookings(user!.id, 5),
-    userService.getActiveRentals(user!.id)
+    userService.getActiveRentals(user!.id),
+    supabase
+      .from('favorites')
+      .select(`id, equipment_id, equipment (id, title, daily_price, location, equipment_images (image_url, is_primary))`)
+      .eq('user_id', user!.id)
+      .order('created_at', { ascending: false })
+      .limit(3)
   ])
+
+  const favorites = favoritesResult.data || []
 
   const STAT_CARDS = [
     { title: t.activeRentals, value: stats.activeRentals, icon: Activity, color: 'text-blue-600', bg: 'bg-blue-100' },
@@ -150,6 +158,52 @@ export default async function CustomerDashboardPage() {
                         </Badge>
                       </div>
                     </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Favorite Equipment */}
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Heart className="h-5 w-5 text-red-500 fill-red-500" /> Favorite Equipment
+              </h2>
+              <Link href="/dashboard/user/favorites" className="text-sm font-medium text-primary hover:underline flex items-center gap-1">
+                View All <ChevronRight className="h-4 w-4" />
+              </Link>
+            </div>
+            {favorites.length === 0 ? (
+              <div className="p-10 text-center flex flex-col items-center">
+                <Heart className="h-10 w-10 text-gray-200 mb-3" />
+                <p className="text-gray-500 mb-4">No favorite equipment saved yet.</p>
+                <Link href="/equipment">
+                  <Button className="bg-primary hover:bg-primary/90 text-white">Browse Equipment</Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-100">
+                {favorites.map((fav: any) => {
+                  const eq = fav.equipment
+                  const image = eq?.equipment_images?.find((i: any) => i.is_primary)?.image_url
+                            || eq?.equipment_images?.[0]?.image_url
+                            || 'https://images.unsplash.com/photo-1605335133649-14a51e1858c4?q=80&w=200'
+                  return (
+                    <Link key={fav.id} href={`/equipment/${eq?.id}`} className="p-5 flex items-center gap-4 hover:bg-gray-50/50 transition-colors block">
+                      <div className="relative h-16 w-16 rounded-xl overflow-hidden shrink-0 bg-gray-100">
+                        <Image src={image} alt={eq?.title || ''} fill className="object-cover" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-gray-900 truncate">{eq?.title}</h3>
+                        <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                          <span>₹{eq?.daily_price}/day</span>
+                          <span className="mx-1">·</span>
+                          <span>{eq?.location}</span>
+                        </p>
+                      </div>
+                      <ChevronRight className="h-4 w-4 text-gray-400 shrink-0" />
+                    </Link>
                   )
                 })}
               </div>
