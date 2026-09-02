@@ -24,10 +24,10 @@ export function Footer() {
               India's smart agricultural equipment rental marketplace. Connecting farmers with equipment owners for a better harvest.
             </p>
             <div className="flex items-center gap-5">
-              <Link href="/" aria-label="Website" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Globe className="h-4 w-4" /></Link>
-              <Link href="/" aria-label="Instagram" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Camera className="h-4 w-4" /></Link>
-              <Link href="/" aria-label="WhatsApp" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><MessageCircle className="h-4 w-4" /></Link>
-              <Link href="/" aria-label="YouTube" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Video className="h-4 w-4" /></Link>
+              <Link href="https://agriform.in" target="_blank" rel="noopener noreferrer" aria-label="Website" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Globe className="h-4 w-4" /></Link>
+              <Link href="https://instagram.com/agriform" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Camera className="h-4 w-4" /></Link>
+              <Link href="https://wa.me/910000000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><MessageCircle className="h-4 w-4" /></Link>
+              <Link href="https://youtube.com/@agriform" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-gray-400 hover:text-primary transition-colors bg-gray-800 p-2.5 rounded-full"><Video className="h-4 w-4" /></Link>
             </div>
           </div>
 
