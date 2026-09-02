@@ -27,6 +27,7 @@ export class AdminService {
       { count: yesterdayReviews },
       { count: totalCategories },
       { count: yesterdayCategories },
+      { count: pendingOwnerRequests },
     ] = await Promise.all([
       this.supabase.from('profiles').select('*', { count: 'exact', head: true }),
       this.supabase.from('profiles').select('*', { count: 'exact', head: true }).lt('created_at', startOfToday),
@@ -54,6 +55,7 @@ export class AdminService {
 
       this.supabase.from('categories').select('*', { count: 'exact', head: true }),
       this.supabase.from('categories').select('*', { count: 'exact', head: true }).lt('created_at', startOfToday),
+      this.supabase.from('owner_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
     ])
 
     let totalRevenue = 0
@@ -97,6 +99,7 @@ export class AdminService {
       yesterdayReviews: yesterdayReviews || 0,
       totalCategories: totalCategories || 0,
       yesterdayCategories: yesterdayCategories || 0,
+      pendingOwnerRequests: pendingOwnerRequests || 0,
     }
   }
 

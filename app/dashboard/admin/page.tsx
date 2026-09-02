@@ -43,12 +43,15 @@ export default async function AdminDashboard() {
         
         <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
           {/* Step 1 */}
-          <Link href="/dashboard/admin/owners" className="block flex-1 lg:w-64 bg-gradient-to-r from-primary to-green-600 rounded-xl p-4 flex flex-col justify-between shadow-md hover:shadow-lg transition-shadow">
+          <Link href="/dashboard/admin/owners" className="block flex-1 lg:w-64 bg-gradient-to-r from-primary to-green-600 rounded-xl p-4 flex flex-col justify-between shadow-md hover:shadow-lg transition-shadow relative overflow-hidden">
             <div className="flex items-center justify-between mb-4">
               <span className="text-white font-medium">1. Verifications</span>
               <span className="bg-white text-primary text-xs font-bold px-2 py-1 rounded">GO</span>
             </div>
             <p className="text-white/80 text-xs">Verify equipment owners</p>
+            {stats.pendingOwnerRequests > 0 && (
+              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 border-2 border-emerald-500" />
+            )}
           </Link>
 
           {/* Step 2 */}
@@ -214,7 +217,8 @@ export default async function AdminDashboard() {
 
           <Link href="/dashboard/admin/owners" className="block h-full hover:scale-[1.02] transition-transform">
             <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4 h-full">
-              <div className="h-10 w-10 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
+              <div className="h-10 w-10 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0 relative">
+                {stats.pendingOwnerRequests > 0 && <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500" />}
                 <Users className="h-5 w-5 text-indigo-500" />
               </div>
               <div>
