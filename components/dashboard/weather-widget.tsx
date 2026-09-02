@@ -16,10 +16,10 @@ export function WeatherWidget() {
 
     const fetchWeather = async (latitude: number, longitude: number) => {
       try {
-        const response = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`
-        )
+        const response = await fetch(`/api/weather?lat=${latitude}&lon=${longitude}`)
+        if (!response.ok) throw new Error('API Error')
         const data = await response.json()
+        if (data.error || !data.current_weather) throw new Error('Invalid Data')
         setWeather(data)
       } catch (err) {
         setError('Failed to fetch weather data')
@@ -35,7 +35,8 @@ export function WeatherWidget() {
         },
         () => {
           fetchWeather(lat, lon) // fallback
-        }
+        },
+        { timeout: 5000, maximumAge: 60000 }
       )
     } else {
       fetchWeather(lat, lon) // fallback
