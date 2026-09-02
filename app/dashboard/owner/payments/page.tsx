@@ -47,34 +47,34 @@ export default async function OwnerPaymentsPage() {
         <p className="text-gray-500 mt-1">Track your transactions and payouts</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-            <CheckCircle2 className="h-6 w-6 text-green-600" />
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
+        <div className="bg-white p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+            <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-500">Total Paid</p>
-            <p className="text-2xl font-bold text-gray-900">₹{totalPaid.toLocaleString()}</p>
+            <p className="text-xs sm:text-sm font-medium text-gray-500">Total Paid</p>
+            <p className="text-xl sm:text-2xl font-bold text-gray-900">₹{totalPaid.toLocaleString()}</p>
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-            <Clock className="h-6 w-6 text-amber-600" />
+        <div className="bg-white p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+            <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600" />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-500">Pending</p>
-            <p className="text-2xl font-bold text-gray-900">₹{pending.toLocaleString()}</p>
+            <p className="text-xs sm:text-sm font-medium text-gray-500">Pending</p>
+            <p className="text-xl sm:text-2xl font-bold text-gray-900">₹{pending.toLocaleString()}</p>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center shrink-0">
-            <RotateCcw className="h-6 w-6 text-red-600" />
+        <div className="bg-white p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 col-span-2 md:col-span-1">
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+            <RotateCcw className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-500">Refunded</p>
-            <p className="text-2xl font-bold text-gray-900">₹{refunded.toLocaleString()}</p>
+            <p className="text-xs sm:text-sm font-medium text-gray-500">Refunded</p>
+            <p className="text-xl sm:text-2xl font-bold text-gray-900">₹{refunded.toLocaleString()}</p>
           </div>
         </div>
       </div>
