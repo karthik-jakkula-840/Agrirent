@@ -17,14 +17,19 @@ export default async function FavoritesPage() {
         title,
         daily_price,
         location,
-        status,
+        category,
+        availability,
         equipment_images (
           image_url,
           is_primary
+        ),
+        profiles (
+          full_name,
+          is_verified
         )
       )
     `)
-    .eq('user_id', user!.id)
+    .eq('customer_id', user!.id)
     .order('created_at', { ascending: false })
 
   return (

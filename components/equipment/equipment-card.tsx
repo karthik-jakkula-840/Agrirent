@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge'
 import { useToggleFavorite, useFavorites } from '@/hooks/use-favorites'
 import { toast } from 'sonner'
 import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
 export interface EquipmentCardProps {
   id: string
@@ -52,9 +53,17 @@ export function EquipmentCard({
     }
   }, [favorites, id])
 
-  const handleFavoriteClick = (e: React.MouseEvent) => {
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    
+    // Check auth before toggling
+    const supabase = createClient()
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      toast.error('Please login to add equipment to favorites')
+      return
+    }
     
     const newStatus = !isFavorited
     setIsFavorited(newStatus)

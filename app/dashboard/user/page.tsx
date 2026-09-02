@@ -31,7 +31,7 @@ export default async function CustomerDashboardPage() {
     supabase
       .from('favorites')
       .select(`id, equipment_id, equipment (id, title, daily_price, location, equipment_images (image_url, is_primary))`)
-      .eq('user_id', user!.id)
+      .eq('customer_id', user!.id)
       .order('created_at', { ascending: false })
       .limit(3)
   ])
