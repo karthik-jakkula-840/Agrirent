@@ -62,20 +62,7 @@ export async function login(values: z.infer<typeof loginSchema>) {
     console.log('[LOGIN] Profile:', profile)
     console.log('[LOGIN] Profile role:', profile.role)
 
-    if (values.role === 'customer' && (profile.role === 'owner' || profile.role === 'rental_owner')) {
-      await supabase.auth.signOut()
-      return { success: false, error: 'You are registered as an Owner. Please use the Owner login tab.' }
-    }
-
-    if (values.role === 'owner' && profile.role === 'customer') {
-      await supabase.auth.signOut()
-      return { success: false, error: 'You are registered as a Customer. Please use the Customer login tab.' }
-    }
-
-    // We allow any registered user to log in and redirect them to their correct dashboard
-    // based on their actual role in the database profile, rather than forcing them to match
-    // the tab they logged in with.
-
+    // Always redirect based on actual role in DB — no tab mismatch blocking
     let destination = '/dashboard/user'
     if (profile.role === 'admin') {
       destination = '/dashboard/admin'
