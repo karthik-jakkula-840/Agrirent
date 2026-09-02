@@ -220,9 +220,11 @@ export default async function CustomerDashboardPage() {
             <p className="text-primary-foreground/80 text-sm mb-6">
               {t.supportText}
             </p>
-            <Button className="w-full bg-white text-primary hover:bg-gray-100">
-              {t.contactSupport}
-            </Button>
+            <Link href="/contact" className="block w-full">
+              <Button className="w-full bg-white text-primary hover:bg-gray-100">
+                {t.contactSupport}
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
