@@ -4,6 +4,7 @@ import "./globals.css";
 import { QueryProvider } from "@/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { BottomNav } from "@/components/layout/bottom-nav";
+import { SplashScreen } from "@/components/layout/splash-screen";
 
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 
@@ -96,11 +97,25 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (sessionStorage.getItem('agrirent_splash_shown')) {
+                  document.documentElement.style.setProperty('--splash-display', 'none');
+                } else {
+                  document.documentElement.style.setProperty('--splash-display', 'flex');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body className="min-h-full flex flex-col pb-16 md:pb-0">
+        <SplashScreen />
         <QueryProvider>{children}</QueryProvider>
         <BottomNav />
         <Toaster />
