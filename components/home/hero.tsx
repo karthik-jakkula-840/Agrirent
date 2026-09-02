@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -14,6 +14,24 @@ export function Hero() {
   const [searchQuery, setSearchQuery] = useState('')
   const [location, setLocation] = useState('')
   const [date, setDate] = useState('')
+
+  const heroItems = [
+    { src: '/mock_tractor.jpg', alt: 'Modern Tractor in Field', title: 'Mahindra 575 DI', price: '500' },
+    { src: '/mock_harvester.jpg', alt: 'Combine Harvester in Action', title: 'John Deere W70', price: '2500' },
+    { src: '/mock_rotavator.jpg', alt: 'Heavy Duty Rotavator', title: 'Shaktiman Rotavator', price: '300' },
+    { src: '/mock_trailer.jpg', alt: 'Farm Trailer', title: '5 Ton Tipper Trailer', price: '200' },
+  ];
+
+  const [activeItem, setActiveItem] = useState(heroItems[0]);
+
+  useEffect(() => {
+    const getDayOfYear = () => {
+      const now = new Date();
+      const start = new Date(now.getFullYear(), 0, 0);
+      return Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+    };
+    setActiveItem(heroItems[getDayOfYear() % heroItems.length]);
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -122,8 +140,9 @@ export function Hero() {
             
             <div className="relative h-full w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
               <Image 
-                src="/mock_tractor.jpg"
-                alt="Modern Tractor in Field"
+                key={activeItem.src}
+                src={activeItem.src}
+                alt={activeItem.alt}
                 fill
                 priority
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -156,13 +175,14 @@ export function Hero() {
 
             {/* Floating Glass Card 2 - Hidden on small mobile */}
             <motion.div 
+              key={activeItem.title}
               animate={{ y: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
               className="hidden sm:flex absolute bottom-10 -right-4 md:bottom-20 md:-right-12 bg-white/60 backdrop-blur-xl p-4 rounded-2xl shadow-2xl border border-white/50 flex-col gap-1"
             >
               <Badge className="bg-primary text-white w-fit mb-1 border-transparent">Available Today</Badge>
-              <p className="text-sm text-gray-500">Mahindra 575 DI</p>
-              <p className="text-lg font-bold text-gray-900">₹500<span className="text-xs font-normal text-gray-500">/hour</span></p>
+              <p className="text-sm text-gray-500">{activeItem.title}</p>
+              <p className="text-lg font-bold text-gray-900">₹{activeItem.price}<span className="text-xs font-normal text-gray-500">/hour</span></p>
             </motion.div>
           </motion.div>
           
