@@ -72,11 +72,11 @@ export function EquipmentCard({
 
   return (
     <motion.div
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.2 }}
-      className="h-full"
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+      className="h-full group"
     >
-      <Card className="h-full flex flex-col overflow-hidden border-border/50 hover:shadow-xl transition-shadow bg-card">
+      <Card className="h-full flex flex-col overflow-hidden border-gray-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] group-hover:shadow-[0_8px_30px_-4px_rgba(16,185,129,0.15)] group-hover:border-emerald-100 transition-all duration-300 bg-white">
         <div className="relative aspect-[16/9] overflow-hidden bg-gray-100">
           <Image
             src={imageUrl}
@@ -98,11 +98,11 @@ export function EquipmentCard({
           </div>
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {isAvailable ? (
-              <Badge className="bg-primary hover:bg-primary/90 text-white border-transparent">Available</Badge>
+              <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white border-transparent shadow-md">Available</Badge>
             ) : (
-              <Badge variant="secondary" className="bg-white/90 text-gray-700 hover:bg-white">Rented</Badge>
+              <Badge variant="secondary" className="bg-white/90 backdrop-blur-md text-gray-700 hover:bg-white shadow-md">Rented</Badge>
             )}
-            <Badge variant="outline" className="bg-white/90 backdrop-blur-sm text-xs font-semibold">
+            <Badge variant="outline" className="bg-white/90 backdrop-blur-md text-emerald-700 text-xs font-semibold shadow-sm border-white/50">
               {categoryName}
             </Badge>
           </div>
@@ -113,8 +113,8 @@ export function EquipmentCard({
             <h3 className="font-semibold text-lg line-clamp-1 text-foreground" title={name}>
               {name}
             </h3>
-            <div className="flex items-center gap-1 text-sm font-medium text-gray-700 bg-gray-100 px-2 py-0.5 rounded-full shrink-0">
-              <Star className="h-3.5 w-3.5 fill-secondary text-secondary" />
+            <div className="flex items-center gap-1 text-sm font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 rounded-full shrink-0 shadow-sm">
+              <Star className="h-3.5 w-3.5 fill-emerald-500 text-emerald-500" />
               <span>{rating.toFixed(1)}</span>
             </div>
           </div>
@@ -127,7 +127,7 @@ export function EquipmentCard({
         
         <CardContent className="p-3 pt-2 flex-grow">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold uppercase shrink-0">
+            <div className="h-7 w-7 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center text-emerald-700 text-xs font-bold uppercase shrink-0 border border-white shadow-sm">
               {ownerName.charAt(0)}
             </div>
             <div className="flex flex-col">
@@ -161,7 +161,7 @@ export function EquipmentCard({
               </Button>
             </Link>
             <Link href={`/equipment/${id}?book=true`} className="flex-[2]">
-              <Button variant="default" className="w-full h-10 bg-secondary hover:bg-secondary/90 text-white font-bold uppercase tracking-wider">
+              <Button variant="default" className="w-full h-10 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold uppercase tracking-wider shadow-md hover:shadow-lg transition-all">
                 Rent Now
               </Button>
             </Link>

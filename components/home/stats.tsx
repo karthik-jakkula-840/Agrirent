@@ -19,7 +19,7 @@ export function Stats() {
   }, [])
 
   return (
-    <section className="py-12 bg-white border-b border-gray-100">
+    <section className="py-16 bg-gradient-to-b from-gray-50 to-white border-b border-gray-100">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
@@ -28,10 +28,10 @@ export function Stats() {
               initial={{ opacity: 0, y: 20 }}
               animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="flex flex-col items-center justify-center text-center p-4 rounded-2xl hover:bg-gray-50 transition-colors"
+              className="flex flex-col items-center justify-center text-center p-6 rounded-2xl bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-100/80 hover:shadow-[0_8px_30px_-4px_rgba(16,185,129,0.15)] hover:-translate-y-1.5 transition-all duration-300 group"
             >
-              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
-                <stat.icon className="h-6 w-6" />
+              <div className="h-14 w-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 mb-4 group-hover:scale-110 group-hover:bg-emerald-100 transition-all duration-300">
+                <stat.icon className="h-7 w-7" />
               </div>
               <p className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
                 {stat.value}

@@ -41,12 +41,12 @@ export function Hero() {
             className="flex flex-col gap-6"
           >
             <div>
-              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 mb-4 px-3 py-1 text-sm font-medium">
+              <Badge variant="outline" className="bg-white/60 backdrop-blur-md text-emerald-700 border-white/40 shadow-sm mb-4 px-3 py-1 text-sm font-medium">
                 India's Smart Equipment Rental Marketplace
               </Badge>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 leading-[1.1]">
                 Rent the Right Equipment.<br />
-                <span className="text-primary">Grow More with Agriform.</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Grow More with Agriform.</span>
               </h1>
             </div>
             
@@ -60,9 +60,9 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               onSubmit={handleSearch}
-              className="bg-white p-2 rounded-2xl shadow-lg border border-gray-100 flex flex-col md:flex-row gap-2 mt-4 max-w-2xl"
+              className="bg-white/70 backdrop-blur-lg p-2 rounded-2xl shadow-xl border border-white/50 flex flex-col md:flex-row gap-2 mt-4 max-w-2xl relative z-20"
             >
-              <div className="flex-1 flex items-center bg-gray-50 rounded-xl px-4 py-2 md:py-0 h-12">
+              <div className="flex-1 flex items-center bg-white/60 hover:bg-white/90 focus-within:bg-white/90 transition-all rounded-xl px-4 py-2 md:py-0 h-12 shadow-sm border border-white/60 focus-within:ring-2 focus-within:ring-emerald-500/20">
                 <Search className="h-5 w-5 text-gray-400 mr-2 shrink-0" />
                 <Input 
                   id="hero-search-query"
@@ -75,7 +75,7 @@ export function Hero() {
                 />
               </div>
               
-              <div className="flex-1 flex items-center bg-gray-50 rounded-xl px-4 py-2 md:py-0 h-12">
+              <div className="flex-1 flex items-center bg-white/60 hover:bg-white/90 focus-within:bg-white/90 transition-all rounded-xl px-4 py-2 md:py-0 h-12 shadow-sm border border-white/60 focus-within:ring-2 focus-within:ring-emerald-500/20">
                 <MapPin className="h-5 w-5 text-gray-400 mr-2 shrink-0" />
                 <Input 
                   id="hero-search-location"
@@ -88,7 +88,7 @@ export function Hero() {
                 />
               </div>
 
-              <div className="flex-1 flex items-center bg-gray-50 rounded-xl px-4 py-2 md:py-0 h-12">
+              <div className="flex-1 flex items-center bg-white/60 hover:bg-white/90 focus-within:bg-white/90 transition-all rounded-xl px-4 py-2 md:py-0 h-12 shadow-sm border border-white/60 focus-within:ring-2 focus-within:ring-emerald-500/20">
                 <Calendar className="h-5 w-5 text-gray-400 mr-2 shrink-0" />
                 <Input 
                   id="hero-search-date"
@@ -100,7 +100,7 @@ export function Hero() {
                 />
               </div>
               
-              <Button type="submit" size="lg" className="h-14 md:h-12 rounded-xl bg-secondary hover:bg-secondary/90 text-white font-bold text-lg md:text-base px-8 shrink-0 shadow-md">
+              <Button type="submit" size="lg" className="h-14 md:h-12 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold text-lg md:text-base px-8 shrink-0 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
                 <span className="md:hidden">RENT NOW</span>
                 <span className="hidden md:inline">Search</span>
               </Button>
@@ -136,7 +136,7 @@ export function Hero() {
             <motion.div 
               animate={{ y: [0, -10, 0] }}
               transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-              className="absolute top-10 -left-6 md:-left-12 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/50 flex items-center gap-4"
+              className="absolute top-10 -left-6 md:-left-12 bg-white/60 backdrop-blur-xl p-4 rounded-2xl shadow-2xl border border-white/50 flex items-center gap-4"
             >
               <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 shrink-0">
                 <CheckCircle2 className="h-6 w-6" />
@@ -158,7 +158,7 @@ export function Hero() {
             <motion.div 
               animate={{ y: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-              className="hidden sm:flex absolute bottom-10 -right-4 md:bottom-20 md:-right-12 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/50 flex-col gap-1"
+              className="hidden sm:flex absolute bottom-10 -right-4 md:bottom-20 md:-right-12 bg-white/60 backdrop-blur-xl p-4 rounded-2xl shadow-2xl border border-white/50 flex-col gap-1"
             >
               <Badge className="bg-primary text-white w-fit mb-1 border-transparent">Available Today</Badge>
               <p className="text-sm text-gray-500">Mahindra 575 DI</p>
