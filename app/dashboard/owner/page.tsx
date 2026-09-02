@@ -60,7 +60,7 @@ export default async function OwnerDashboardPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         <StatCard 
           title={t.totalEquipment} 
           value={stats.totalEquipment.toString()} 
@@ -192,18 +192,18 @@ export default async function OwnerDashboardPage() {
 }
 
 function StatCard({ title, value, subtitle, icon: Icon, color, href }: any) {
+  // Map color prop from 'bg-X-50 text-X-600' to separate bg/text for the icon container
+  // e.g. color="bg-blue-50 text-blue-600"
   const CardContent = (
-    <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group h-full">
-      <div className="flex items-center justify-between mb-4">
-        <div className={`p-3 rounded-xl ${color}`}>
-          <Icon className="h-6 w-6 group-hover:scale-110 transition-transform" />
-        </div>
-        {href && <ArrowRight className="h-5 w-5 text-gray-300 group-hover:text-primary transition-colors" />}
+    <div className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all group h-full flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+      <div className={`h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 ${color}`}>
+        <Icon className="h-5 w-5 sm:h-6 sm:w-6 group-hover:scale-110 transition-transform" />
       </div>
-      <div>
-        <h3 className="text-gray-500 text-sm font-medium mb-1">{title}</h3>
-        <p className="text-3xl font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors">{value}</p>
-        <p className="text-xs text-gray-500">{subtitle}</p>
+      <div className="min-w-0 w-full relative">
+        <p className="text-xs sm:text-sm font-medium text-gray-500 truncate mb-0.5 sm:mb-1">{title}</p>
+        <p className="text-xl sm:text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors">{value}</p>
+        <p className="text-[10px] sm:text-xs text-gray-500 mt-1 line-clamp-1">{subtitle}</p>
+        {href && <ArrowRight className="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300 group-hover:text-primary transition-colors opacity-0 sm:opacity-100 hidden sm:block" />}
       </div>
     </div>
   )
