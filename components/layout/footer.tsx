@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { toast } from 'sonner'
 import { Tractor, Globe, Camera, MessageCircle, Video } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -63,14 +66,22 @@ export function Footer() {
           {/* Newsletter - 1 col on lg */}
           <div className="lg:col-span-1 flex flex-col items-center md:items-start">
             <h3 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">Newsletter</h3>
-            <form className="flex flex-col gap-3 w-full max-w-sm">
+            <form 
+              className="flex flex-col gap-3 w-full max-w-sm"
+              onSubmit={(e) => {
+                e.preventDefault();
+                toast.success('Successfully subscribed to newsletter!');
+                (e.target as HTMLFormElement).reset();
+              }}
+            >
               <Input 
                 type="email" 
+                required
                 placeholder="Your email address" 
                 aria-label="Newsletter email address"
                 className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-primary h-11"
               />
-              <Button className="bg-primary hover:bg-primary/90 text-white w-full h-11">Subscribe</Button>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white w-full h-11">Subscribe</Button>
             </form>
           </div>
 
