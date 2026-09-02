@@ -69,10 +69,10 @@ export function Contact() {
               <div className="mt-16 pt-8 border-t border-white/10">
                 <p className="font-semibold mb-4">Follow Us</p>
                 <div className="flex gap-4">
-                  <a href="#" aria-label="Website" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><Globe className="h-5 w-5" /></a>
-                  <a href="#" aria-label="Instagram" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><Camera className="h-5 w-5" /></a>
-                  <a href="#" aria-label="WhatsApp" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><MessageCircle className="h-5 w-5" /></a>
-                  <a href="#" aria-label="YouTube" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><Video className="h-5 w-5" /></a>
+                  <a href="https://agriform.in" target="_blank" rel="noopener noreferrer" aria-label="Website" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><Globe className="h-5 w-5" /></a>
+                  <a href="https://instagram.com/agriform" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><Camera className="h-5 w-5" /></a>
+                  <a href="https://wa.me/910000000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><MessageCircle className="h-5 w-5" /></a>
+                  <a href="https://youtube.com/@agriform" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="h-10 w-10 rounded-full bg-white/5 hover:bg-primary flex items-center justify-center transition-colors"><Video className="h-5 w-5" /></a>
                 </div>
               </div>
             </div>
