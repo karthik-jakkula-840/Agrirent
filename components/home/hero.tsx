@@ -87,10 +87,10 @@ export function Hero() {
               onSubmit={handleSearch}
               className="bg-white/70 backdrop-blur-lg p-2 rounded-2xl shadow-xl border border-white/50 flex flex-col md:flex-row gap-2 mt-4 max-w-2xl relative z-20"
             >
-              <div className="flex-1 flex items-center bg-white/60 hover:bg-white/90 focus-within:bg-white/90 transition-all rounded-xl px-4 py-2 md:py-0 h-12 shadow-sm border border-white/60 focus-within:ring-2 focus-within:ring-emerald-500/20">
+              <div className="flex-[1.5] min-w-0 flex items-center bg-white/60 hover:bg-white/90 focus-within:bg-white/90 transition-all rounded-xl px-4 py-2 md:py-0 h-12 shadow-sm border border-white/60 focus-within:ring-2 focus-within:ring-emerald-500/20">
                 <Search className="h-5 w-5 text-gray-400 mr-2 shrink-0" />
                 <Select value={searchQuery} onValueChange={(val) => setSearchQuery(val || '')}>
-                  <SelectTrigger className="border-0 bg-transparent focus:ring-0 focus:ring-offset-0 px-0 h-full w-full shadow-none whitespace-nowrap overflow-hidden">
+                  <SelectTrigger className="border-0 bg-transparent focus:ring-0 focus:ring-offset-0 px-0 h-full w-full shadow-none whitespace-nowrap overflow-hidden min-w-0">
                     <SelectValue placeholder="What equipment do you need?" />
                   </SelectTrigger>
                   <SelectContent>
@@ -106,7 +106,7 @@ export function Hero() {
                 </Select>
               </div>
               
-              <div className="flex-1 flex items-center bg-white/60 hover:bg-white/90 focus-within:bg-white/90 transition-all rounded-xl px-4 py-2 md:py-0 h-12 shadow-sm border border-white/60 focus-within:ring-2 focus-within:ring-emerald-500/20">
+              <div className="flex-1 min-w-0 flex items-center bg-white/60 hover:bg-white/90 focus-within:bg-white/90 transition-all rounded-xl px-4 py-2 md:py-0 h-12 shadow-sm border border-white/60 focus-within:ring-2 focus-within:ring-emerald-500/20">
                 <MapPin className="h-5 w-5 text-gray-400 mr-2 shrink-0" />
                 <Input 
                   id="hero-search-location"
@@ -119,7 +119,7 @@ export function Hero() {
                 />
               </div>
 
-              <div className="flex-1 flex items-center bg-white/60 hover:bg-white/90 focus-within:bg-white/90 transition-all rounded-xl px-4 py-2 md:py-0 h-12 shadow-sm border border-white/60 focus-within:ring-2 focus-within:ring-emerald-500/20">
+              <div className="flex-1 min-w-0 flex items-center bg-white/60 hover:bg-white/90 focus-within:bg-white/90 transition-all rounded-xl px-4 py-2 md:py-0 h-12 shadow-sm border border-white/60 focus-within:ring-2 focus-within:ring-emerald-500/20">
                 <Calendar className="h-5 w-5 text-gray-400 mr-2 shrink-0" />
                 <Input 
                   id="hero-search-date"
