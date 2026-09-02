@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       openGraph: {
         title: `${equipment.title} | Agriform`,
         description: equipment.description?.substring(0, 160) || 'Rent agricultural equipment on Agriform.',
-        url: `https://agriform.in/equipment/${equipment.id}`,
+        url: `https://agriform.in/equipment/${id}`,
         images: equipment.equipment_images?.length > 0 ? [{ url: equipment.equipment_images[0].image_url }] : [],
         type: 'website',
       },
@@ -41,6 +41,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       }
     }
   } catch (error) {
+    // Check if it's a mock ID for metadata too
+    if (id.startsWith('mock-')) {
+      return {
+        title: 'Mock Equipment | Agriform',
+        description: 'Rent agricultural equipment on Agriform.',
+      }
+    }
     return { title: 'Equipment Not Found | Agriform' }
   }
 }
@@ -51,10 +58,37 @@ export default async function EquipmentDetailsPage({ params }: Props) {
   const equipmentService = new EquipmentService(supabase)
   
   let equipment: any
-  try {
-    equipment = await equipmentService.getEquipmentById(id)
-  } catch (error) {
-    notFound()
+  
+  if (id.startsWith('mock-')) {
+    equipment = {
+      id,
+      title: 'Mock Agricultural Equipment',
+      description: 'This is a high-quality piece of agricultural equipment available for rent. Perfect for your farming needs. Features excellent fuel efficiency and robust build quality.',
+      equipment_images: [{ image_url: id === 'mock-1' ? '/mock_tractor.jpg' : id === 'mock-2' ? '/mock_harvester.jpg' : id === 'mock-3' ? '/mock_rotavator.jpg' : '/mock_trailer.jpg' }],
+      owner_id: 'mock-owner',
+      status: 'approved',
+      categories: { name: 'Machinery' },
+      brand: 'Premium Brand',
+      model: 'Pro Series 2024',
+      year: 2024,
+      horsepower: 50,
+      working_hours: 120,
+      fuel_type: 'diesel',
+      location: 'Hyderabad',
+      district: 'Telangana',
+      daily_price: id === 'mock-1' ? 2500 : id === 'mock-2' ? 4000 : id === 'mock-3' ? 1200 : 800,
+      hourly_price: id === 'mock-1' ? 500 : null,
+      deposit: 5000,
+      availability: 'available',
+      insurance_status: 'insured',
+      profiles: { full_name: 'Verified Owner' }
+    }
+  } else {
+    try {
+      equipment = await equipmentService.getEquipmentById(id)
+    } catch (error) {
+      notFound()
+    }
   }
 
   const { data: { session } } = await supabase.auth.getSession()
