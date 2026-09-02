@@ -104,7 +104,7 @@ export function LoginForm() {
     setIsLoading(true)
     try {
       if (loginMethod === 'email_otp') {
-        const verifyResult = await verifyEmailOtp(contactValue, otp)
+        const verifyResult = await verifyEmailOtp(contactValue, otp, currentRole)
         if (verifyResult.success && verifyResult.redirectUrl) {
           toast.success('OTP Verified. Logging you in...')
           window.location.href = verifyResult.redirectUrl

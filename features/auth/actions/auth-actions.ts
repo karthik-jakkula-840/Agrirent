@@ -62,11 +62,37 @@ export async function login(values: z.infer<typeof loginSchema>) {
     console.log('[LOGIN] Profile:', profile)
     console.log('[LOGIN] Profile role:', profile.role)
 
-    // Always redirect based on actual role in DB — no tab mismatch blocking
+    const { data: ownerRequest } = await supabase
+      .from('owner_requests')
+      .select('status')
+      .eq('user_id', data.user.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    const isPendingOwner = ownerRequest?.status === 'pending'
+    const isApprovedOwner = profile.role === 'owner' || profile.role === 'rental_owner' || ownerRequest?.status === 'approved'
+    const hasOwnerRequest = !!ownerRequest
+
+    if (profile.role !== 'admin') {
+      if (values.role === 'customer' && (isPendingOwner || isApprovedOwner || hasOwnerRequest)) {
+        await supabase.auth.signOut()
+        return { success: false, error: 'Please login as an owner.' }
+      }
+      if (values.role === 'owner' && isPendingOwner) {
+        await supabase.auth.signOut()
+        return { success: false, error: 'Your owner account is pending admin approval. You will be able to login once approved.' }
+      }
+      if (values.role === 'owner' && !isApprovedOwner && !hasOwnerRequest) {
+        await supabase.auth.signOut()
+        return { success: false, error: 'You are not registered as an owner.' }
+      }
+    }
+
     let destination = '/dashboard/user'
     if (profile.role === 'admin') {
       destination = '/dashboard/admin'
-    } else if (profile.role === 'owner' || profile.role === 'rental_owner') {
+    } else if (profile.role === 'owner' || profile.role === 'rental_owner' || isApprovedOwner) {
       destination = '/dashboard/owner'
     }
 
@@ -298,7 +324,7 @@ export async function sendEmailOtp(email: string) {
   return { success: true }
 }
 
-export async function verifyEmailOtp(email: string, otp: string) {
+export async function verifyEmailOtp(email: string, otp: string, role?: string) {
   const supabase = await createClient()
 
   const { data, error } = await supabase.auth.verifyOtp({
@@ -323,10 +349,37 @@ export async function verifyEmailOtp(email: string, otp: string) {
     .eq('id', data.user.id)
     .single()
 
+  const { data: ownerRequest } = await supabase
+    .from('owner_requests')
+    .select('status')
+    .eq('user_id', data.user.id)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  const isPendingOwner = ownerRequest?.status === 'pending'
+  const isApprovedOwner = profile?.role === 'owner' || profile?.role === 'rental_owner' || ownerRequest?.status === 'approved'
+  const hasOwnerRequest = !!ownerRequest
+
+  if (profile && profile.role !== 'admin' && role) {
+    if (role === 'customer' && (isPendingOwner || isApprovedOwner || hasOwnerRequest)) {
+      await supabase.auth.signOut()
+      return { success: false, error: 'Please login as an owner.' }
+    }
+    if (role === 'owner' && isPendingOwner) {
+      await supabase.auth.signOut()
+      return { success: false, error: 'Your owner account is pending admin approval. You will be able to login once approved.' }
+    }
+    if (role === 'owner' && !isApprovedOwner && !hasOwnerRequest) {
+      await supabase.auth.signOut()
+      return { success: false, error: 'You are not registered as an owner.' }
+    }
+  }
+
   let destination = '/dashboard/user'
   if (profile) {
     if (profile.role === 'admin') destination = '/dashboard/admin'
-    else if (profile.role === 'owner' || profile.role === 'rental_owner') destination = '/dashboard/owner'
+    else if (profile.role === 'owner' || profile.role === 'rental_owner' || isApprovedOwner) destination = '/dashboard/owner'
   }
 
   return { success: true, redirectUrl: destination }

@@ -98,10 +98,36 @@ export async function handlePhoneLoginSession(phoneNumber: string, role: string)
         .eq('id', loginData.user.id)
         .single()
         
+      const { data: ownerRequest } = await supabase
+        .from('owner_requests')
+        .select('status')
+        .eq('user_id', loginData.user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      const isPendingOwner = ownerRequest?.status === 'pending'
+      const isApprovedOwner = profile?.role === 'owner' || profile?.role === 'rental_owner' || ownerRequest?.status === 'approved'
+      const hasOwnerRequest = !!ownerRequest
+
+      if (profile && profile.role !== 'admin') {
+        if (role === 'customer' && (isPendingOwner || isApprovedOwner || hasOwnerRequest)) {
+          await supabase.auth.signOut()
+          return { success: false, error: 'Please login as an owner.' }
+        }
+        if (role === 'owner' && isPendingOwner) {
+          await supabase.auth.signOut()
+          return { success: false, error: 'Your owner account is pending admin approval. You will be able to login once approved.' }
+        }
+        if (role === 'owner' && !isApprovedOwner && !hasOwnerRequest) {
+          await supabase.auth.signOut()
+          return { success: false, error: 'You are not registered as an owner.' }
+        }
+      }
+
       if (profile) {
-        // Always redirect based on actual role in DB — no tab mismatch blocking
         if (profile.role === 'admin') destination = '/dashboard/admin'
-        else if (profile.role === 'owner' || profile.role === 'rental_owner') destination = '/dashboard/owner'
+        else if (profile.role === 'owner' || profile.role === 'rental_owner' || isApprovedOwner) destination = '/dashboard/owner'
       }
     }
 

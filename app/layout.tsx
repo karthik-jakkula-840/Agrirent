@@ -94,6 +94,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${fontSans.variable} ${fontMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <head>
         <script
