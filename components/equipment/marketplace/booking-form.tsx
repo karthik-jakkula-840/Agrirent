@@ -8,6 +8,7 @@ import { bookingSchema } from '@/lib/validations/booking'
 import { useCreateBooking } from '@/hooks/use-bookings'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -95,6 +96,15 @@ export function BookingForm({ equipment }: { equipment: any }) {
     setError(null)
     
     try {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      if (!session) {
+        toast.error('Please login to request a booking')
+        router.push(`/login?redirect=${encodeURIComponent(`/equipment/${equipment.id}`)}`)
+        return
+      }
+
       const bookingData = {
         equipment_id: data.equipment_id,
         start_date: data.start_date,
