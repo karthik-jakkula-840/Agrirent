@@ -11,7 +11,7 @@ export async function FeaturedEquipment() {
     const { data } = await supabase
       .from('equipment')
       .select('*, profiles(first_name, last_name, is_verified)')
-      .eq('is_active', true)
+      .eq('status', 'approved')
       .limit(4)
       
     if (data && data.length > 0) {
