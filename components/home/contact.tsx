@@ -30,7 +30,7 @@ export function Contact() {
   const [state, formAction, pending] = useActionState(submitContactMessage, initialState)
 
   return (
-    <section className="py-10 sm:py-16 md:py-24 bg-gradient-to-b from-white via-gray-50/40 to-white relative overflow-hidden">
+    <section id="contact" className="py-10 sm:py-16 md:py-24 bg-gradient-to-b from-white via-gray-50/40 to-white relative overflow-hidden scroll-mt-20">
       {/* Decorative background glow */}
       <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-emerald-50/60 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none -z-10" />
       
@@ -75,7 +75,7 @@ export function Contact() {
                   
                   {/* Email */}
                   <a 
-                    href="mailto:support@agriform.in" 
+                    href="mailto:support@agrirent.in" 
                     className="flex items-start gap-3.5 p-2 -ml-2 rounded-xl hover:bg-white/5 active:bg-white/10 transition-colors group"
                   >
                     <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 border border-white/10 group-hover:border-emerald-500/50 group-hover:bg-emerald-500/20 transition-all">
@@ -84,7 +84,7 @@ export function Contact() {
                     <div>
                       <h3 className="font-bold text-xs sm:text-sm text-gray-200 mb-0.5">Email Support</h3>
                       <p className="text-xs sm:text-sm text-gray-400 group-hover:text-white transition-colors font-medium">
-                        support@agriform.in
+                        support@agrirent.in
                       </p>
                     </div>
                   </a>

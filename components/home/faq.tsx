@@ -103,6 +103,13 @@ export function Faq() {
 
           <a 
             href="#contact" 
+            onClick={(e) => {
+              const el = document.getElementById('contact')
+              if (el) {
+                e.preventDefault()
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+              }
+            }}
             className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#009b55] hover:bg-[#00874a] text-white font-bold text-xs sm:text-sm shadow-xs transition-all active:scale-95 shrink-0"
           >
             <span>Contact Support</span>

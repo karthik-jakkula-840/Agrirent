@@ -4,8 +4,8 @@ import { Footer } from '@/components/layout/footer'
 import { Contact } from '@/components/home/contact'
 
 export const metadata: Metadata = {
-  title: 'Contact Us | Agriform',
-  description: 'Get in touch with Agriform. Contact our support team for any queries about renting or listing agricultural machinery.',
+  title: 'Contact Us | AgriRent',
+  description: 'Get in touch with AgriRent. Contact our support team for any queries about renting or listing agricultural machinery.',
 }
 
 export default function ContactPage() {
