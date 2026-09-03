@@ -1,9 +1,14 @@
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/supabase/auth'
 import { FavoritesClient } from './favorites-client'
 
 export default async function FavoritesPage() {
   const user = await getCurrentUser()
+  if (!user) {
+    redirect('/login')
+  }
+
   const supabase = await createClient()
 
   // Initial fetch for Server Component
@@ -29,7 +34,7 @@ export default async function FavoritesPage() {
         )
       )
     `)
-    .eq('customer_id', user!.id)
+    .eq('customer_id', user.id)
     .order('created_at', { ascending: false })
 
   return (

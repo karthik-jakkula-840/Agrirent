@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/supabase/auth'
 import { CreditCard, ArrowUpRight, CheckCircle2 } from 'lucide-react'
@@ -7,6 +8,10 @@ import Link from 'next/link'
 
 export default async function PaymentsPage() {
   const user = await getCurrentUser()
+  if (!user) {
+    redirect('/login')
+  }
+
   const adminSupabase = createAdminClient()
 
   // Fetch transactions and payments for the user
@@ -16,7 +21,7 @@ export default async function PaymentsPage() {
       *,
       booking:booking_id(booking_number, equipment:equipment_id(title))
     `)
-    .eq('user_id', user!.id)
+    .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
   const typedTransactions = transactions as any[] || []

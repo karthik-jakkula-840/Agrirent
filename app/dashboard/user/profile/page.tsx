@@ -1,15 +1,20 @@
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/supabase/auth'
 import { ProfileForm } from './profile-form'
 
 export default async function ProfilePage() {
   const user = await getCurrentUser()
+  if (!user) {
+    redirect('/login')
+  }
+
   const supabase = await createClient()
 
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
-    .eq('id', user!.id)
+    .eq('id', user.id)
     .single()
 
   return (

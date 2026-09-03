@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/supabase/auth'
 import { UserService } from '@/services/user.service'
@@ -13,25 +14,29 @@ import { translations, LanguageCode } from '@/lib/translations'
 
 export default async function CustomerDashboardPage() {
   const user = await getCurrentUser()
+  if (!user) {
+    redirect('/login')
+  }
+
   const supabase = await createClient()
   
   const cookieStore = await cookies()
   const locale = (cookieStore.get('NEXT_LOCALE')?.value as LanguageCode) || 'en'
   const t = translations[locale]?.dashboard || translations['en'].dashboard
 
-  const { data: profile } = await supabase.from('profiles').select('full_name').eq('id', user!.id).single()
+  const { data: profile } = await supabase.from('profiles').select('full_name').eq('id', user.id).single()
   const typedProfile = profile as any
   
   const userService = new UserService(supabase)
   
   const [stats, recentBookings, activeRentals, favoritesResult] = await Promise.all([
-    userService.getCustomerDashboardStats(user!.id),
-    userService.getRecentBookings(user!.id, 5),
-    userService.getActiveRentals(user!.id),
+    userService.getCustomerDashboardStats(user.id),
+    userService.getRecentBookings(user.id, 5),
+    userService.getActiveRentals(user.id),
     supabase
       .from('favorites')
       .select(`id, equipment_id, equipment (id, title, daily_price, location, equipment_images (image_url, is_primary))`)
-      .eq('customer_id', user!.id)
+      .eq('customer_id', user.id)
       .order('created_at', { ascending: false })
       .limit(3)
   ])

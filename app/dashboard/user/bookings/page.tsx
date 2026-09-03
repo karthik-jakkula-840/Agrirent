@@ -1,19 +1,24 @@
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { BookingService } from '@/services/booking.service'
 import { getCurrentUser } from '@/lib/supabase/auth'
 import { CustomerBookingsClient } from './bookings-client'
 
 export const metadata = {
-  title: 'My Bookings | Customer Dashboard | Agriform',
+  title: 'My Bookings | Customer Dashboard | AgriRent',
   description: 'Manage and track your agricultural equipment rental bookings',
 }
 
 export default async function CustomerBookingsPage() {
   const user = await getCurrentUser()
+  if (!user) {
+    redirect('/login')
+  }
+
   const supabase = await createClient()
   const bookingService = new BookingService(supabase)
   
-  const bookings = await bookingService.getCustomerBookings(user!.id)
+  const bookings = await bookingService.getCustomerBookings(user.id)
 
   return (
     <div className="max-w-5xl mx-auto py-4 sm:py-8 px-4">
