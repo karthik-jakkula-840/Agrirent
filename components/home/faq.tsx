@@ -11,11 +11,11 @@ import Link from "next/link"
 
 const faqs = [
   {
-    question: "What is Agriform?",
-    answer: "Agriform is India's smart agricultural equipment rental marketplace. We connect farmers in need of machinery with verified equipment owners nearby, ensuring affordable, safe, and transparent rentals."
+    question: "What is AgriRent?",
+    answer: "AgriRent is India's smart agricultural equipment rental marketplace. We connect farmers in need of machinery with verified equipment owners nearby, ensuring affordable, safe, and transparent rentals."
   },
   {
-    question: "How do I rent equipment on Agriform?",
+    question: "How do I rent equipment on AgriRent?",
     answer: "Renting is fast and straightforward: search for the machinery you need (by name or location), select your rental dates, and submit a booking request. Once the owner confirms, complete payment securely to lock in your reservation."
   },
   {

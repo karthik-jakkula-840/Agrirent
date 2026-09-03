@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Agriform - Smart Agricultural Equipment Rental',
-    short_name: 'Agriform',
+    name: 'AgriRent - Smart Agricultural Equipment Rental',
+    short_name: 'AgriRent',
     description: 'Rent agricultural equipment from verified owners near you.',
     start_url: '/',
     display: 'standalone',

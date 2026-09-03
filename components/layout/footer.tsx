@@ -18,7 +18,7 @@ export function Footer() {
               <div className="bg-primary/20 p-2 rounded-xl">
                 <Tractor className="h-7 w-7 text-primary" />
               </div>
-              <span className="text-2xl font-bold tracking-tight">AGRIFORM</span>
+              <span className="text-2xl font-black tracking-tight">Agri<span className="text-[#009b55]">Rent</span></span>
             </Link>
             <p className="text-gray-400 mb-8 max-w-sm text-sm leading-relaxed">
               India's smart agricultural equipment rental marketplace. Connecting farmers with equipment owners for a better harvest.
@@ -89,7 +89,7 @@ export function Footer() {
 
         <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-gray-500 text-sm">
-            &copy; {new Date().getFullYear()} Agriform. All rights reserved.
+            &copy; {new Date().getFullYear()} AgriRent. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-gray-500">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>

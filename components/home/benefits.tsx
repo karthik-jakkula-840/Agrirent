@@ -104,7 +104,7 @@ export function Benefits() {
           </div>
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-950 tracking-tight leading-tight mb-2.5">
-            Why Choose <span className="text-[#009b55]">Agriform</span>
+            Why Choose <span className="text-[#009b55]">AgriRent</span>
           </h2>
           <p className="text-xs sm:text-sm md:text-base text-gray-500 leading-relaxed font-normal px-2">
             We are revolutionizing agricultural equipment rentals across India with verified owners, transparent prices, and complete rental security.

@@ -87,7 +87,7 @@ export async function Testimonials() {
             Trusted by Thousands of <span className="text-[#009b55]">Customers</span>
           </h2>
           <p className="text-xs sm:text-sm md:text-base text-gray-500 leading-relaxed font-normal">
-            Real experiences from farmers and equipment owners who rent and grow together with Agriform.
+            Real experiences from farmers and equipment owners who rent and grow together with AgriRent.
           </p>
         </div>
       </div>

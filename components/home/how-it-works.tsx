@@ -86,7 +86,7 @@ export function HowItWorks() {
           </div>
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-950 tracking-tight leading-tight mb-2.5">
-            How <span className="text-[#009b55]">Agriform</span> Works
+            How <span className="text-[#009b55]">AgriRent</span> Works
           </h2>
           <p className="text-xs sm:text-sm md:text-base text-gray-500 leading-relaxed max-w-xl mx-auto px-2">
             A transparent, reliable rental journey designed for Indian farmers. Get the machinery you need in 6 straightforward steps.

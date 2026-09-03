@@ -14,20 +14,20 @@ import { Contact } from '@/components/home/contact'
 import { getCurrentUser, getUserRole } from '@/lib/supabase/auth'
 
 export const metadata: Metadata = {
-  title: 'Agriform | India\'s Smart Equipment Rental Marketplace',
+  title: 'AgriRent | India\'s Smart Equipment Rental Marketplace',
   description: 'Discover and rent high-quality agricultural equipment from verified owners near you. Affordable, reliable, and built for your farm\'s success.',
   keywords: 'agriculture, equipment, rental, tractor, harvester, farming, marketplace, India',
   openGraph: {
-    title: 'Agriform | Smart Agricultural Equipment Rental',
+    title: 'AgriRent | Smart Agricultural Equipment Rental',
     description: 'Discover and rent high-quality agricultural equipment from verified owners.',
-    url: 'https://agriform.in',
-    siteName: 'Agriform',
+    url: 'https://agrirent.in',
+    siteName: 'AgriRent',
     locale: 'en_IN',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Agriform | Smart Agricultural Equipment Rental',
+    title: 'AgriRent | Smart Agricultural Equipment Rental',
     description: 'Discover and rent high-quality agricultural equipment from verified owners.',
   },
 }
@@ -46,22 +46,22 @@ export default async function HomePage() {
     '@graph': [
       {
         '@type': 'WebSite',
-        '@id': 'https://agriform.in/#website',
-        'url': 'https://agriform.in',
-        'name': 'Agriform',
+        '@id': 'https://agrirent.in/#website',
+        'url': 'https://agrirent.in',
+        'name': 'AgriRent',
         'description': 'Smart Agricultural Equipment Rental Marketplace in India',
         'potentialAction': [{
           '@type': 'SearchAction',
-          'target': 'https://agriform.in/equipment?q={search_term_string}',
+          'target': 'https://agrirent.in/equipment?q={search_term_string}',
           'query-input': 'required name=search_term_string'
         }]
       },
       {
         '@type': 'Organization',
-        '@id': 'https://agriform.in/#organization',
-        'name': 'Agriform',
-        'url': 'https://agriform.in',
-        'logo': 'https://agriform.in/logo.png',
+        '@id': 'https://agrirent.in/#organization',
+        'name': 'AgriRent',
+        'url': 'https://agrirent.in',
+        'logo': 'https://agrirent.in/logo.png',
         'contactPoint': {
           '@type': 'ContactPoint',
           'telephone': '+91-XXXXXXXXXX',

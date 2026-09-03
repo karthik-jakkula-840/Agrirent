@@ -63,7 +63,9 @@ export function NavbarClient({ user, role }: NavbarClientProps) {
         <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 text-primary">
             <Tractor className="h-7 w-7 md:h-8 md:w-8 text-[#009b55]" />
-            <span className="text-xl md:text-2xl font-black tracking-tight text-gray-950">AGRIFORM</span>
+            <span className="text-xl md:text-2xl font-black tracking-tight text-gray-950">
+              Agri<span className="text-[#009b55]">Rent</span>
+            </span>
           </Link>
 
           {/* Desktop Nav */}
@@ -167,7 +169,9 @@ export function NavbarClient({ user, role }: NavbarClientProps) {
                     className="flex items-center gap-2"
                   >
                     <Tractor className="h-7 w-7 text-[#009b55]" />
-                    <span className="text-xl font-black tracking-tight text-gray-950">AGRIFORM</span>
+                    <span className="text-xl font-black tracking-tight text-gray-950">
+                      Agri<span className="text-[#009b55]">Rent</span>
+                    </span>
                   </Link>
 
                   <button
@@ -284,7 +288,7 @@ export function NavbarClient({ user, role }: NavbarClientProps) {
                   </div>
                 ) : (
                   <p className="text-xs text-gray-400 text-center">
-                    Agriform · Smart Equipment Rental
+                    AgriRent · Smart Equipment Rental
                   </p>
                 )}
               </div>

@@ -54,7 +54,7 @@ export function OwnerCta({ userRole, isAuthenticated }: OwnerCtaProps) {
             </h2>
 
             <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8 leading-relaxed font-medium">
-              List your tractors, harvesters, rotavators, or pumps on Agriform. Connect with verified farmers in your district and earn safely whenever your machinery is idle.
+              List your tractors, harvesters, rotavators, or pumps on AgriRent. Connect with verified farmers in your district and earn safely whenever your machinery is idle.
             </p>
             
             {/* Benefits 2-Column Grid */}

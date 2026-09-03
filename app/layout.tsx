@@ -25,25 +25,25 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://agriform.in'),
+  metadataBase: new URL('https://agrirent.in'),
   title: {
-    default: 'Agriform | Smart Agricultural Equipment Rental',
-    template: '%s | Agriform',
+    default: 'AgriRent | Smart Agricultural Equipment Rental',
+    template: '%s | AgriRent',
   },
   description: 'Discover and rent high-quality agricultural equipment from verified owners near you. Affordable, reliable, and built for your farm\'s success.',
   keywords: [
     'agricultural equipment rental', 
     'tractor rental India', 
     'farm machinery', 
-    'Agriform', 
+    'AgriRent', 
     'farming equipment rental', 
     'harvester rental', 
     'smart farming',
     'peer-to-peer equipment sharing'
   ],
-  authors: [{ name: 'Agriform Team' }],
-  creator: 'Agriform',
-  publisher: 'Agriform',
+  authors: [{ name: 'AgriRent Team' }],
+  creator: 'AgriRent',
+  publisher: 'AgriRent',
   robots: {
     index: true,
     follow: true,
@@ -58,13 +58,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    url: 'https://agriform.in',
-    siteName: 'Agriform',
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Agriform - Smart Agricultural Equipment Rental' }],
+    url: 'https://agrirent.in',
+    siteName: 'AgriRent',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'AgriRent - Smart Agricultural Equipment Rental' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Agriform | Smart Agricultural Equipment Rental',
+    title: 'AgriRent | Smart Agricultural Equipment Rental',
     description: 'Discover and rent high-quality agricultural equipment from verified owners near you.',
     images: ['/og-image.jpg'],
   },
@@ -85,14 +85,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Agriform',
-    url: 'https://agriform.in',
-    logo: 'https://agriform.in/logo.png',
+    name: 'AgriRent',
+    url: 'https://agrirent.in',
+    logo: 'https://agrirent.in/logo.png',
     description: 'Smart Agricultural Equipment Rental Marketplace in India',
     sameAs: [
-      'https://twitter.com/agriform',
-      'https://facebook.com/agriform',
-      'https://instagram.com/agriform'
+      'https://twitter.com/agrirent',
+      'https://facebook.com/agrirent',
+      'https://instagram.com/agrirent'
     ]
   };
 

@@ -177,7 +177,7 @@ export function MobileLandingView() {
           <div className="flex-1 pr-1">
             <h1 className="text-[28px] sm:text-[32px] font-black tracking-tight text-gray-950 leading-[1.18] mb-2.5">
               Rent the Right Equipment.<br />
-              <span className="text-[#009b55]">Grow More with Agriform.</span>
+              <span className="text-[#009b55]">Grow More with AgriRent.</span>
             </h1>
             <p className="text-sm sm:text-base text-gray-600 font-medium leading-relaxed">
               Affordable, reliable & high-quality equipment rental near you.

@@ -146,7 +146,7 @@ export function Contact() {
                   </div>
                   <h4 className="text-lg font-bold text-gray-900 mb-1">Message Sent Successfully!</h4>
                   <p className="text-xs sm:text-sm text-emerald-800 leading-relaxed max-w-sm">
-                    Thank you for reaching out to Agriform. Our regional representative will get in touch with you within 24 hours.
+                    Thank you for reaching out to AgriRent. Our regional representative will get in touch with you within 24 hours.
                   </p>
                 </div>
               ) : (
