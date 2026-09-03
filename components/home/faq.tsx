@@ -1,71 +1,115 @@
+'use client'
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { HelpCircle, MessageCircle, ArrowRight, Sparkles } from "lucide-react"
+import Link from "next/link"
 
 const faqs = [
   {
     question: "What is Agriform?",
-    answer: "Agriform is India's leading smart agricultural equipment rental marketplace. We connect farmers who need machinery with verified equipment owners, ensuring affordable, safe, and efficient rentals."
+    answer: "Agriform is India's smart agricultural equipment rental marketplace. We connect farmers in need of machinery with verified equipment owners nearby, ensuring affordable, safe, and transparent rentals."
   },
   {
-    question: "How do I rent equipment?",
-    answer: "Renting is easy! Simply search for the equipment you need, select your desired dates, and send a booking request. Once the verified owner approves, you can proceed with the secure payment."
+    question: "How do I rent equipment on Agriform?",
+    answer: "Renting is fast and straightforward: search for the machinery you need (by name or location), select your rental dates, and submit a booking request. Once the owner confirms, complete payment securely to lock in your reservation."
   },
   {
-    question: "How do I become a rental owner?",
-    answer: "Click on 'Become a Rental Owner' to sign up. You will need to provide your details and register your equipment. Once our team verifies your profile, your equipment will be listed for farmers to rent."
+    question: "How do I list my equipment as an owner?",
+    answer: "Tap 'Become an Owner' to register. Add your machinery specifications, photos, and daily or hourly pricing. Once our verification team reviews your listing, it goes live to thousands of farmers in your district."
   },
   {
-    question: "How are equipment owners verified?",
-    answer: "We perform a thorough background check, verify identity documents, and ensure that the listed equipment meets our quality and safety standards before an owner can accept bookings."
+    question: "How are equipment owners and machinery verified?",
+    answer: "Every equipment owner undergoes strict identity verification (Aadhaar/Govt ID) and machine condition checks before their equipment is approved for booking."
   },
   {
-    question: "How is payment handled?",
-    answer: "All payments are securely processed through our platform. We hold the funds in escrow until the rental period begins, ensuring peace of mind for both farmers and owners."
+    question: "How are payments handled securely?",
+    answer: "All transactions are protected by escrow. Your payment is held safely and released only after you inspect and accept the equipment upon handover."
   },
   {
-    question: "Can I cancel a booking?",
-    answer: "Yes, bookings can be cancelled subject to our cancellation policy. Cancellations made well in advance typically receive a full refund."
+    question: "Can I cancel or reschedule a booking?",
+    answer: "Yes, bookings can be cancelled or modified according to our transparent cancellation policy. Cancellations made prior to the rental date qualify for prompt refunds."
   },
   {
-    question: "Is equipment insured?",
-    answer: "We strongly recommend that owners maintain active insurance for their machinery. Agriform also provides basic damage protection for eligible rentals during the booking period."
+    question: "What happens if equipment breaks down during work?",
+    answer: "Owners are responsible for well-maintained machinery. If an unexpected mechanical issue occurs, our 24/7 farmer support team will immediately coordinate replacement machinery or a fair refund."
   },
   {
-    question: "How do I contact support?",
-    answer: "You can reach our 24/7 support team through the Contact Form below, or call our dedicated helpline listed on the contact page."
+    question: "How can I contact customer support?",
+    answer: "Our support helpline is active 24/7. You can call our toll-free number (+91 1800 123 4567), chat with us on WhatsApp, or send a message through the contact form below."
   }
 ]
 
 export function Faq() {
   return (
-    <section className="py-24 bg-white">
-      <div className="container mx-auto px-4 md:px-6 max-w-4xl">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
-            Frequently Asked Questions
+    <section id="faq" className="py-12 sm:py-16 md:py-24 bg-gradient-to-b from-white via-[#fbfdfc] to-white relative overflow-hidden">
+      {/* Subtle background ambient blur */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-emerald-50/50 rounded-full blur-3xl pointer-events-none -z-10" />
+
+      <div className="container mx-auto px-4 md:px-6 max-w-3xl relative z-10">
+        {/* Section Header */}
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ebf8f1] border border-[#c3edd5] text-[#008f4c] text-[11px] sm:text-xs font-bold mb-3 shadow-xs">
+            <Sparkles className="h-3.5 w-3.5 text-[#009b55]" />
+            <span>Got Questions? We Have Answers</span>
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-950 tracking-tight leading-tight mb-2.5">
+            Frequently Asked <span className="text-[#009b55]">Questions</span>
           </h2>
-          <p className="text-lg text-gray-600">
-            Everything you need to know about renting and listing equipment on Agriform.
+          <p className="text-xs sm:text-sm md:text-base text-gray-500 max-w-lg mx-auto leading-relaxed font-normal">
+            Quick answers to help you rent machinery, list equipment, manage payments, and grow your farm.
           </p>
         </div>
 
+        {/* Accordion Cards */}
         {/* @ts-ignore */}
-        <Accordion type="single" className="w-full">
+        <Accordion type="single" collapsible className="w-full space-y-2.5 sm:space-y-3">
           {faqs.map((faq, index) => (
-            <AccordionItem key={index} value={`item-${index}`} className="border border-gray-200/80 rounded-3xl mb-4 bg-white shadow-sm overflow-hidden px-4 md:px-8 py-2 md:py-4">
-              <AccordionTrigger className="text-left text-base md:text-xl font-bold text-slate-900 hover:no-underline hover:text-primary transition-colors">
-                {faq.question}
+            <AccordionItem 
+              key={index} 
+              value={`item-${index}`} 
+              className="border border-gray-100 bg-white rounded-2xl sm:rounded-3xl shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:shadow-md hover:border-emerald-200/80 transition-all duration-200 px-4 sm:px-6 py-1 overflow-hidden"
+            >
+              <AccordionTrigger className="text-left text-xs sm:text-base font-bold text-gray-900 hover:no-underline hover:text-[#009b55] py-3.5 sm:py-4 transition-colors">
+                <div className="flex items-center gap-2.5 pr-2">
+                  <div className="h-6 w-6 rounded-lg bg-emerald-50 text-[#009b55] flex items-center justify-center shrink-0 text-xs font-black">
+                    Q
+                  </div>
+                  <span className="leading-snug">{faq.question}</span>
+                </div>
               </AccordionTrigger>
-              <AccordionContent className="text-gray-600 text-base leading-relaxed pt-2 pb-4">
+              <AccordionContent className="text-xs sm:text-sm text-gray-500 leading-relaxed font-normal pt-1 pb-4 pl-8.5 pr-2">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
+
+        {/* Need More Help Banner */}
+        <div className="mt-8 sm:mt-10 p-4 sm:p-6 bg-[#eef8f2] rounded-2xl sm:rounded-3xl border border-emerald-100/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left shadow-xs">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-2xl bg-emerald-100 text-[#009b55] flex items-center justify-center shrink-0">
+              <HelpCircle className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="font-bold text-xs sm:text-sm text-gray-900">Still have questions?</h3>
+              <p className="text-[11px] sm:text-xs text-gray-500 font-medium">Our agricultural support desk is here for you 24/7.</p>
+            </div>
+          </div>
+
+          <a 
+            href="#contact" 
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#009b55] hover:bg-[#00874a] text-white font-bold text-xs shadow-xs transition-all active:scale-95 shrink-0"
+          >
+            <span>Contact Support</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </a>
+        </div>
       </div>
     </section>
   )
