@@ -4,8 +4,9 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Lock, Loader2, CheckCircle2, Shield, Globe } from 'lucide-react'
+import { Lock, Loader2, CheckCircle2, Shield, Globe, LogOut } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { logout } from '@/features/auth/actions/auth-actions'
 
 export function SettingsForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -142,6 +143,27 @@ export function SettingsForm() {
           }}>
             Apply Changes
           </Button>
+        </div>
+      </section>
+
+      <section>
+        <div className="mb-6 border-b border-gray-100 pb-4">
+          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+            <LogOut className="h-5 w-5 text-gray-400" /> Account Session
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">Sign out from your active account on this device.</p>
+        </div>
+        
+        <div className="max-w-md">
+          <form action={logout}>
+            <button
+              type="submit"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 text-sm font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-all active:scale-[0.98] shadow-xs"
+            >
+              <LogOut className="h-4 w-4 text-red-500" />
+              <span>Log out</span>
+            </button>
+          </form>
         </div>
       </section>
     </div>

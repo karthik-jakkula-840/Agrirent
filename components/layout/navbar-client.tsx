@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Tractor, Home, Grid, HelpCircle, Info, Phone, ArrowRight, UserCircle } from 'lucide-react'
+import { Menu, X, Tractor, Home, Grid, HelpCircle, Info, Phone, ArrowRight, UserCircle, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { motion, AnimatePresence } from 'framer-motion'
 import { logout } from '@/features/auth/actions/auth-actions'
@@ -272,12 +272,13 @@ export function NavbarClient({ user, role }: NavbarClientProps) {
                       <UserCircle className="h-4 w-4 text-gray-400" />
                       Profile Settings
                     </Link>
-                    <form action={logout}>
+                    <form action={logout} className="w-full">
                       <button
                         type="submit"
-                        className="w-full text-left px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-xl"
+                        className="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-all active:scale-[0.98] shadow-xs"
                       >
-                        Log out
+                        <LogOut className="h-4 w-4 text-red-500" />
+                        <span>Log out</span>
                       </button>
                     </form>
                   </div>

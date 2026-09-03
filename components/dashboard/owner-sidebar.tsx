@@ -98,14 +98,14 @@ export function OwnerSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen, l
           </div>
         </div>
         
-        <Button 
-          variant="ghost" 
+        <button
+          type="button"
           onClick={handleLogout}
-          className="w-full justify-start text-gray-600 hover:text-red-600 hover:bg-red-50"
+          className="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-all active:scale-[0.98] shadow-xs"
         >
-          <LogOut className="mr-2 h-4 w-4" />
-          {t.logout}
-        </Button>
+          <LogOut className="h-4 w-4 text-red-500" />
+          <span>{t.logout}</span>
+        </button>
       </div>
     </div>
   )
