@@ -32,6 +32,8 @@ export const metadata: Metadata = {
   },
 }
 
+import { MobileLandingView } from '@/components/home/mobile-landing'
+
 export default async function HomePage() {
   // Fetch user data for the CTA logic
   const user = await getCurrentUser()
@@ -80,10 +82,17 @@ export default async function HomePage() {
       <Navbar />
       
       <main className="flex-1 w-full">
-        <Hero />
-        <Stats />
-        <CategorySection />
-        <FeaturedEquipment />
+        {/* Mobile View Landing Page (Exact layout as mockup) */}
+        <MobileLandingView />
+
+        {/* Desktop Hero & Stats (Hidden on mobile) */}
+        <div className="hidden md:block">
+          <Hero />
+          <Stats />
+          <CategorySection />
+          <FeaturedEquipment />
+        </div>
+
         <Benefits />
         <HowItWorks />
         <OwnerCta userRole={role} isAuthenticated={isAuthenticated} />

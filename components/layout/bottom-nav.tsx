@@ -71,21 +71,24 @@ export function BottomNav() {
     },
     { 
       name: 'Bookings', 
-      href: '/bookings', 
+      href: '/dashboard/user/bookings', 
       icon: Calendar,
-      isActive: pathname.startsWith('/bookings') || pathname.includes('/bookings') || (pathname.startsWith('/dashboard') && !pathname.includes('/profile'))
+      isActive: pathname.includes('/bookings')
     },
     { 
       name: 'Profile', 
-      href: '/profile', 
+      href: '/dashboard/user/profile', 
       icon: User,
-      isActive: pathname.includes('/profile')
+      isActive: pathname.includes('/profile') || pathname === '/dashboard/user'
     },
   ]
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t border-gray-200 pb-safe shadow-lg">
-      <div className="flex justify-around items-center h-16 max-w-md mx-auto">
+    <nav 
+      aria-label="Mobile Bottom Navigation"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-gray-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.04)]"
+    >
+      <div className="flex justify-around items-center h-14 max-w-md mx-auto px-2">
         {navItems.map((item) => {
           const isActive = item.isActive
           const Icon = item.icon
@@ -94,16 +97,24 @@ export function BottomNav() {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${
-                isActive ? 'text-primary font-semibold' : 'text-gray-500 hover:text-gray-900'
+              className={`flex flex-col items-center justify-center w-full h-full gap-0.5 transition-colors ${
+                isActive ? 'text-[#009b55] font-bold' : 'text-gray-400 hover:text-gray-700'
               }`}
             >
-              <Icon className={`w-5 h-5 ${isActive ? 'fill-primary/20 scale-105 transition-transform' : ''}`} strokeWidth={isActive ? 2.5 : 2} />
-              <span className="text-[11px]">{item.name}</span>
+              <Icon 
+                className={`w-5 h-5 transition-transform ${
+                  isActive ? 'stroke-[#009b55] fill-[#009b55]/15 scale-105' : ''
+                }`} 
+                strokeWidth={isActive ? 2.4 : 1.8} 
+              />
+              <span className="text-[10px] font-semibold tracking-tight">{item.name}</span>
             </Link>
           )
         })}
       </div>
-    </div>
+      
+      {/* iOS Home Indicator Bar */}
+      <div className="w-28 h-1 bg-gray-300/80 rounded-full mx-auto mb-1.5" />
+    </nav>
   )
 }
