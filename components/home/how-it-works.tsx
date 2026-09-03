@@ -73,7 +73,7 @@ const itemVariants = {
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-12 sm:py-16 md:py-24 bg-gradient-to-b from-white via-gray-50/40 to-white overflow-hidden relative">
+    <section id="how-it-works" className="py-12 sm:py-16 md:py-24 bg-gradient-to-b from-white via-gray-50/40 to-white overflow-hidden relative scroll-mt-20">
       {/* Subtle Background Glow Circles */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-50/40 rounded-full blur-3xl pointer-events-none -z-10" />
 

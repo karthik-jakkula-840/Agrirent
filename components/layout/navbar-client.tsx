@@ -51,6 +51,19 @@ export function NavbarClient({ user, role }: NavbarClientProps) {
     return '/dashboard/user'
   }
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    setMobileMenuOpen(false)
+    if (href.includes('#how-it-works')) {
+      if (typeof window !== 'undefined' && window.location.pathname === '/') {
+        e.preventDefault()
+        const el = document.getElementById('how-it-works')
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }
+    }
+  }
+
   return (
     <>
       <header
@@ -74,6 +87,7 @@ export function NavbarClient({ user, role }: NavbarClientProps) {
               <Link
                 key={link.name}
                 href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className="text-sm font-medium text-gray-700 hover:text-primary transition-colors"
               >
                 {link.name}
@@ -236,7 +250,7 @@ export function NavbarClient({ user, role }: NavbarClientProps) {
                       <Link
                         key={link.name}
                         href={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
+                        onClick={(e) => handleNavClick(e, link.href)}
                         className="flex items-center justify-between px-3 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-emerald-50/60 hover:text-[#009b55] transition-colors group"
                       >
                         <div className="flex items-center gap-3">
