@@ -13,14 +13,17 @@ export async function GET(req: NextRequest) {
 
     // Parse filters
     const filters: EquipmentFilters = {
-      search: searchParams.get('search') || undefined,
-      category: searchParams.get('category') || undefined,
-      district: searchParams.get('district') || undefined,
+      search: searchParams.get('search')?.trim() || undefined,
+      category: searchParams.get('category')?.trim() || undefined,
+      district: searchParams.get('district')?.trim() || undefined,
       status: (searchParams.get('status') as any) || 'approved', // Public API defaults to approved
+      availability: (searchParams.get('availability') as any) || undefined,
     }
 
-    if (searchParams.get('minPrice')) filters.minPrice = Number(searchParams.get('minPrice'))
-    if (searchParams.get('maxPrice')) filters.maxPrice = Number(searchParams.get('maxPrice'))
+    const minPriceRaw = searchParams.get('minPrice')
+    const maxPriceRaw = searchParams.get('maxPrice')
+    if (minPriceRaw && !isNaN(Number(minPriceRaw))) filters.minPrice = Number(minPriceRaw)
+    if (maxPriceRaw && !isNaN(Number(maxPriceRaw))) filters.maxPrice = Number(maxPriceRaw)
 
     // Parse Pagination
     const pagination: PaginationOptions = {

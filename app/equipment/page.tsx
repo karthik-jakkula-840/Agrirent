@@ -23,6 +23,10 @@ export default async function MarketplacePage(props: Props) {
   const defaultCategory = typeof searchParams.category === 'string' ? searchParams.category : ''
   const defaultSearch = typeof searchParams.search === 'string' ? searchParams.search : ''
   const defaultDistrict = typeof searchParams.district === 'string' ? searchParams.district : ''
+  const defaultMinPrice = typeof searchParams.minPrice === 'string' ? searchParams.minPrice : ''
+  const defaultMaxPrice = typeof searchParams.maxPrice === 'string' ? searchParams.maxPrice : ''
+  const defaultAvailability = typeof searchParams.availability === 'string' ? searchParams.availability : ''
+  const defaultSort = typeof searchParams.sort === 'string' ? searchParams.sort : 'newest'
 
   const supabase = await createClient()
   
@@ -33,11 +37,22 @@ export default async function MarketplacePage(props: Props) {
     .eq('is_active', true)
     .order('name')
 
+  // Resolve category slug to ID if needed
+  let resolvedCategory = defaultCategory
+  if (categories && defaultCategory) {
+    const matched = categories.find(
+      (c: any) => c.id === defaultCategory || c.slug === defaultCategory || c.name.toLowerCase() === defaultCategory.toLowerCase()
+    )
+    if (matched) {
+      resolvedCategory = matched.id
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50/50">
       <Navbar />
       
-      <main className="flex-1 w-full pb-20">
+      <main className="flex-1 w-full pb-20 pt-24">
         <div className="bg-primary/5 py-12 border-b border-primary/10">
           <div className="container mx-auto px-4 md:px-6">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Equipment Marketplace</h1>
@@ -47,12 +62,16 @@ export default async function MarketplacePage(props: Props) {
           </div>
         </div>
 
-        <div className="container mx-auto px-4 md:px-6 pt-12">
+        <div className="container mx-auto px-4 md:px-6 pt-10">
           <EquipmentGrid 
             initialCategories={categories || []} 
-            defaultCategory={defaultCategory} 
+            defaultCategory={resolvedCategory} 
             defaultSearch={defaultSearch}
             defaultDistrict={defaultDistrict}
+            defaultMinPrice={defaultMinPrice}
+            defaultMaxPrice={defaultMaxPrice}
+            defaultAvailability={defaultAvailability}
+            defaultSort={defaultSort}
           />
         </div>
       </main>

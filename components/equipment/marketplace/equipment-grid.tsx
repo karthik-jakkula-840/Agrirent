@@ -1,37 +1,104 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 import { EquipmentCard } from '@/components/equipment/equipment-card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Search, Loader2, SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { 
+  Search, 
+  Loader2, 
+  SlidersHorizontal, 
+  ChevronLeft, 
+  ChevronRight, 
+  X, 
+  MapPin, 
+  IndianRupee,
+  RotateCcw,
+  CheckCircle2
+} from 'lucide-react'
+
+interface EquipmentGridProps {
+  initialCategories: any[]
+  defaultCategory?: string
+  defaultSearch?: string
+  defaultDistrict?: string
+  defaultMinPrice?: string
+  defaultMaxPrice?: string
+  defaultAvailability?: string
+  defaultSort?: string
+}
 
 export function EquipmentGrid({ 
   initialCategories, 
   defaultCategory = '',
   defaultSearch = '',
-  defaultDistrict = ''
-}: { 
-  initialCategories: any[], 
-  defaultCategory?: string,
-  defaultSearch?: string,
-  defaultDistrict?: string
-}) {
+  defaultDistrict = '',
+  defaultMinPrice = '',
+  defaultMaxPrice = '',
+  defaultAvailability = '',
+  defaultSort = 'newest'
+}: EquipmentGridProps) {
+  const router = useRouter()
+  const [, startTransition] = useTransition()
+
+  // Filter States
   const [search, setSearch] = useState(defaultSearch)
+  const [searchInput, setSearchInput] = useState(defaultSearch)
+  
   const [district, setDistrict] = useState(defaultDistrict)
+  const [districtInput, setDistrictInput] = useState(defaultDistrict)
+  
   const [category, setCategory] = useState(defaultCategory)
-  const [sort, setSort] = useState('newest')
+  
+  const [minPrice, setMinPrice] = useState(defaultMinPrice)
+  const [maxPrice, setMaxPrice] = useState(defaultMaxPrice)
+  const [minPriceInput, setMinPriceInput] = useState(defaultMinPrice)
+  const [maxPriceInput, setMaxPriceInput] = useState(defaultMaxPrice)
+  
+  const [availability, setAvailability] = useState(defaultAvailability)
+  const [sort, setSort] = useState(defaultSort)
   const [page, setPage] = useState(1)
+  const [showMobileFilters, setShowMobileFilters] = useState(false)
   const pageSize = 9
 
+  // URL Sync Helper
+  const syncToUrl = (updates: Record<string, string | undefined>) => {
+    startTransition(() => {
+      const params = new URLSearchParams()
+      const newSearch = updates.search !== undefined ? updates.search : search
+      const newDistrict = updates.district !== undefined ? updates.district : district
+      const newCategory = updates.category !== undefined ? updates.category : category
+      const newMinPrice = updates.minPrice !== undefined ? updates.minPrice : minPrice
+      const newMaxPrice = updates.maxPrice !== undefined ? updates.maxPrice : maxPrice
+      const newAvailability = updates.availability !== undefined ? updates.availability : availability
+      const newSort = updates.sort !== undefined ? updates.sort : sort
+
+      if (newSearch) params.set('search', newSearch)
+      if (newDistrict) params.set('district', newDistrict)
+      if (newCategory) params.set('category', newCategory)
+      if (newMinPrice) params.set('minPrice', newMinPrice)
+      if (newMaxPrice) params.set('maxPrice', newMaxPrice)
+      if (newAvailability) params.set('availability', newAvailability)
+      if (newSort && newSort !== 'newest') params.set('sort', newSort)
+
+      const qs = params.toString()
+      router.replace(`/equipment${qs ? `?${qs}` : ''}`, { scroll: false })
+    })
+  }
+
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['equipment', search, district, category, sort, page],
+    queryKey: ['equipment', search, district, category, minPrice, maxPrice, availability, sort, page],
     queryFn: async () => {
       const params = new URLSearchParams()
       if (search) params.append('search', search)
       if (district) params.append('district', district)
       if (category) params.append('category', category)
+      if (minPrice) params.append('minPrice', minPrice)
+      if (maxPrice) params.append('maxPrice', maxPrice)
+      if (availability) params.append('availability', availability)
       if (sort) params.append('sort', sort)
       params.append('page', page.toString())
       params.append('pageSize', pageSize.toString())
@@ -43,114 +110,497 @@ export function EquipmentGrid({
     },
   })
 
-  const handleSearch = (e: React.FormEvent) => {
+  // Handlers
+  const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    setSearch(searchInput)
+    setDistrict(districtInput)
     setPage(1)
+    syncToUrl({ search: searchInput, district: districtInput })
     refetch()
   }
 
+  const handleApplyPrice = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    setMinPrice(minPriceInput)
+    setMaxPrice(maxPriceInput)
+    setPage(1)
+    syncToUrl({ minPrice: minPriceInput, maxPrice: maxPriceInput })
+  }
+
+  const handlePricePreset = (min: string, max: string) => {
+    setMinPrice(min)
+    setMaxPrice(max)
+    setMinPriceInput(min)
+    setMaxPriceInput(max)
+    setPage(1)
+    syncToUrl({ minPrice: min, maxPrice: max })
+  }
+
+  const handleCategoryChange = (catId: string) => {
+    setCategory(catId)
+    setPage(1)
+    syncToUrl({ category: catId })
+  }
+
+  const handleAvailabilityToggle = (avail: string) => {
+    setAvailability(avail)
+    setPage(1)
+    syncToUrl({ availability: avail })
+  }
+
+  const clearAllFilters = () => {
+    setSearch('')
+    setSearchInput('')
+    setDistrict('')
+    setDistrictInput('')
+    setCategory('')
+    setMinPrice('')
+    setMaxPrice('')
+    setMinPriceInput('')
+    setMaxPriceInput('')
+    setAvailability('')
+    setSort('newest')
+    setPage(1)
+    syncToUrl({
+      search: '',
+      district: '',
+      category: '',
+      minPrice: '',
+      maxPrice: '',
+      availability: '',
+      sort: 'newest'
+    })
+  }
+
+  // Active filters calculation
+  const activeFiltersCount = 
+    (search ? 1 : 0) + 
+    (district ? 1 : 0) + 
+    (category ? 1 : 0) + 
+    (minPrice || maxPrice ? 1 : 0) + 
+    (availability ? 1 : 0)
+
+  const selectedCategoryName = initialCategories.find(
+    cat => cat.id === category || cat.slug === category
+  )?.name
+
   return (
     <div className="flex flex-col md:flex-row gap-8">
+      {/* Mobile Filter Trigger */}
+      <div className="md:hidden flex items-center justify-between bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowMobileFilters(!showMobileFilters)}
+          className="flex items-center gap-2 font-medium"
+        >
+          <SlidersHorizontal className="h-4 w-4" />
+          {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
+          {activeFiltersCount > 0 && (
+            <Badge className="bg-primary text-white text-xs px-1.5 py-0.5 rounded-full">
+              {activeFiltersCount}
+            </Badge>
+          )}
+        </Button>
+
+        {activeFiltersCount > 0 && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearAllFilters}
+            className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
+          >
+            Clear All
+          </Button>
+        )}
+      </div>
+
       {/* Sidebar Filters */}
-      <aside className="w-full md:w-64 shrink-0 space-y-6">
-        <div>
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <SlidersHorizontal className="h-5 w-5" /> Filters
-          </h3>
-          
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Category</label>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <input
-                    type="radio"
-                    id="cat-all"
-                    name="category"
-                    checked={category === ''}
-                    onChange={() => { setCategory(''); setPage(1) }}
-                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300"
+      <aside 
+        className={`w-full md:w-72 shrink-0 space-y-6 ${
+          showMobileFilters ? 'block' : 'hidden md:block'
+        }`}
+      >
+        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+          <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+            <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
+              <SlidersHorizontal className="h-4 w-4 text-primary" /> Filters
+              {activeFiltersCount > 0 && (
+                <span className="text-xs font-semibold bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                  {activeFiltersCount} active
+                </span>
+              )}
+            </h3>
+            {activeFiltersCount > 0 && (
+              <button
+                onClick={clearAllFilters}
+                className="text-xs font-medium text-red-600 hover:text-red-700 hover:underline flex items-center gap-1"
+              >
+                <RotateCcw className="h-3 w-3" /> Reset
+              </button>
+            )}
+          </div>
+
+          {/* Category Filter */}
+          <div>
+            <label className="text-sm font-semibold text-gray-800 mb-3 block">
+              Category
+            </label>
+            <div className="space-y-1.5 max-h-60 overflow-y-auto pr-1">
+              <button
+                type="button"
+                onClick={() => handleCategoryChange('')}
+                className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium transition-colors flex items-center justify-between ${
+                  category === '' 
+                    ? 'bg-primary text-white font-semibold shadow-sm' 
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                <span>All Categories</span>
+                {category === '' && <CheckCircle2 className="h-4 w-4" />}
+              </button>
+              {initialCategories.map((cat) => {
+                const isSelected = category === cat.id || category === cat.slug
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => handleCategoryChange(cat.id)}
+                    className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium transition-colors flex items-center justify-between ${
+                      isSelected 
+                        ? 'bg-primary text-white font-semibold shadow-sm' 
+                        : 'text-gray-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    <span className="truncate">{cat.name}</span>
+                    {isSelected && <CheckCircle2 className="h-4 w-4 shrink-0" />}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Price Range Filter */}
+          <div className="border-t border-gray-100 pt-5">
+            <label className="text-sm font-semibold text-gray-800 mb-3 block flex items-center gap-1">
+              <IndianRupee className="h-4 w-4 text-gray-500" /> Daily Rate (₹)
+            </label>
+
+            {/* Quick Price Presets */}
+            <div className="grid grid-cols-2 gap-1.5 mb-3">
+              <button
+                type="button"
+                onClick={() => handlePricePreset('', '1000')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                  minPrice === '' && maxPrice === '1000'
+                    ? 'bg-primary text-white border-primary'
+                    : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                }`}
+              >
+                Under ₹1,000
+              </button>
+              <button
+                type="button"
+                onClick={() => handlePricePreset('1000', '2500')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                  minPrice === '1000' && maxPrice === '2500'
+                    ? 'bg-primary text-white border-primary'
+                    : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                }`}
+              >
+                ₹1k - ₹2.5k
+              </button>
+              <button
+                type="button"
+                onClick={() => handlePricePreset('2500', '5000')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                  minPrice === '2500' && maxPrice === '5000'
+                    ? 'bg-primary text-white border-primary'
+                    : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                }`}
+              >
+                ₹2.5k - ₹5k
+              </button>
+              <button
+                type="button"
+                onClick={() => handlePricePreset('5000', '')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                  minPrice === '5000' && maxPrice === ''
+                    ? 'bg-primary text-white border-primary'
+                    : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                }`}
+              >
+                Above ₹5,000
+              </button>
+            </div>
+
+            {/* Custom Min / Max Inputs */}
+            <form onSubmit={handleApplyPrice} className="space-y-2">
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">₹</span>
+                  <Input
+                    type="number"
+                    min="0"
+                    placeholder="Min"
+                    value={minPriceInput}
+                    onChange={(e) => setMinPriceInput(e.target.value)}
+                    className="pl-6 h-9 text-xs rounded-lg"
                   />
-                  <label htmlFor="cat-all" className="ml-2 text-sm text-gray-600">All Categories</label>
                 </div>
-                {initialCategories.map(cat => (
-                  <div key={cat.id} className="flex items-center">
-                    <input
-                      type="radio"
-                      id={`cat-${cat.id}`}
-                      name="category"
-                      checked={category === cat.id}
-                      onChange={() => { setCategory(cat.id); setPage(1) }}
-                      className="h-4 w-4 text-primary focus:ring-primary border-gray-300"
-                    />
-                    <label htmlFor={`cat-${cat.id}`} className="ml-2 text-sm text-gray-600">{cat.name}</label>
-                  </div>
-                ))}
+                <span className="text-gray-400 text-xs">-</span>
+                <div className="relative flex-1">
+                  <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">₹</span>
+                  <Input
+                    type="number"
+                    min="0"
+                    placeholder="Max"
+                    value={maxPriceInput}
+                    onChange={(e) => setMaxPriceInput(e.target.value)}
+                    className="pl-6 h-9 text-xs rounded-lg"
+                  />
+                </div>
               </div>
+              <Button type="submit" variant="secondary" size="sm" className="w-full h-8 text-xs font-semibold">
+                Apply Price Range
+              </Button>
+            </form>
+          </div>
+
+          {/* Availability Filter */}
+          <div className="border-t border-gray-100 pt-5">
+            <label className="text-sm font-semibold text-gray-800 mb-3 block">
+              Availability
+            </label>
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                <input
+                  type="radio"
+                  name="availability"
+                  checked={availability === ''}
+                  onChange={() => handleAvailabilityToggle('')}
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300"
+                />
+                <span>All Machinery</span>
+              </label>
+              <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                <input
+                  type="radio"
+                  name="availability"
+                  checked={availability === 'available'}
+                  onChange={() => handleAvailabilityToggle('available')}
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300"
+                />
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-green-500 inline-block" />
+                  Available Now Only
+                </span>
+              </label>
             </div>
           </div>
         </div>
       </aside>
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <div className="flex-1 space-y-6">
         {/* Search & Sort Bar */}
-        <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-          <form onSubmit={handleSearch} className="relative w-full sm:max-w-md flex flex-col gap-2 sm:flex-row">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <Input 
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by name or brand..." 
-                className="pl-10 h-11 bg-gray-50 border-transparent focus:border-primary focus:bg-white transition-all"
-              />
-            </div>
-            <div className="relative flex-1">
-              <Input 
-                value={district}
-                onChange={(e) => setDistrict(e.target.value)}
-                placeholder="District or location..." 
-                className="h-11 bg-gray-50 border-transparent focus:border-primary focus:bg-white transition-all"
-              />
-            </div>
-            <Button type="submit" className="h-11">Search</Button>
-          </form>
+        <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+          <div className="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between">
+            <form onSubmit={handleSearchSubmit} className="flex-1 flex flex-col sm:flex-row gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input 
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  placeholder="Search by name, brand (e.g. Mahindra)..." 
+                  className="pl-9 pr-8 h-11 bg-gray-50/70 border-gray-200 focus:border-primary focus:bg-white transition-all text-sm rounded-xl"
+                />
+                {searchInput && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchInput('')
+                      setSearch('')
+                      syncToUrl({ search: '' })
+                    }}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <span className="text-sm text-gray-500 whitespace-nowrap">Sort by:</span>
-            <select
-              value={sort}
-              onChange={(e) => { setSort(e.target.value); setPage(1) }}
-              className="h-11 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="newest">Newest Arrivals</option>
-              <option value="price_asc">Price: Low to High</option>
-              <option value="price_desc">Price: High to Low</option>
-            </select>
+              <div className="relative sm:w-56">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input 
+                  value={districtInput}
+                  onChange={(e) => setDistrictInput(e.target.value)}
+                  placeholder="District or State..." 
+                  className="pl-9 pr-8 h-11 bg-gray-50/70 border-gray-200 focus:border-primary focus:bg-white transition-all text-sm rounded-xl"
+                />
+                {districtInput && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDistrictInput('')
+                      setDistrict('')
+                      syncToUrl({ district: '' })
+                    }}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+
+              <Button type="submit" className="h-11 px-6 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold">
+                Search
+              </Button>
+            </form>
+
+            {/* Sort Dropdown */}
+            <div className="flex items-center gap-2 self-end lg:self-auto shrink-0">
+              <span className="text-xs font-medium text-gray-500 whitespace-nowrap">Sort:</span>
+              <select
+                value={sort}
+                onChange={(e) => {
+                  const newSort = e.target.value
+                  setSort(newSort)
+                  setPage(1)
+                  syncToUrl({ sort: newSort })
+                }}
+                className="h-11 rounded-xl border border-gray-200 bg-gray-50/70 px-3 py-2 text-sm font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition-all"
+              >
+                <option value="newest">Newest Arrivals</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+              </select>
+            </div>
           </div>
+
+          {/* Active Filter Chips Bar */}
+          {activeFiltersCount > 0 && (
+            <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-gray-100">
+              <span className="text-xs text-gray-500 font-medium">Active filters:</span>
+              
+              {selectedCategoryName && (
+                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 gap-1.5 py-1 px-2.5 rounded-lg text-xs">
+                  Category: {selectedCategoryName}
+                  <button 
+                    onClick={() => handleCategoryChange('')} 
+                    className="hover:text-primary/70"
+                    aria-label="Remove category filter"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              )}
+
+              {search && (
+                <Badge variant="secondary" className="bg-emerald-50 text-emerald-800 border-emerald-200 gap-1.5 py-1 px-2.5 rounded-lg text-xs">
+                  Keyword: {search}
+                  <button 
+                    onClick={() => {
+                      setSearch('')
+                      setSearchInput('')
+                      syncToUrl({ search: '' })
+                    }} 
+                    className="hover:text-emerald-950"
+                    aria-label="Remove keyword filter"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              )}
+
+              {district && (
+                <Badge variant="secondary" className="bg-blue-50 text-blue-800 border-blue-200 gap-1.5 py-1 px-2.5 rounded-lg text-xs">
+                  Location: {district}
+                  <button 
+                    onClick={() => {
+                      setDistrict('')
+                      setDistrictInput('')
+                      syncToUrl({ district: '' })
+                    }} 
+                    className="hover:text-blue-950"
+                    aria-label="Remove location filter"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              )}
+
+              {(minPrice || maxPrice) && (
+                <Badge variant="secondary" className="bg-amber-50 text-amber-800 border-amber-200 gap-1.5 py-1 px-2.5 rounded-lg text-xs">
+                  Price: {minPrice ? `₹${minPrice}` : '₹0'} - {maxPrice ? `₹${maxPrice}` : 'Any'}
+                  <button 
+                    onClick={() => handlePricePreset('', '')} 
+                    className="hover:text-amber-950"
+                    aria-label="Remove price filter"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              )}
+
+              {availability && (
+                <Badge variant="secondary" className="bg-green-50 text-green-800 border-green-200 gap-1.5 py-1 px-2.5 rounded-lg text-xs">
+                  Available Now Only
+                  <button 
+                    onClick={() => handleAvailabilityToggle('')} 
+                    className="hover:text-green-950"
+                    aria-label="Remove availability filter"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              )}
+
+              <button
+                onClick={clearAllFilters}
+                className="text-xs text-gray-500 hover:text-red-600 underline ml-2"
+              >
+                Clear all
+              </button>
+            </div>
+          )}
         </div>
+
+        {/* Results Counter */}
+        {!isLoading && !error && data && (
+          <div className="flex items-center justify-between text-sm text-gray-500 px-1">
+            <span>
+              Showing <span className="font-semibold text-gray-900">{data.items?.length || 0}</span> of{' '}
+              <span className="font-semibold text-gray-900">{data.total || 0}</span> equipment listings
+            </span>
+          </div>
+        )}
 
         {/* Results Grid */}
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20">
+          <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-gray-100">
             <Loader2 className="h-8 w-8 text-primary animate-spin mb-4" />
-            <p className="text-gray-500">Finding the best equipment...</p>
+            <p className="text-gray-500 font-medium">Finding the best equipment...</p>
           </div>
         ) : error ? (
-          <div className="text-center py-20 bg-red-50 rounded-3xl border border-red-100">
-            <p className="text-red-600 font-medium">Failed to load equipment. Please try again.</p>
+          <div className="text-center py-20 bg-red-50 rounded-3xl border border-red-100 p-8">
+            <p className="text-red-600 font-semibold mb-2">Failed to load equipment.</p>
+            <p className="text-gray-500 text-sm mb-4">There was an issue processing your filter request.</p>
+            <Button onClick={() => refetch()} variant="outline" size="sm">
+              Try Again
+            </Button>
           </div>
         ) : data?.items?.length === 0 ? (
-          <div className="text-center py-20 bg-gray-50 rounded-3xl border border-gray-100">
-            <div className="h-16 w-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+          <div className="text-center py-20 bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
+            <div className="h-16 w-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
               <Search className="h-8 w-8 text-gray-400" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">No equipment found</h3>
-            <p className="text-gray-500 mb-6 max-w-sm mx-auto">
-              We couldn't find any equipment matching your current filters. Try adjusting your search criteria.
+            <p className="text-gray-500 mb-6 max-w-sm mx-auto text-sm">
+              We couldn't find any equipment matching your current filter criteria. Try clearing or relaxing your filters.
             </p>
-            <Button onClick={() => { setSearch(''); setCategory(''); setPage(1) }} variant="outline">
+            <Button onClick={clearAllFilters} variant="outline" className="rounded-xl">
               Clear All Filters
             </Button>
           </div>
@@ -169,12 +619,13 @@ export function EquipmentGrid({
                     name={item.title}
                     categoryName={item.categories?.name || 'Equipment'}
                     pricePerDay={item.daily_price}
+                    pricePerHour={item.hourly_price}
                     location={item.location}
                     imageUrl={primaryImage}
-                    ownerName={item.profiles?.full_name || 'Owner'}
-                    rating={4.8} // Placeholder rating
+                    ownerName={item.profiles?.full_name || 'Verified Owner'}
+                    rating={4.8}
                     isAvailable={item.availability === 'available'}
-                    isVerifiedOwner={true} // Placeholder
+                    isVerifiedOwner={true}
                   />
                 )
               })}
@@ -182,27 +633,37 @@ export function EquipmentGrid({
 
             {/* Pagination */}
             {data.totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 pt-8">
+              <div className="flex items-center justify-center gap-3 pt-8 pb-4">
                 <Button 
                   variant="outline" 
-                  size="icon" 
-                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  size="sm" 
+                  onClick={() => {
+                    const p = Math.max(1, page - 1)
+                    setPage(p)
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }}
                   disabled={page === 1}
+                  className="rounded-xl flex items-center gap-1 text-xs"
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="h-4 w-4" /> Previous
                 </Button>
                 
-                <span className="text-sm font-medium text-gray-700 px-4">
+                <span className="text-xs font-semibold text-gray-700 bg-white px-3.5 py-2 rounded-xl border border-gray-200 shadow-sm">
                   Page {page} of {data.totalPages}
                 </span>
 
                 <Button 
                   variant="outline" 
-                  size="icon" 
-                  onClick={() => setPage(p => Math.min(data.totalPages, p + 1))}
+                  size="sm" 
+                  onClick={() => {
+                    const p = Math.min(data.totalPages, page + 1)
+                    setPage(p)
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }}
                   disabled={page === data.totalPages}
+                  className="rounded-xl flex items-center gap-1 text-xs"
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  Next <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
             )}

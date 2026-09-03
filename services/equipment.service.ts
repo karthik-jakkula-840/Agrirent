@@ -8,6 +8,7 @@ export interface EquipmentFilters {
   maxPrice?: number
   district?: string
   status?: 'pending' | 'approved' | 'rejected' | 'maintenance'
+  availability?: 'available' | 'booked' | 'maintenance' | 'unavailable'
 }
 
 export interface PaginationOptions {
@@ -32,15 +33,45 @@ export class EquipmentService {
   async listEquipment(filters: EquipmentFilters, pagination: PaginationOptions, sort?: string) {
     let query = this.supabase
       .from('equipment')
-      .select('*, equipment_images(*), categories!inner(name), profiles!inner(full_name)', { count: 'exact' })
+      .select('*, equipment_images(*), categories!inner(name, slug), profiles!inner(full_name)', { count: 'exact' })
 
     // Apply filters
     if (filters.status) query = query.eq('status', filters.status)
-    if (filters.category) query = query.eq('category_id', filters.category)
-    if (filters.minPrice !== undefined) query = query.gte('daily_price', filters.minPrice)
-    if (filters.maxPrice !== undefined) query = query.lte('daily_price', filters.maxPrice)
-    if (filters.district) query = query.ilike('district', `%${filters.district}%`)
-    if (filters.search) query = query.ilike('title', `%${filters.search}%`)
+    if (filters.availability) query = query.eq('availability', filters.availability)
+
+    if (filters.category) {
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(filters.category)
+      if (isUuid) {
+        query = query.eq('category_id', filters.category)
+      } else {
+        // Resolve category by slug or name
+        const { data: matchedCat } = await this.supabase
+          .from('categories')
+          .select('id')
+          .or(`slug.ilike.%${filters.category}%,name.ilike.%${filters.category}%`)
+          .limit(1)
+          .maybeSingle()
+
+        if (matchedCat?.id) {
+          query = query.eq('category_id', matchedCat.id)
+        } else {
+          query = query.ilike('categories.name', `%${filters.category}%`)
+        }
+      }
+    }
+
+    if (filters.minPrice !== undefined && !isNaN(filters.minPrice)) query = query.gte('daily_price', filters.minPrice)
+    if (filters.maxPrice !== undefined && !isNaN(filters.maxPrice)) query = query.lte('daily_price', filters.maxPrice)
+
+    if (filters.district) {
+      const loc = filters.district.trim()
+      query = query.or(`district.ilike.%${loc}%,location.ilike.%${loc}%,state.ilike.%${loc}%`)
+    }
+
+    if (filters.search) {
+      const s = filters.search.trim()
+      query = query.or(`title.ilike.%${s}%,brand.ilike.%${s}%,model.ilike.%${s}%,description.ilike.%${s}%`)
+    }
 
     // Apply sorting
     if (sort === 'price_asc') query = query.order('daily_price', { ascending: true })
