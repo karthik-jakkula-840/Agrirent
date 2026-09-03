@@ -67,8 +67,7 @@ export function Faq() {
         </div>
 
         {/* Accordion Cards */}
-        {/* @ts-ignore */}
-        <Accordion type="single" collapsible className="w-full space-y-3 sm:space-y-3.5">
+        <Accordion className="w-full space-y-3 sm:space-y-3.5">
           {faqs.map((faq, index) => (
             <AccordionItem 
               key={index} 
