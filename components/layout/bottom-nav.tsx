@@ -107,7 +107,7 @@ export function BottomNav() {
                 }`} 
                 strokeWidth={isActive ? 2.4 : 1.8} 
               />
-              <span className="text-[10px] font-semibold tracking-tight">{item.name}</span>
+              <span className="text-[11px] font-bold tracking-tight">{item.name}</span>
             </Link>
           )
         })}
