@@ -144,7 +144,7 @@ export default async function EquipmentDetailsPage({ params }: Props) {
       />
       <Navbar />
       
-      <main className="flex-1 w-full pb-20 pt-8">
+      <main className="flex-1 w-full pb-20 pt-28">
         <div className="container mx-auto px-4 md:px-6">
           {/* Breadcrumbs (Placeholder) */}
           <div className="text-sm text-gray-500 mb-6 font-medium">
