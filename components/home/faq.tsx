@@ -61,29 +61,29 @@ export function Faq() {
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-950 tracking-tight leading-tight mb-2.5">
             Frequently Asked <span className="text-[#009b55]">Questions</span>
           </h2>
-          <p className="text-xs sm:text-sm md:text-base text-gray-500 max-w-lg mx-auto leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-gray-600 max-w-lg mx-auto leading-relaxed font-medium">
             Quick answers to help you rent machinery, list equipment, manage payments, and grow your farm.
           </p>
         </div>
 
         {/* Accordion Cards */}
         {/* @ts-ignore */}
-        <Accordion type="single" collapsible className="w-full space-y-2.5 sm:space-y-3">
+        <Accordion type="single" collapsible className="w-full space-y-3 sm:space-y-3.5">
           {faqs.map((faq, index) => (
             <AccordionItem 
               key={index} 
               value={`item-${index}`} 
               className="border border-gray-100 bg-white rounded-2xl sm:rounded-3xl shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:shadow-md hover:border-emerald-200/80 transition-all duration-200 px-4 sm:px-6 py-1 overflow-hidden"
             >
-              <AccordionTrigger className="text-left text-xs sm:text-base font-bold text-gray-900 hover:no-underline hover:text-[#009b55] py-3.5 sm:py-4 transition-colors">
-                <div className="flex items-center gap-2.5 pr-2">
-                  <div className="h-6 w-6 rounded-lg bg-emerald-50 text-[#009b55] flex items-center justify-center shrink-0 text-xs font-black">
+              <AccordionTrigger className="text-left text-[15px] sm:text-lg font-bold text-gray-950 hover:no-underline hover:text-[#009b55] py-4 transition-colors">
+                <div className="flex items-center gap-3 pr-2">
+                  <div className="h-7 w-7 rounded-xl bg-emerald-50 text-[#009b55] flex items-center justify-center shrink-0 text-xs sm:text-sm font-black border border-emerald-100/60">
                     Q
                   </div>
                   <span className="leading-snug">{faq.question}</span>
                 </div>
               </AccordionTrigger>
-              <AccordionContent className="text-xs sm:text-sm text-gray-500 leading-relaxed font-normal pt-1 pb-4 pl-8.5 pr-2">
+              <AccordionContent className="text-sm sm:text-base text-gray-600 leading-relaxed font-normal pt-1.5 pb-4.5 pl-10 pr-2">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>
@@ -97,14 +97,14 @@ export function Faq() {
               <HelpCircle className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-bold text-xs sm:text-sm text-gray-900">Still have questions?</h3>
-              <p className="text-[11px] sm:text-xs text-gray-500 font-medium">Our agricultural support desk is here for you 24/7.</p>
+              <h3 className="font-bold text-sm sm:text-base text-gray-900">Still have questions?</h3>
+              <p className="text-xs sm:text-sm text-gray-600 font-medium">Our agricultural support desk is here for you 24/7.</p>
             </div>
           </div>
 
           <a 
             href="#contact" 
-            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#009b55] hover:bg-[#00874a] text-white font-bold text-xs shadow-xs transition-all active:scale-95 shrink-0"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#009b55] hover:bg-[#00874a] text-white font-bold text-xs sm:text-sm shadow-xs transition-all active:scale-95 shrink-0"
           >
             <span>Contact Support</span>
             <ArrowRight className="h-3.5 w-3.5" />
