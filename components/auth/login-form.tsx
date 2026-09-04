@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { Eye, EyeOff, Smartphone, Mail, User, Store, Lock, ShieldCheck } from 'lucide-react'
+import { Eye, EyeOff, Smartphone, Mail, User, Store, Lock, Shield, Loader2, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
 type LoginFormValues = z.infer<typeof loginSchema>
@@ -43,7 +43,7 @@ export function LoginForm() {
     setErrorMessage(null)
     setIsLoading(true)
     try {
-      const result = await login({...data, role: currentRole})
+      const result = await login({ ...data, role: currentRole })
       if (result?.error) {
         setErrorMessage(result.error)
         toast.error(result.error)
@@ -132,136 +132,163 @@ export function LoginForm() {
   }
 
   return (
-    <div className="space-y-6 w-full">
-      {errorMessage && <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg">{errorMessage}</div>}
+    <div className="space-y-5 w-full">
+      {errorMessage && (
+        <div className="p-3.5 text-xs font-semibold text-red-700 bg-red-50 border border-red-200/80 rounded-xl">
+          {errorMessage}
+        </div>
+      )}
       
-      {/* Role Selection */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* 1. Sleek iOS-Style Segmented Role Selector */}
+      <div className="bg-gray-100/80 p-1 rounded-2xl flex items-center shadow-inner">
         <button
           type="button"
           onClick={() => setCurrentRole('customer')}
-          className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-colors ${
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
             currentRole === 'customer' 
-              ? 'border-green-600 bg-green-50 text-green-700' 
-              : 'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100'
+              ? 'bg-white text-emerald-800 shadow-sm' 
+              : 'text-gray-500 hover:text-gray-800'
           }`}
         >
-          <User className="h-4 w-4" /> Customer
+          <User className="h-4 w-4" />
+          <span>Customer</span>
         </button>
         <button
           type="button"
           onClick={() => setCurrentRole('owner')}
-          className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-colors ${
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
             currentRole === 'owner' 
-              ? 'border-green-600 bg-green-50 text-green-700' 
-              : 'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100'
+              ? 'bg-white text-emerald-800 shadow-sm' 
+              : 'text-gray-500 hover:text-gray-800'
           }`}
         >
-          <Store className="h-4 w-4" /> Owner
+          <Store className="h-4 w-4" />
+          <span>Owner</span>
         </button>
       </div>
 
-      {/* Login Method Selection */}
-      <div className="flex flex-col sm:grid sm:grid-cols-3 gap-2">
+      {/* 2. Compact Horizontal Method Tabs (Saves ~120px vertical space on mobile) */}
+      <div className="bg-gray-100/80 p-1 rounded-2xl grid grid-cols-3 gap-1 shadow-inner">
         <button
           type="button"
           onClick={() => setLoginMethod('email_password')}
-          className={`flex items-center justify-center gap-1.5 p-2.5 sm:p-2 rounded-lg border text-sm sm:text-xs font-medium transition-colors ${
+          className={`flex items-center justify-center gap-1 py-2 px-1 rounded-xl text-xs font-bold transition-all ${
             loginMethod === 'email_password' 
-              ? 'border-green-600 bg-white text-green-700 shadow-sm' 
-              : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+              ? 'bg-white text-emerald-700 shadow-sm' 
+              : 'text-gray-500 hover:text-gray-800'
           }`}
         >
-          <Mail className="h-4 w-4 sm:h-3.5 sm:w-3.5" /> Email & Password
+          <Mail className="h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">Password</span>
         </button>
+
         <button
           type="button"
           onClick={() => setLoginMethod('mobile_otp')}
-          className={`flex items-center justify-center gap-1.5 p-2.5 sm:p-2 rounded-lg border text-sm sm:text-xs font-medium transition-colors ${
+          className={`flex items-center justify-center gap-1 py-2 px-1 rounded-xl text-xs font-bold transition-all ${
             loginMethod === 'mobile_otp' 
-              ? 'border-green-600 bg-white text-green-700 shadow-sm' 
-              : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+              ? 'bg-white text-emerald-700 shadow-sm' 
+              : 'text-gray-500 hover:text-gray-800'
           }`}
         >
-          <Smartphone className="h-4 w-4 sm:h-3.5 sm:w-3.5" /> Mobile OTP
+          <Smartphone className="h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">Mobile OTP</span>
         </button>
+
         <button
           type="button"
           onClick={() => setLoginMethod('email_otp')}
-          className={`flex items-center justify-center gap-1.5 p-2.5 sm:p-2 rounded-lg border text-sm sm:text-xs font-medium transition-colors ${
+          className={`flex items-center justify-center gap-1 py-2 px-1 rounded-xl text-xs font-bold transition-all ${
             loginMethod === 'email_otp' 
-              ? 'border-green-600 bg-white text-green-700 shadow-sm' 
-              : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+              ? 'bg-white text-emerald-700 shadow-sm' 
+              : 'text-gray-500 hover:text-gray-800'
           }`}
         >
-          <Mail className="h-4 w-4 sm:h-3.5 sm:w-3.5" /> Email OTP
+          <Mail className="h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">Email OTP</span>
         </button>
       </div>
 
-      {/* Form Fields */}
+      {/* 3. Form Input Fields */}
       {loginMethod === 'email_password' ? (
-        <form onSubmit={handleSubmit(onEmailSubmit)} className="space-y-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address</Label>
+        <form onSubmit={handleSubmit(onEmailSubmit)} className="space-y-3.5">
+          <div className="space-y-1">
+            <Label htmlFor="email" className="text-xs font-bold text-gray-700">Email Address</Label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                 <Mail className="h-4 w-4 text-gray-400" />
               </div>
               <Input 
                 id="email" 
                 type="email" 
-                placeholder="Enter your email address" 
-                className="pl-9 h-11 border-gray-200 focus-visible:ring-green-500"
+                placeholder="name@domain.com" 
+                className="pl-10 h-11 bg-gray-50/80 border-gray-200/90 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:border-emerald-500 transition-all shadow-2xs"
                 {...register('email')}
               />
             </div>
-            {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
+            {errors.email && <p className="text-[11px] text-red-500 font-medium mt-0.5">{errors.email.message}</p>}
           </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="password" className="text-sm font-medium text-gray-700">Password</Label>
+          <div className="space-y-1">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password" className="text-xs font-bold text-gray-700">Password</Label>
+              <Link href="/forgot-password" tabIndex={-1} className="text-xs font-bold text-emerald-700 hover:underline">
+                Forgot?
+              </Link>
+            </div>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                 <Lock className="h-4 w-4 text-gray-400" />
               </div>
               <Input 
                 id="password" 
                 type={showPassword ? 'text' : 'password'} 
-                placeholder="Enter your password" 
-                className="pl-9 pr-10 h-11 border-gray-200 focus-visible:ring-green-500"
+                placeholder="Enter password" 
+                className="pl-10 pr-10 h-11 bg-gray-50/80 border-gray-200/90 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:border-emerald-500 transition-all shadow-2xs"
                 {...register('password')}
               />
               <button 
                 type="button" 
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600"
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
-            {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
+            {errors.password && <p className="text-[11px] text-red-500 font-medium mt-0.5">{errors.password.message}</p>}
           </div>
 
-          <Button type="submit" className="w-full h-11 bg-green-700 hover:bg-green-800 text-white font-medium mt-6" disabled={isLoading}>
-            {isLoading ? 'Logging in...' : `Login as ${currentRole === 'owner' ? 'Owner' : 'Customer'}`}
+          <Button 
+            type="submit" 
+            className="w-full h-12 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-2" 
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <><Loader2 className="h-4 w-4 animate-spin" /> Logging in...</>
+            ) : (
+              <>
+                <span>Login as {currentRole === 'owner' ? 'Owner' : 'Customer'}</span>
+                <ArrowRight className="h-4 w-4" />
+              </>
+            )}
           </Button>
         </form>
       ) : (
-        <div className="space-y-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="contact" className="text-sm font-medium text-gray-700">
+        <div className="space-y-3.5">
+          <div className="space-y-1">
+            <Label htmlFor="contact" className="text-xs font-bold text-gray-700">
               {loginMethod === 'mobile_otp' ? 'Mobile Number' : 'Email Address'}
             </Label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                 {loginMethod === 'mobile_otp' ? <Smartphone className="h-4 w-4 text-gray-400" /> : <Mail className="h-4 w-4 text-gray-400" />}
               </div>
               <Input 
                 id="contact" 
                 type={loginMethod === 'mobile_otp' ? 'tel' : 'email'} 
-                placeholder={`Enter your ${loginMethod === 'mobile_otp' ? 'mobile number' : 'email'}`} 
-                className="pl-9 h-11 border-gray-200 focus-visible:ring-green-500"
+                placeholder={loginMethod === 'mobile_otp' ? '10-digit mobile number' : 'name@domain.com'} 
+                className="pl-10 h-11 bg-gray-50/80 border-gray-200/90 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:border-emerald-500 transition-all shadow-2xs"
                 value={contactValue}
                 onChange={(e) => setContactValue(e.target.value)}
                 disabled={(loginMethod === 'mobile_otp' && sessionId !== null) || (loginMethod === 'email_otp' && emailOtpSent)}
@@ -269,18 +296,19 @@ export function LoginForm() {
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="otp" className="text-sm font-medium text-gray-700">Enter OTP</Label>
-            <div className="flex flex-col sm:flex-row gap-2">
+          <div className="space-y-1">
+            <Label htmlFor="otp" className="text-xs font-bold text-gray-700">Enter OTP</Label>
+            <div className="flex gap-2">
               <div className="relative flex-1">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <ShieldCheck className="h-4 w-4 text-gray-400" />
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <Shield className="h-4 w-4 text-gray-400" />
                 </div>
                 <Input 
                   id="otp" 
                   type="text" 
-                  placeholder="Enter 6-digit OTP" 
-                  className="pl-9 h-11 border-gray-200 focus-visible:ring-green-500"
+                  maxLength={6}
+                  placeholder="6-digit code" 
+                  className="pl-10 h-11 bg-gray-50/80 border-gray-200/90 rounded-xl text-xs sm:text-sm font-bold tracking-widest focus:bg-white focus:border-emerald-500 transition-all shadow-2xs"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
                 />
@@ -288,39 +316,44 @@ export function LoginForm() {
               <Button 
                 type="button" 
                 variant="outline" 
-                className="h-11 border-green-600 text-green-700 hover:bg-green-50 sm:w-32"
+                className="h-11 px-4 rounded-xl border-emerald-300 text-emerald-700 bg-emerald-50/50 hover:bg-emerald-100 font-bold text-xs shrink-0"
                 onClick={handleSendOTP} 
                 disabled={isLoading}
               >
                 {isLoading ? '...' : ((loginMethod === 'mobile_otp' && sessionId) || (loginMethod === 'email_otp' && emailOtpSent) ? 'Resend' : 'Send OTP')}
               </Button>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
-              We will send a 6-digit OTP to your registered {loginMethod === 'mobile_otp' ? 'phone' : 'email'}.
+            <p className="text-[11px] text-gray-400 mt-0.5">
+              OTP will be sent to your registered {loginMethod === 'mobile_otp' ? 'phone' : 'email'}.
             </p>
           </div>
 
           <Button 
             type="button" 
             onClick={handleVerifyOTP} 
-            className="w-full h-11 bg-green-700 hover:bg-green-800 text-white font-medium mt-6" 
+            className="w-full h-12 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-2" 
             disabled={isLoading || (loginMethod === 'mobile_otp' && !sessionId) || (loginMethod === 'email_otp' && !emailOtpSent)}
           >
-            {isLoading ? 'Verifying...' : `Login as ${currentRole === 'owner' ? 'Owner' : 'Customer'}`}
+            {isLoading ? (
+              <><Loader2 className="h-4 w-4 animate-spin" /> Verifying...</>
+            ) : (
+              <>
+                <span>Verify & Login as {currentRole === 'owner' ? 'Owner' : 'Customer'}</span>
+                <ArrowRight className="h-4 w-4" />
+              </>
+            )}
           </Button>
         </div>
       )}
 
-      <div className="flex flex-col items-center space-y-3 pt-2">
-        <Link href="/forgot-password" className="text-sm font-medium text-green-700 hover:underline">
-          Forgot password?
-        </Link>
-        <div className="text-sm text-gray-500">
+      {/* 4. Footer Registration Link */}
+      <div className="pt-2 text-center border-t border-gray-100">
+        <p className="text-xs text-gray-500">
           Don't have an account?{' '}
-          <Link href="/signup" className="font-medium text-green-700 hover:underline">
-            Sign up
+          <Link href="/signup" className="font-extrabold text-emerald-700 hover:underline">
+            Create account
           </Link>
-        </div>
+        </p>
       </div>
     </div>
   )
