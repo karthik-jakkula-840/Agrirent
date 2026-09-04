@@ -8,6 +8,13 @@ export async function GET(
 ) {
   try {
     const { id } = await params
+
+    // If ID is not a valid UUID (e.g. mock equipment), return empty availability array
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)
+    if (!isUuid) {
+      return NextResponse.json({ success: true, data: [] })
+    }
+
     const supabase = await createClient()
     const bookingService = new BookingService(supabase)
     

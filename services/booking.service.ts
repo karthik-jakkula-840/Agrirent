@@ -5,6 +5,11 @@ export class BookingService {
   constructor(private supabase: SupabaseClient) {}
 
   async getEquipmentAvailability(equipmentId: string) {
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(equipmentId)
+    if (!isUuid) {
+      return []
+    }
+
     const adminClient = createAdminClient()
     const { data, error } = await adminClient
       .from('bookings')

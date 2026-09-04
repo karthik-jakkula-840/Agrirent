@@ -6,6 +6,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ equi
   try {
     const { equipmentId } = await params
     
+    // If equipmentId is not a valid UUID (e.g. mock equipment), return empty reviews array
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(equipmentId)
+    if (!isUuid) {
+      return successResponse([])
+    }
+
     const supabase = await createClient()
     const { data, error } = await supabase
       .from('reviews')
