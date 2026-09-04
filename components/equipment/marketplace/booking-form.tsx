@@ -19,10 +19,9 @@ import {
   Loader2, 
   AlertCircle, 
   CheckCircle2, 
-  ShieldCheck, 
-  Sparkles,
-  ArrowRight,
-  Info
+  Shield, 
+  Zap,
+  ArrowRight
 } from 'lucide-react'
 
 export function BookingForm({ equipment }: { equipment: any }) {
@@ -210,7 +209,7 @@ export function BookingForm({ equipment }: { equipment: any }) {
       <div>
         <div className="flex items-center justify-between mb-2">
           <Label className="text-xs font-bold uppercase tracking-wider text-gray-500 flex items-center gap-1">
-            <Sparkles className="h-3.5 w-3.5 text-amber-500" /> Quick Duration
+            <Zap className="h-3.5 w-3.5 text-amber-500" /> Quick Duration
           </Label>
           <span className="text-[11px] text-gray-400 font-medium">Tap to auto-fill</span>
         </div>
@@ -329,7 +328,7 @@ export function BookingForm({ equipment }: { equipment: any }) {
       {availability && availability.length > 0 && (
         <div className="p-3 rounded-xl bg-amber-50/80 border border-amber-200/80 text-amber-900 text-xs">
           <p className="font-bold mb-1 flex items-center gap-1.5 text-amber-800">
-            <Info className="h-3.5 w-3.5" /> Booked Dates
+            <AlertCircle className="h-3.5 w-3.5" /> Booked Dates
           </p>
           <ul className="list-disc pl-4 space-y-0.5 text-amber-800/90 text-[11px]">
             {availability.map((block: any, idx: number) => (
@@ -403,7 +402,7 @@ export function BookingForm({ equipment }: { equipment: any }) {
 
       {/* Trust & Guarantee Pill */}
       <div className="flex items-center justify-center gap-1.5 text-[11px] text-gray-500">
-        <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+        <Shield className="h-3.5 w-3.5 text-emerald-600" />
         <span>No immediate payment required • Owner verifies availability first</span>
       </div>
 
