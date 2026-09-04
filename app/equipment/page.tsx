@@ -52,17 +52,22 @@ export default async function MarketplacePage(props: Props) {
     <div className="flex flex-col min-h-screen bg-gray-50/50">
       <Navbar />
       
-      <main className="flex-1 w-full pb-20 pt-24">
-        <div className="bg-primary/5 py-12 border-b border-primary/10">
+      <main className="flex-1 w-full pb-32 md:pb-20 pt-20 md:pt-24">
+        <div className="bg-gradient-to-b from-primary/10 via-primary/5 to-transparent py-6 md:py-12 border-b border-primary/10">
           <div className="container mx-auto px-4 md:px-6">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Equipment Marketplace</h1>
-            <p className="text-lg text-gray-600 max-w-2xl">
-              Find the perfect machinery for your farm. Rent directly from verified owners at affordable rates.
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-2">
+              <span>🚜 Verified Agricultural Fleet</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-2 md:mb-3">
+              Equipment Marketplace
+            </h1>
+            <p className="text-sm md:text-base text-gray-600 max-w-2xl">
+              Rent high-performance tractors, harvesters, and implements directly from trusted local owners.
             </p>
           </div>
         </div>
 
-        <div className="container mx-auto px-4 md:px-6 pt-10">
+        <div className="container mx-auto px-3 sm:px-4 md:px-6 pt-4 md:pt-8">
           <EquipmentGrid 
             initialCategories={categories || []} 
             defaultCategory={resolvedCategory} 

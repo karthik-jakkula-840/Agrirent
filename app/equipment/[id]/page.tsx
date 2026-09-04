@@ -144,60 +144,126 @@ export default async function EquipmentDetailsPage({ params }: Props) {
       />
       <Navbar />
       
-      <main className="flex-1 w-full pb-20 pt-28">
+      <main className="flex-1 w-full pb-36 md:pb-20 pt-20 md:pt-28">
         <div className="container mx-auto px-4 md:px-6">
-          {/* Breadcrumbs (Placeholder) */}
-          <div className="text-sm text-gray-500 mb-6 font-medium">
-            Equipment / {equipment.categories?.name} / <span className="text-gray-900">{equipment.title}</span>
+          {/* Breadcrumbs */}
+          <div className="text-xs md:text-sm text-gray-500 mb-4 md:mb-6 font-medium flex items-center gap-1.5 overflow-x-auto whitespace-nowrap">
+            <Link href="/equipment" className="hover:text-emerald-700">Equipment</Link>
+            <span>/</span>
+            <span>{equipment.categories?.name || 'Machinery'}</span>
+            <span>/</span>
+            <span className="text-gray-900 font-bold truncate max-w-[200px] sm:max-w-none">{equipment.title}</span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            {/* Left Column: Images & Details */}
-            <div className="lg:col-span-2 space-y-10">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-10">
+            {/* Left Column: Images, Mobile Quick Summary, Description, Specs, Reviews */}
+            <div className="lg:col-span-2 space-y-6 md:space-y-10">
               <ImageGallery images={equipment.equipment_images || []} title={equipment.title} />
               
-              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Description</h2>
-                <p className="text-gray-600 leading-relaxed whitespace-pre-wrap">{equipment.description}</p>
+              {/* Mobile Quick Summary & Booking Card (Visible on mobile only) */}
+              <div className="block lg:hidden bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-5">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h1 className="text-xl font-extrabold text-gray-900 mb-1">{equipment.title}</h1>
+                    <div className="flex items-center text-gray-500 gap-1 text-xs font-medium">
+                      <MapPin className="h-3.5 w-3.5 text-emerald-600" /> {equipment.location}, {equipment.district}
+                    </div>
+                  </div>
+                  <Button variant="outline" size="icon" className="rounded-full h-9 w-9 text-gray-400 hover:text-red-500 hover:border-red-200 shrink-0">
+                    <Heart className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                <div className="py-3 border-y border-gray-100 flex items-center justify-between">
+                  <div>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-2xl font-black text-gray-900">₹{equipment.daily_price}</span>
+                      <span className="text-xs text-gray-500 font-medium">/ day</span>
+                    </div>
+                    {equipment.hourly_price && (
+                      <p className="text-xs font-semibold text-emerald-700">₹{equipment.hourly_price} / hour</p>
+                    )}
+                  </div>
+                  {equipment.deposit > 0 && (
+                    <div className="text-xs font-semibold text-amber-800 bg-amber-50 px-2.5 py-1.5 rounded-lg border border-amber-200/70">
+                      Deposit: ₹{equipment.deposit}
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap gap-2 text-xs">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 font-bold border border-emerald-100">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                    <span>Available {equipment.availability === 'available' ? 'Now' : equipment.availability}</span>
+                  </div>
+                  {equipment.insurance_status === 'insured' && (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-800 font-bold border border-blue-100">
+                      <Shield className="h-3.5 w-3.5 text-blue-600" />
+                      <span>Fully Insured</span>
+                    </div>
+                  )}
+                </div>
+
+                {isOwnerOfEquipment ? (
+                  <div className="space-y-2">
+                    <div className="p-2.5 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-xl text-center border border-emerald-200">
+                      You are the owner of this equipment
+                    </div>
+                    <Link href={`/dashboard/owner/equipment/${equipment.id}/edit`} className="block">
+                      <Button className="w-full h-11 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm">
+                        Manage & Edit Equipment
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <BookingModal equipment={equipment} />
+                )}
               </div>
 
-              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Specifications</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              {/* Description */}
+              <div className="bg-white p-5 md:p-8 rounded-2xl md:rounded-3xl border border-gray-100 shadow-sm">
+                <h2 className="text-lg md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">Description</h2>
+                <p className="text-sm md:text-base text-gray-600 leading-relaxed whitespace-pre-wrap">{equipment.description}</p>
+              </div>
+
+              {/* Specifications */}
+              <div className="bg-white p-5 md:p-8 rounded-2xl md:rounded-3xl border border-gray-100 shadow-sm">
+                <h2 className="text-lg md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">Specifications</h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                   {equipment.brand && (
-                    <div>
-                      <p className="text-sm text-gray-500 mb-1">Brand</p>
-                      <p className="font-semibold text-gray-900">{equipment.brand}</p>
+                    <div className="bg-gray-50/70 p-3 rounded-xl">
+                      <p className="text-xs text-gray-400 font-bold uppercase mb-0.5">Brand</p>
+                      <p className="font-bold text-sm text-gray-900">{equipment.brand}</p>
                     </div>
                   )}
                   {equipment.model && (
-                    <div>
-                      <p className="text-sm text-gray-500 mb-1">Model</p>
-                      <p className="font-semibold text-gray-900">{equipment.model}</p>
+                    <div className="bg-gray-50/70 p-3 rounded-xl">
+                      <p className="text-xs text-gray-400 font-bold uppercase mb-0.5">Model</p>
+                      <p className="font-bold text-sm text-gray-900">{equipment.model}</p>
                     </div>
                   )}
                   {equipment.year && (
-                    <div>
-                      <p className="text-sm text-gray-500 mb-1">Year</p>
-                      <p className="font-semibold text-gray-900">{equipment.year}</p>
+                    <div className="bg-gray-50/70 p-3 rounded-xl">
+                      <p className="text-xs text-gray-400 font-bold uppercase mb-0.5">Year</p>
+                      <p className="font-bold text-sm text-gray-900">{equipment.year}</p>
                     </div>
                   )}
                   {equipment.horsepower && (
-                    <div>
-                      <p className="text-sm text-gray-500 mb-1">Horsepower</p>
-                      <p className="font-semibold text-gray-900">{equipment.horsepower} HP</p>
+                    <div className="bg-gray-50/70 p-3 rounded-xl">
+                      <p className="text-xs text-gray-400 font-bold uppercase mb-0.5">Horsepower</p>
+                      <p className="font-bold text-sm text-gray-900">{equipment.horsepower} HP</p>
                     </div>
                   )}
                   {equipment.working_hours && (
-                    <div>
-                      <p className="text-sm text-gray-500 mb-1">Working Hours</p>
-                      <p className="font-semibold text-gray-900">{equipment.working_hours} hrs</p>
+                    <div className="bg-gray-50/70 p-3 rounded-xl">
+                      <p className="text-xs text-gray-400 font-bold uppercase mb-0.5">Working Hours</p>
+                      <p className="font-bold text-sm text-gray-900">{equipment.working_hours} hrs</p>
                     </div>
                   )}
                   {equipment.fuel_type && (
-                    <div>
-                      <p className="text-sm text-gray-500 mb-1">Fuel Type</p>
-                      <p className="font-semibold text-gray-900 capitalize">{equipment.fuel_type}</p>
+                    <div className="bg-gray-50/70 p-3 rounded-xl">
+                      <p className="text-xs text-gray-400 font-bold uppercase mb-0.5">Fuel Type</p>
+                      <p className="font-bold text-sm text-gray-900 capitalize">{equipment.fuel_type}</p>
                     </div>
                   )}
                 </div>
@@ -207,9 +273,9 @@ export default async function EquipmentDetailsPage({ params }: Props) {
               <ReviewsSection equipmentId={id} />
             </div>
 
-            {/* Right Column: Pricing & Actions */}
-            <div className="space-y-6">
-              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm sticky top-24">
+            {/* Right Column: Pricing & Actions (Desktop Sticky View) */}
+            <div className="hidden lg:block space-y-6">
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm sticky top-28">
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">{equipment.title}</h1>
@@ -284,6 +350,31 @@ export default async function EquipmentDetailsPage({ params }: Props) {
             </div>
           </div>
         </div>
+
+        {/* Mobile Sticky Booking Bar */}
+        {!isOwnerOfEquipment && (
+          <div className="md:hidden fixed bottom-14 left-0 right-0 z-30 bg-white/95 backdrop-blur-xl border-t border-gray-200/90 px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] flex items-center justify-between gap-3">
+            <div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-xl font-black text-gray-900">₹{equipment.daily_price}</span>
+                <span className="text-xs font-semibold text-gray-500">/day</span>
+              </div>
+              {equipment.hourly_price && (
+                <span className="text-[11px] font-semibold text-emerald-700">₹{equipment.hourly_price}/hr</span>
+              )}
+            </div>
+            <div className="w-1/2">
+              <BookingModal 
+                equipment={equipment} 
+                trigger={
+                  <Button className="w-full h-11 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs shadow-md active:scale-98">
+                    Rent Now
+                  </Button>
+                }
+              />
+            </div>
+          </div>
+        )}
       </main>
 
       <Footer />

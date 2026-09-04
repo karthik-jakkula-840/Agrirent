@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/client'
 import { LogIn, Lock } from 'lucide-react'
 import Link from 'next/link'
 
-export function BookingModal({ equipment }: { equipment: any }) {
+export function BookingModal({ equipment, trigger }: { equipment: any; trigger?: React.ReactElement }) {
   const [open, setOpen] = useState(false)
   const [loginRequired, setLoginRequired] = useState(false)
   const router = useRouter()
@@ -32,9 +32,11 @@ export function BookingModal({ equipment }: { equipment: any }) {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger
         render={
-          <Button className="w-full h-14 text-lg font-semibold rounded-xl bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/25">
-            Request to Rent
-          </Button>
+          trigger || (
+            <Button className="w-full h-14 text-lg font-semibold rounded-xl bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/25">
+              Request to Rent
+            </Button>
+          )
         }
       />
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl">
