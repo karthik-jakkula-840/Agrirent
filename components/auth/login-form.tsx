@@ -21,6 +21,7 @@ export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [isPendingNotice, setIsPendingNotice] = useState(false)
   
   // Role & Method State
   const [currentRole, setCurrentRole] = useState<'customer' | 'owner'>('customer')
@@ -31,6 +32,17 @@ export function LoginForm() {
   const [otp, setOtp] = useState('')
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [emailOtpSent, setEmailOtpSent] = useState(false)
+
+  // Check URL query parameters for pending approval notice
+  useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      if (params.get('pending_approval') === 'true') {
+        setIsPendingNotice(true)
+        setCurrentRole('owner')
+      }
+    }
+  })
   
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -136,6 +148,15 @@ export function LoginForm() {
       {errorMessage && (
         <div className="p-3.5 text-xs font-semibold text-red-700 bg-red-50 border border-red-200/80 rounded-xl">
           {errorMessage}
+        </div>
+      )}
+
+      {isPendingNotice && !errorMessage && (
+        <div className="p-3.5 text-xs font-medium text-amber-800 bg-amber-50/90 border border-amber-200/90 rounded-xl flex items-start gap-2.5">
+          <Shield className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+          <span>
+            <strong className="font-bold">Application Received:</strong> Your equipment owner registration is submitted and awaiting admin approval. You will receive access as soon as it is reviewed.
+          </span>
         </div>
       )}
       

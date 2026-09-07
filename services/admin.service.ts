@@ -126,11 +126,36 @@ export class AdminService {
 
     if (error) throw error
 
-    // If approved, update the user profile to 'owner'
-    if (status === 'approved') {
-      const { data: request } = await this.supabase.from('owner_requests').select('user_id').eq('id', requestId).single()
-      if (request) {
-        await this.supabase.from('profiles').update({ role: 'owner' }).eq('id', request.user_id)
+    // Fetch the owner request to get user_id
+    const { data: request } = await this.supabase
+      .from('owner_requests')
+      .select('user_id')
+      .eq('id', requestId)
+      .single()
+
+    if (request?.user_id) {
+      const newRole = status === 'approved' ? 'owner' : 'customer'
+      await (this.supabase.from('profiles') as any).update({ role: newRole }).eq('id', request.user_id)
+
+      // Sync auth metadata and create notification using admin client
+      try {
+        const { createAdminClient } = await import('@/lib/supabase/server')
+        const adminClient = createAdminClient()
+        
+        await adminClient.auth.admin.updateUserById(request.user_id, {
+          user_metadata: { role: newRole }
+        })
+
+        await (adminClient.from('notifications') as any).insert({
+          user_id: request.user_id,
+          title: `Owner Application ${status === 'approved' ? 'Approved' : 'Rejected'}`,
+          message: status === 'approved'
+            ? 'Congratulations! Your equipment owner account has been approved by the admin. You can now log in as an owner to manage your fleet.'
+            : 'Your equipment owner registration was rejected by the admin. Please contact support for more information.',
+          is_read: false
+        })
+      } catch (syncErr) {
+        console.warn('Could not sync auth metadata or notification:', syncErr)
       }
     }
 

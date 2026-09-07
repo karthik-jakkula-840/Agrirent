@@ -95,8 +95,13 @@ export function SignupForm() {
       
       if (result?.error) {
         toast.error(result.error)
+      } else if (result?.isOwnerPending) {
+        toast.success('Registration submitted! Your owner account is pending Admin approval before you can log in.', {
+          duration: 6000
+        })
+        router.push('/login?pending_approval=true')
       } else {
-        toast.success('Account created successfully. Please check your inbox to verify.')
+        toast.success('Account created successfully. You can now log in.')
         router.push('/login')
       }
     } finally {

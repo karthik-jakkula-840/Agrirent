@@ -21,10 +21,11 @@ function createAdminClient() {
 
 export async function login(values: z.infer<typeof loginSchema>) {
   const supabase = await createClient()
+  const adminClient = createAdminClient()
 
   try {
-    console.log('[LOGIN] Starting login')
-    console.log('[LOGIN] Selected role:', values.role)
+    console.log('[LOGIN] Starting login for:', values.email)
+    console.log('[LOGIN] Selected role tab:', values.role)
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email: values.email,
@@ -47,7 +48,8 @@ export async function login(values: z.infer<typeof loginSchema>) {
 
     console.log('[LOGIN] Authenticated user:', data.user.id)
 
-    const { data: profile, error: profileError } = await supabase
+    // Fetch profile with adminClient to avoid any RLS or stale session issues
+    const { data: profile, error: profileError } = await adminClient
       .from('profiles')
       .select('*')
       .eq('id', data.user.id)
@@ -59,10 +61,13 @@ export async function login(values: z.infer<typeof loginSchema>) {
       return { success: false, error: 'Profile not found for this account. Please contact support.' }
     }
 
-    console.log('[LOGIN] Profile:', profile)
-    console.log('[LOGIN] Profile role:', profile.role)
+    // Admins always redirect to admin dashboard
+    if (profile.role === 'admin') {
+      return { success: true, redirectUrl: '/dashboard/admin' }
+    }
 
-    const { data: ownerRequest } = await supabase
+    // Fetch latest owner request using adminClient (bypasses RLS)
+    const { data: ownerRequest } = await adminClient
       .from('owner_requests')
       .select('status')
       .eq('user_id', data.user.id)
@@ -71,34 +76,52 @@ export async function login(values: z.infer<typeof loginSchema>) {
       .maybeSingle()
 
     const isPendingOwner = ownerRequest?.status === 'pending'
-    const isApprovedOwner = profile.role === 'owner' || profile.role === 'rental_owner' || ownerRequest?.status === 'approved'
-    const hasOwnerRequest = !!ownerRequest
+    const isRejectedOwner = ownerRequest?.status === 'rejected'
+    const isApprovedOwner = ownerRequest?.status === 'approved' || (profile.role === 'owner' && !ownerRequest)
 
-    if (profile.role !== 'admin') {
-      if (values.role === 'customer' && (isPendingOwner || isApprovedOwner || hasOwnerRequest)) {
-        await supabase.auth.signOut()
-        return { success: false, error: 'Please login as an owner.' }
-      }
-      if (values.role === 'owner' && isPendingOwner) {
-        await supabase.auth.signOut()
-        return { success: false, error: 'Your owner account is pending admin approval. You will be able to login once approved.' }
-      }
-      if (values.role === 'owner' && !isApprovedOwner && !hasOwnerRequest) {
-        await supabase.auth.signOut()
-        return { success: false, error: 'You are not registered as an owner.' }
+    // RULE 1: If owner registration is PENDING approval:
+    // Block login completely (under both Customer and Owner tabs) until an Admin approves!
+    if (isPendingOwner) {
+      console.log('[LOGIN] Blocked: Owner account is pending admin approval')
+      await supabase.auth.signOut()
+      return { 
+        success: false, 
+        error: 'Your equipment owner registration is pending admin approval. You will be able to log in once an administrator approves your account.' 
       }
     }
 
-    let destination = '/dashboard/user'
-    if (profile.role === 'admin') {
-      destination = '/dashboard/admin'
-    } else if (profile.role === 'owner' || profile.role === 'rental_owner' || isApprovedOwner) {
-      destination = '/dashboard/owner'
+    // RULE 2: If owner registration was REJECTED:
+    if (isRejectedOwner) {
+      console.log('[LOGIN] Blocked: Owner account was rejected')
+      await supabase.auth.signOut()
+      return { 
+        success: false, 
+        error: 'Your equipment owner registration was rejected by an administrator. Please contact support.' 
+      }
     }
 
-    console.log('[LOGIN] Redirect:', destination)
+    // RULE 3: If user is an APPROVED equipment owner:
+    if (isApprovedOwner) {
+      if (values.role === 'customer') {
+        await supabase.auth.signOut()
+        return { 
+          success: false, 
+          error: 'You are registered as an Equipment Owner. Please select the Equipment Owner tab to log in.' 
+        }
+      }
+      return { success: true, redirectUrl: '/dashboard/owner' }
+    }
 
-    return { success: true, redirectUrl: destination }
+    // RULE 4: User is a standard CUSTOMER (never applied as owner):
+    if (values.role === 'owner') {
+      await supabase.auth.signOut()
+      return { 
+        success: false, 
+        error: 'You are not registered as an equipment owner. Please log in as a Customer, or register as an Equipment Owner.' 
+      }
+    }
+
+    return { success: true, redirectUrl: '/dashboard/user' }
   } catch (error: any) {
     console.error('[LOGIN] Unexpected error:', error)
     const message = error instanceof Error ? error.message : 'An unexpected error occurred during login.'
@@ -210,12 +233,13 @@ export async function signup(values: z.infer<typeof signupSchema>) {
         console.log('[Signup] Email auto-confirmed successfully')
       }
 
-      // Explicitly update profile with phone number and full name
+      // Explicitly update profile with phone number and full name (always customer role until approved)
       await adminClient
         .from('profiles')
         .update({
           phone: values.phone,
           full_name: values.fullName,
+          role: 'customer',
         })
         .eq('id', data.user.id)
 
@@ -234,13 +258,15 @@ export async function signup(values: z.infer<typeof signupSchema>) {
         ])
         if (reqError) {
           console.error('[Signup] Error creating owner request:', reqError)
+          return { error: 'Failed to create owner verification request. Please try again.' }
         } else {
           console.log('[Signup] Created owner request for approval with Aadhaar:', aadharDocUrl)
         }
       }
 
-    } catch (err) {
+    } catch (err: any) {
       console.error('[Signup] Error in post-signup tasks:', err)
+      return { error: err?.message || 'Error completing registration' }
     }
   }
 
@@ -250,7 +276,7 @@ export async function signup(values: z.infer<typeof signupSchema>) {
   }
 
   console.log('[Signup] User registered successfully', values.email)
-  return { success: true }
+  return { success: true, isOwnerPending: values.role === 'owner' }
 }
 
 export async function logout() {
@@ -326,6 +352,7 @@ export async function sendEmailOtp(email: string) {
 
 export async function verifyEmailOtp(email: string, otp: string, role?: string) {
   const supabase = await createClient()
+  const adminClient = createAdminClient()
 
   const { data, error } = await supabase.auth.verifyOtp({
     email,
@@ -342,14 +369,18 @@ export async function verifyEmailOtp(email: string, otp: string, role?: string) 
     return { success: false, error: 'User not found after verification.' }
   }
 
-  // Get user profile to determine redirect
-  const { data: profile } = await supabase
+  // Get user profile using adminClient
+  const { data: profile } = await adminClient
     .from('profiles')
     .select('role')
     .eq('id', data.user.id)
     .single()
 
-  const { data: ownerRequest } = await supabase
+  if (profile?.role === 'admin') {
+    return { success: true, redirectUrl: '/dashboard/admin' }
+  }
+
+  const { data: ownerRequest } = await adminClient
     .from('owner_requests')
     .select('status')
     .eq('user_id', data.user.id)
@@ -358,30 +389,48 @@ export async function verifyEmailOtp(email: string, otp: string, role?: string) 
     .maybeSingle()
 
   const isPendingOwner = ownerRequest?.status === 'pending'
-  const isApprovedOwner = profile?.role === 'owner' || profile?.role === 'rental_owner' || ownerRequest?.status === 'approved'
-  const hasOwnerRequest = !!ownerRequest
+  const isRejectedOwner = ownerRequest?.status === 'rejected'
+  const isApprovedOwner = ownerRequest?.status === 'approved' || (profile?.role === 'owner' && !ownerRequest)
 
-  if (profile && profile.role !== 'admin' && role) {
-    if (role === 'customer' && (isPendingOwner || isApprovedOwner || hasOwnerRequest)) {
-      await supabase.auth.signOut()
-      return { success: false, error: 'Please login as an owner.' }
-    }
-    if (role === 'owner' && isPendingOwner) {
-      await supabase.auth.signOut()
-      return { success: false, error: 'Your owner account is pending admin approval. You will be able to login once approved.' }
-    }
-    if (role === 'owner' && !isApprovedOwner && !hasOwnerRequest) {
-      await supabase.auth.signOut()
-      return { success: false, error: 'You are not registered as an owner.' }
+  // 1. Pending owner request: block login until approved
+  if (isPendingOwner) {
+    await supabase.auth.signOut()
+    return { 
+      success: false, 
+      error: 'Your equipment owner registration is pending admin approval. You will be able to log in once an administrator approves your account.' 
     }
   }
 
-  let destination = '/dashboard/user'
-  if (profile) {
-    if (profile.role === 'admin') destination = '/dashboard/admin'
-    else if (profile.role === 'owner' || profile.role === 'rental_owner' || isApprovedOwner) destination = '/dashboard/owner'
+  // 2. Rejected owner request: block login
+  if (isRejectedOwner) {
+    await supabase.auth.signOut()
+    return { 
+      success: false, 
+      error: 'Your equipment owner registration was rejected by an administrator. Please contact support.' 
+    }
   }
 
-  return { success: true, redirectUrl: destination }
+  // 3. Approved owner
+  if (isApprovedOwner) {
+    if (role === 'customer') {
+      await supabase.auth.signOut()
+      return { 
+        success: false, 
+        error: 'You are registered as an Equipment Owner. Please select the Equipment Owner tab to log in.' 
+      }
+    }
+    return { success: true, redirectUrl: '/dashboard/owner' }
+  }
+
+  // 4. Standard customer
+  if (role === 'owner') {
+    await supabase.auth.signOut()
+    return { 
+      success: false, 
+      error: 'You are not registered as an equipment owner. Please log in as a Customer, or register as an Equipment Owner.' 
+    }
+  }
+
+  return { success: true, redirectUrl: '/dashboard/user' }
 }
 
