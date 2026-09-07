@@ -84,37 +84,37 @@ export function WeatherWidget() {
   const current = weather.current_weather
   
   return (
-    <Card className="rounded-3xl border-gray-100 shadow-sm overflow-hidden bg-gradient-to-br from-blue-50 to-white">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium flex items-center gap-2 text-gray-600">
-          <MapPin className="h-4 w-4 text-primary" />
+    <Card className="rounded-2xl sm:rounded-3xl border border-gray-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] overflow-hidden bg-gradient-to-br from-emerald-50/40 via-white to-white">
+      <CardHeader className="pb-2 pt-4 sm:pt-6 px-4 sm:px-6">
+        <CardTitle className="text-xs sm:text-sm font-bold flex items-center gap-1.5 text-gray-700">
+          <MapPin className="h-4 w-4 text-[#009b55]" />
           Local Forecast
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <div className="text-3xl font-bold text-gray-900">{Math.round(current.temperature)}°C</div>
-            <div className="text-sm text-gray-600 mt-1">{getWeatherDescription(current.weathercode)}</div>
+            <div className="text-3xl font-black text-gray-950 tracking-tight">{Math.round(current.temperature)}°C</div>
+            <div className="text-xs sm:text-sm text-gray-600 font-medium mt-0.5">{getWeatherDescription(current.weathercode)}</div>
           </div>
           <div>
             {getWeatherIcon(current.weathercode)}
           </div>
         </div>
         
-        <div className="pt-4 border-t border-blue-100 grid grid-cols-3 gap-2 text-center text-sm">
+        <div className="pt-3.5 border-t border-emerald-100/80 grid grid-cols-3 gap-2 text-center text-sm">
           {weather.daily?.time?.slice(1, 4).map((time: string, idx: number) => {
             const date = new Date(time)
             const dayStr = date.toLocaleDateString('en-US', { weekday: 'short' })
             return (
               <div key={idx} className="flex flex-col items-center">
-                <span className="text-gray-500 text-xs mb-1">{dayStr}</span>
+                <span className="text-gray-500 text-xs font-semibold mb-1">{dayStr}</span>
                 {getWeatherIcon(weather.daily.weathercode[idx + 1]) && 
-                  <div className="scale-75 my-1">
+                  <div className="scale-75 my-0.5">
                     {getWeatherIcon(weather.daily.weathercode[idx + 1])}
                   </div>
                 }
-                <span className="font-medium text-gray-800">
+                <span className="font-bold text-gray-900 text-xs sm:text-sm">
                   {Math.round(weather.daily.temperature_2m_max[idx + 1])}°
                 </span>
               </div>

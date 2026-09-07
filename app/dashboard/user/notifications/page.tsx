@@ -20,8 +20,12 @@ export default async function NotificationsPage() {
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Notifications</h1>
-        <p className="text-gray-500 mt-1">Stay updated on your bookings and account activity.</p>
+        <h1 className="text-[24px] sm:text-[32px] font-black tracking-tight text-gray-950 leading-tight">
+          Notifications
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-600 font-medium leading-relaxed mt-1">
+          Stay updated on your bookings and account activity.
+        </p>
       </div>
 
       <NotificationsClient initialNotifications={notifications || []} />

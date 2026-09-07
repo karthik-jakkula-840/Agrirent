@@ -29,29 +29,33 @@ export default async function PaymentsPage() {
   const totalRefunds = typedTransactions.filter(t => t.transaction_type === 'refund').reduce((acc, t) => acc + Number(t.amount), 0)
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="space-y-6 sm:space-y-8 max-w-5xl mx-auto">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Payment History</h1>
-        <p className="text-gray-500 mt-1">View your transactions, deposits, and refunds.</p>
+        <h1 className="text-[24px] sm:text-[32px] font-black tracking-tight text-gray-950 leading-tight">
+          Payment History
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-600 font-medium leading-relaxed mt-1">
+          View your transactions, deposits, and refunds.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-4">
-          <div className="h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 bg-green-100 text-green-600">
-            <CheckCircle2 className="h-6 w-6" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+        <div className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex items-center gap-4">
+          <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-2xl flex items-center justify-center shrink-0 bg-emerald-50 text-[#009b55] border border-emerald-100">
+            <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-500">Total Paid</p>
-            <p className="text-2xl font-bold text-gray-900">₹{totalPaid.toFixed(2)}</p>
+            <p className="text-xs sm:text-sm font-semibold text-gray-500 tracking-tight">Total Paid</p>
+            <p className="text-2xl sm:text-3xl font-black text-gray-950 tracking-tight">₹{totalPaid.toFixed(2)}</p>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-4">
-          <div className="h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 bg-blue-100 text-blue-600">
-            <ArrowUpRight className="h-6 w-6" />
+        <div className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex items-center gap-4">
+          <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-2xl flex items-center justify-center shrink-0 bg-blue-50 text-blue-600 border border-blue-100">
+            <ArrowUpRight className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-500">Total Refunds</p>
-            <p className="text-2xl font-bold text-gray-900">₹{totalRefunds.toFixed(2)}</p>
+            <p className="text-xs sm:text-sm font-semibold text-gray-500 tracking-tight">Total Refunds</p>
+            <p className="text-2xl sm:text-3xl font-black text-gray-950 tracking-tight">₹{totalRefunds.toFixed(2)}</p>
           </div>
         </div>
       </div>

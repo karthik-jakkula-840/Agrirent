@@ -14,7 +14,8 @@ import {
   Settings, 
   LogOut,
   Menu,
-  X
+  X,
+  Tractor
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
@@ -46,9 +47,11 @@ export function UserSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen, lo
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-white border-r border-gray-100">
       <div className="p-6">
-        <Link href="/" className="flex items-center gap-2 font-bold text-2xl text-primary">
-          <span className="bg-primary text-white p-1.5 rounded-lg">A</span>
-          Agriform
+        <Link href="/" className="flex items-center gap-2 select-none">
+          <Tractor className="h-7 w-7 text-[#009b55]" />
+          <span className="text-2xl font-black tracking-tight text-gray-950">
+            Agri<span className="text-[#009b55]">Rent</span>
+          </span>
         </Link>
       </div>
 
@@ -60,14 +63,14 @@ export function UserSidebar({ profile, isMobileMenuOpen, setIsMobileMenuOpen, lo
               key={item.translationKey}
               href={item.href}
               onClick={() => setIsMobileMenuOpen?.(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${
+              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-2xl transition-all ${
                 isActive 
-                  ? 'bg-primary/10 text-primary font-medium' 
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  ? 'bg-[#009b55]/10 text-[#009b55] font-bold shadow-xs' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-950 font-semibold'
               }`}
             >
-              <item.icon className={`h-5 w-5 ${isActive ? 'text-primary' : 'text-gray-400'}`} />
-              {t[item.translationKey as keyof typeof t]}
+              <item.icon className={`h-5 w-5 ${isActive ? 'text-[#009b55]' : 'text-gray-400'}`} />
+              <span className="text-sm tracking-tight">{t[item.translationKey as keyof typeof t]}</span>
             </Link>
           )
         })}

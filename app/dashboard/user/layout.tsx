@@ -6,7 +6,7 @@ import { cookies } from 'next/headers'
 import { LanguageCode } from '@/lib/translations'
 
 export const metadata = {
-  title: 'Customer Dashboard | Agriform',
+  title: 'Customer Dashboard | AgriRent',
 }
 
 export default async function UserDashboardLayout({

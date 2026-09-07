@@ -40,8 +40,12 @@ export default async function FavoritesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Favorite Equipment</h1>
-        <p className="text-gray-500 mt-1">Manage your saved machinery and tools.</p>
+        <h1 className="text-[24px] sm:text-[32px] font-black tracking-tight text-gray-950 leading-tight">
+          Favorite Equipment
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-600 font-medium leading-relaxed mt-1">
+          Manage your saved machinery and tools.
+        </p>
       </div>
 
       <FavoritesClient initialFavorites={favorites || []} />
