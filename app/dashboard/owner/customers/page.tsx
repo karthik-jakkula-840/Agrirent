@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { format } from 'date-fns'
 
 export const metadata = {
-  title: 'Customers | Owner Portal | Agriform',
+  title: 'Customers | Owner Portal | AgriRent',
 }
 
 export default async function OwnerCustomersPage() {
@@ -53,8 +53,12 @@ export default async function OwnerCustomersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Your Customers</h1>
-        <p className="text-gray-500 mt-1">Farmers who have rented your equipment</p>
+        <h1 className="text-[24px] sm:text-[32px] font-black tracking-tight text-gray-950 leading-tight">
+          Your Customers
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-600 font-medium leading-relaxed mt-1">
+          Farmers who have rented your equipment
+        </p>
       </div>
 
       {customers.length === 0 ? (

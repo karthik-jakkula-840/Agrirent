@@ -3,7 +3,7 @@ import { getCurrentUser } from '@/lib/supabase/auth'
 import { ProfileForm } from '@/app/dashboard/user/profile/profile-form'
 
 export const metadata = {
-  title: 'Profile Settings | Owner Portal | Agriform',
+  title: 'Profile Settings | Owner Portal | AgriRent',
 }
 
 export default async function OwnerProfilePage() {
@@ -17,10 +17,14 @@ export default async function OwnerProfilePage() {
     .single()
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Owner Profile</h1>
-        <p className="text-gray-500 mt-1">Manage your personal information and contact details.</p>
+        <h1 className="text-[24px] sm:text-[32px] font-black tracking-tight text-gray-950 leading-tight">
+          Owner Profile
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-600 font-medium leading-relaxed mt-1">
+          Manage your personal information and contact details.
+        </p>
       </div>
 
       <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 md:p-8">

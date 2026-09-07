@@ -6,7 +6,7 @@ import { BackButton } from '@/components/dashboard/back-button'
 import { notFound, redirect } from 'next/navigation'
 
 export const metadata = {
-  title: 'Edit Equipment | Owner Portal | Agriform',
+  title: 'Edit Equipment | Owner Portal | AgriRent',
 }
 
 export default async function EditEquipmentPage(props: { params: Promise<{ id: string }> }) {

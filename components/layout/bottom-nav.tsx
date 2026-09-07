@@ -86,9 +86,9 @@ export function BottomNav() {
   return (
     <nav 
       aria-label="Mobile Bottom Navigation"
-      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-gray-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.04)]"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-gray-150/90 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] pt-1.5 pb-[max(0.35rem,env(safe-area-inset-bottom))]"
     >
-      <div className="flex justify-around items-center h-14 max-w-md mx-auto px-2">
+      <div className="grid grid-cols-4 items-center max-w-md mx-auto px-1">
         {navItems.map((item) => {
           const isActive = item.isActive
           const Icon = item.icon
@@ -97,24 +97,29 @@ export function BottomNav() {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex flex-col items-center justify-center w-full h-full gap-0.5 transition-colors ${
-                isActive ? 'text-[#009b55] font-bold' : 'text-gray-400 hover:text-gray-700'
+              className={`group flex flex-col items-center justify-center py-1 gap-1 transition-all select-none ${
+                isActive ? 'text-[#009b55]' : 'text-gray-400 hover:text-gray-600'
               }`}
             >
-              <Icon 
-                className={`w-5 h-5 transition-transform ${
-                  isActive ? 'stroke-[#009b55] fill-[#009b55]/15 scale-105' : ''
-                }`} 
-                strokeWidth={isActive ? 2.4 : 1.8} 
-              />
-              <span className="text-[11px] font-bold tracking-tight">{item.name}</span>
+              <div className={`relative px-3 py-0.5 rounded-full transition-all ${
+                isActive ? 'bg-emerald-50 text-[#009b55]' : 'text-gray-400 group-hover:text-gray-600'
+              }`}>
+                <Icon 
+                  className={`w-5 h-5 transition-transform ${
+                    isActive ? 'scale-105 stroke-[#009b55]' : ''
+                  }`} 
+                  strokeWidth={isActive ? 2.3 : 1.7} 
+                />
+              </div>
+              <span className={`text-[10.5px] tracking-tight truncate max-w-[72px] text-center leading-none ${
+                isActive ? 'font-bold text-[#009b55]' : 'font-medium text-gray-500'
+              }`}>
+                {item.name}
+              </span>
             </Link>
           )
         })}
       </div>
-      
-      {/* iOS Home Indicator Bar */}
-      <div className="w-28 h-1 bg-gray-300/80 rounded-full mx-auto mb-1.5" />
     </nav>
   )
 }

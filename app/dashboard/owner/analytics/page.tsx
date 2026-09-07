@@ -6,7 +6,7 @@ import { LineChart, BarChart2, Tractor, CalendarClock } from 'lucide-react'
 import Image from 'next/image'
 
 export const metadata = {
-  title: 'Analytics | Owner Portal | Agriform',
+  title: 'Analytics | Owner Portal | AgriRent',
 }
 
 export default async function OwnerAnalyticsPage() {
@@ -28,8 +28,12 @@ export default async function OwnerAnalyticsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Analytics</h1>
-        <p className="text-gray-500 mt-1">Deep dive into your rental business performance</p>
+        <h1 className="text-[24px] sm:text-[32px] font-black tracking-tight text-gray-950 leading-tight">
+          Analytics
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-600 font-medium leading-relaxed mt-1">
+          Deep dive into your rental business performance
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

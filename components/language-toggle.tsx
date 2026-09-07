@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
-import { Languages } from 'lucide-react'
+import { Languages, ChevronDown } from 'lucide-react'
 
 export function LanguageToggle() {
   const router = useRouter()
@@ -22,18 +22,24 @@ export function LanguageToggle() {
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <Languages className="h-4 w-4 text-gray-500" />
+    <div className="relative inline-flex items-center shrink-0">
+      <div className="pointer-events-none absolute left-2.5 flex items-center text-gray-500">
+        <Languages className="h-3.5 w-3.5 text-[#009b55]" />
+      </div>
       <select 
         value={language} 
         onChange={setLanguage}
         aria-label="Select Language"
-        className="text-sm bg-white border border-gray-200 rounded-md px-2 py-1 outline-none focus:ring-2 focus:ring-primary/20"
+        className="appearance-none cursor-pointer text-xs font-semibold pl-7 pr-6 py-1.5 bg-gray-50/90 hover:bg-gray-100/90 border border-gray-200/90 rounded-full text-gray-700 outline-none focus:ring-2 focus:ring-[#009b55]/20 focus:border-[#009b55] transition-all"
       >
-        <option value="en">English</option>
-        <option value="hi">हिंदी (Hindi)</option>
-        <option value="te">తెలుగు (Telugu)</option>
+        <option value="en">EN</option>
+        <option value="hi">हिंदी</option>
+        <option value="te">తెలుగు</option>
       </select>
+      <div className="pointer-events-none absolute right-2 flex items-center text-gray-400">
+        <ChevronDown className="h-3 w-3" />
+      </div>
     </div>
   )
 }
+

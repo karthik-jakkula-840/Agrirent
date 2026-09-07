@@ -4,7 +4,7 @@ import { CreditCard, CheckCircle2, Clock, RotateCcw } from 'lucide-react'
 import { format } from 'date-fns'
 
 export const metadata = {
-  title: 'Payments | Owner Portal | Agriform',
+  title: 'Payments | Owner Portal | AgriRent',
 }
 
 export default async function OwnerPaymentsPage() {
@@ -41,40 +41,44 @@ export default async function OwnerPaymentsPage() {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Payments & Earnings</h1>
-        <p className="text-gray-500 mt-1">Track your transactions and payouts</p>
+        <h1 className="text-[24px] sm:text-[32px] font-black tracking-tight text-gray-950 leading-tight">
+          Payments & Earnings
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-600 font-medium leading-relaxed mt-1">
+          Track your transactions and payouts
+        </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
-        <div className="bg-white p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-            <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
+        <div className="bg-white p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border border-gray-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between gap-3">
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-emerald-50 text-[#009b55] border border-emerald-100 flex items-center justify-center shrink-0">
+            <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
           <div>
-            <p className="text-xs sm:text-sm font-medium text-gray-500">Total Paid</p>
-            <p className="text-xl sm:text-2xl font-bold text-gray-900">₹{totalPaid.toLocaleString()}</p>
+            <p className="text-2xl sm:text-3xl font-black text-gray-950 tracking-tight leading-none mb-1">₹{totalPaid.toLocaleString()}</p>
+            <p className="text-xs sm:text-sm font-semibold text-gray-500 tracking-tight">Total Paid</p>
           </div>
         </div>
         
-        <div className="bg-white p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-            <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600" />
+        <div className="bg-white p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border border-gray-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between gap-3">
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center shrink-0">
+            <Clock className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
           <div>
-            <p className="text-xs sm:text-sm font-medium text-gray-500">Pending</p>
-            <p className="text-xl sm:text-2xl font-bold text-gray-900">₹{pending.toLocaleString()}</p>
+            <p className="text-2xl sm:text-3xl font-black text-gray-950 tracking-tight leading-none mb-1">₹{pending.toLocaleString()}</p>
+            <p className="text-xs sm:text-sm font-semibold text-gray-500 tracking-tight">Pending</p>
           </div>
         </div>
 
-        <div className="bg-white p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 col-span-2 md:col-span-1">
-          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-red-100 flex items-center justify-center shrink-0">
-            <RotateCcw className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
+        <div className="bg-white p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border border-gray-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between gap-3 col-span-2 md:col-span-1">
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-rose-50 text-rose-600 border border-rose-100 flex items-center justify-center shrink-0">
+            <RotateCcw className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
           <div>
-            <p className="text-xs sm:text-sm font-medium text-gray-500">Refunded</p>
-            <p className="text-xl sm:text-2xl font-bold text-gray-900">₹{refunded.toLocaleString()}</p>
+            <p className="text-2xl sm:text-3xl font-black text-gray-950 tracking-tight leading-none mb-1">₹{refunded.toLocaleString()}</p>
+            <p className="text-xs sm:text-sm font-semibold text-gray-500 tracking-tight">Refunded</p>
           </div>
         </div>
       </div>

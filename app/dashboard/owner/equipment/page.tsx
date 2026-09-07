@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 
 export const metadata = {
-  title: 'My Equipment | Owner Portal | Agriform',
+  title: 'My Equipment | Owner Portal | AgriRent',
 }
 
 export default async function OwnerEquipmentPage() {
@@ -21,11 +21,15 @@ export default async function OwnerEquipmentPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">My Equipment</h1>
-          <p className="text-gray-500 mt-1">Manage your fleet and pricing</p>
+          <h1 className="text-[24px] sm:text-[32px] font-black tracking-tight text-gray-950 leading-tight">
+            My Equipment
+          </h1>
+          <p className="text-xs sm:text-sm text-gray-600 font-medium leading-relaxed mt-1">
+            Manage your fleet and pricing
+          </p>
         </div>
         <Link href="/dashboard/owner/equipment/new">
-          <Button className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white">
+          <Button className="w-full sm:w-auto bg-[#009b55] hover:bg-[#008f4c] text-white font-bold rounded-2xl shadow-xs text-xs sm:text-sm px-4 py-2.5 h-auto transition-all active:scale-[0.98]">
             <Plus className="mr-2 h-4 w-4" /> Add Equipment
           </Button>
         </Link>

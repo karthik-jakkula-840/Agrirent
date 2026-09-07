@@ -4,7 +4,7 @@ import { CalendarDays, Clock } from 'lucide-react'
 import { format } from 'date-fns'
 
 export const metadata = {
-  title: 'Calendar | Owner Portal | Agriform',
+  title: 'Calendar | Owner Portal | AgriRent',
 }
 
 export default async function OwnerCalendarPage() {
@@ -30,10 +30,14 @@ export default async function OwnerCalendarPage() {
   const active = bookings?.filter((b: any) => new Date(b.start_time) <= now && new Date(b.end_time) >= now) || []
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Availability & Calendar</h1>
-        <p className="text-gray-500 mt-1">Overview of your active and upcoming rentals</p>
+        <h1 className="text-[24px] sm:text-[32px] font-black tracking-tight text-gray-950 leading-tight">
+          Availability & Calendar
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-600 font-medium leading-relaxed mt-1">
+          Overview of your active and upcoming rentals
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

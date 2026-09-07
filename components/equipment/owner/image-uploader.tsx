@@ -106,7 +106,20 @@ export function ImageUploader({ value, onChange, maxImages = 5 }: ImageUploaderP
               sizes="(max-width: 768px) 50vw, 25vw"
             />
             
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+            {/* Mobile Direct Delete Button */}
+            <button
+              type="button"
+              aria-label="Remove image"
+              onClick={(e) => {
+                e.stopPropagation()
+                removeImage(index)
+              }}
+              className="sm:hidden absolute top-2 right-2 z-10 h-7 w-7 rounded-full bg-black/65 text-white flex items-center justify-center backdrop-blur-sm shadow-sm active:scale-90 transition-transform"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+
+            <div className="hidden sm:flex absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex-col items-center justify-center gap-2">
               <Button
                 type="button"
                 variant="destructive"
@@ -131,7 +144,7 @@ export function ImageUploader({ value, onChange, maxImages = 5 }: ImageUploaderP
             </div>
             
             {index === 0 && (
-              <div className="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
+              <div className="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 sm:py-1 rounded-full flex items-center gap-1 shadow-sm">
                 <Star className="h-3 w-3 fill-current" /> Primary
               </div>
             )}

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { CalendarClock, ArrowRight, CheckCircle2, XCircle, Clock } from 'lucide-react'
 
 export const metadata = {
-  title: 'Bookings | Owner Portal | Agriform',
+  title: 'Bookings | Owner Portal | AgriRent',
 }
 
 export default async function OwnerBookingsPage() {
@@ -20,8 +20,12 @@ export default async function OwnerBookingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Equipment Bookings</h1>
-        <p className="text-gray-500 mt-1">Manage rental requests and active bookings</p>
+        <h1 className="text-[24px] sm:text-[32px] font-black tracking-tight text-gray-950 leading-tight">
+          Equipment Bookings
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-600 font-medium leading-relaxed mt-1">
+          Manage rental requests and active bookings
+        </p>
       </div>
 
       {bookings.length === 0 ? (
