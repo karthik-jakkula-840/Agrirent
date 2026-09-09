@@ -32,12 +32,12 @@ export const metadata: Metadata = {
   },
   description: 'Discover and rent high-quality agricultural equipment from verified owners near you. Affordable, reliable, and built for your farm\'s success.',
   keywords: [
-    'agricultural equipment rental', 
-    'tractor rental India', 
-    'farm machinery', 
-    'AgriRent', 
-    'farming equipment rental', 
-    'harvester rental', 
+    'agricultural equipment rental',
+    'tractor rental India',
+    'farm machinery',
+    'AgriRent',
+    'farming equipment rental',
+    'harvester rental',
     'smart farming',
     'peer-to-peer equipment sharing'
   ],
