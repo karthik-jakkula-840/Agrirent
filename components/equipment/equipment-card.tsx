@@ -3,14 +3,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { MapPin, Star, Heart, CheckCircle2 } from 'lucide-react'
+import { MapPin, Star, CheckCircle2 } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { useToggleFavorite, useFavorites } from '@/hooks/use-favorites'
-import { toast } from 'sonner'
-import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { FavoriteButton } from '@/components/equipment/favorite-button'
 
 export interface EquipmentCardProps {
   id: string
@@ -41,44 +38,6 @@ export function EquipmentCard({
   isVerifiedOwner = true,
   priority = false,
 }: EquipmentCardProps) {
-  const { data: favorites } = useFavorites()
-  const { mutate: toggleFavorite, isPending } = useToggleFavorite()
-  
-  const [isFavorited, setIsFavorited] = useState(false)
-
-  // Sync with server state
-  useEffect(() => {
-    if (favorites) {
-      setIsFavorited(favorites.some((fav: any) => fav.equipment_id === id))
-    }
-  }, [favorites, id])
-
-  const handleFavoriteClick = async (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    
-    // Check auth before toggling
-    const supabase = createClient()
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) {
-      toast.error('Please login to add equipment to favorites')
-      return
-    }
-    
-    const newStatus = !isFavorited
-    setIsFavorited(newStatus)
-    
-    toggleFavorite(
-      { equipmentId: id, isFavorited: !newStatus }, 
-      {
-        onError: () => {
-          setIsFavorited(!newStatus) // Revert on error
-          toast.error('Failed to update favorites')
-        }
-      }
-    )
-  }
-
   return (
     <motion.div
       whileHover={{ y: -5 }}
@@ -99,14 +58,7 @@ export function EquipmentCard({
           <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/40 to-transparent pointer-events-none" />
 
           <div className="absolute top-2.5 right-2.5 z-10">
-            <button 
-              onClick={handleFavoriteClick}
-              disabled={isPending}
-              aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
-              className="h-9 w-9 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 hover:bg-white"
-            >
-              <Heart className={`h-4 w-4 transition-colors ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-700 hover:text-red-500'}`} />
-            </button>
+            <FavoriteButton equipmentId={id} equipmentName={name} size="md" />
           </div>
 
           <div className="absolute top-2.5 left-2.5 z-10 flex flex-wrap gap-1.5 max-w-[80%]">

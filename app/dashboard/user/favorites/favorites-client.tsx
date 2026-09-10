@@ -15,13 +15,7 @@ export function FavoritesClient({ initialFavorites }: { initialFavorites: any[] 
   const { mutate: toggleFavorite, isPending, variables: pendingVars } = useToggleFavorite()
 
   const handleRemove = (equipmentId: string) => {
-    toggleFavorite(
-      { equipmentId, isFavorited: true },
-      {
-        onSuccess: () => toast.success('Removed from favorites'),
-        onError: () => toast.error('Failed to remove favorite'),
-      }
-    )
+    toggleFavorite({ equipmentId, isFavorited: true })
   }
 
   if (isLoading) {

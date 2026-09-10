@@ -8,9 +8,10 @@ import { Footer } from '@/components/layout/footer'
 import { ImageGallery } from '@/components/equipment/shared/image-gallery'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { MapPin, Calendar, Clock, Zap, CheckCircle2, Shield, Heart } from 'lucide-react'
+import { MapPin, Calendar, Clock, Zap, CheckCircle2, Shield } from 'lucide-react'
 import { BookingModal } from '@/components/equipment/marketplace/booking-modal'
 import { ReviewsSection } from '@/components/equipment/marketplace/reviews-section'
+import { FavoriteButton } from '@/components/equipment/favorite-button'
 
 interface Props {
   params: Promise<{ id: string }>
@@ -169,9 +170,12 @@ export default async function EquipmentDetailsPage({ params }: Props) {
                       <MapPin className="h-3.5 w-3.5 text-emerald-600" /> {equipment.location}, {equipment.district}
                     </div>
                   </div>
-                  <Button variant="outline" size="icon" className="rounded-full h-9 w-9 text-gray-400 hover:text-red-500 hover:border-red-200 shrink-0">
-                    <Heart className="h-4 w-4" />
-                  </Button>
+                  <FavoriteButton 
+                    equipmentId={equipment.id} 
+                    equipmentName={equipment.title} 
+                    size="md" 
+                    className="shrink-0" 
+                  />
                 </div>
 
                 <div className="py-3 border-y border-gray-100 flex items-center justify-between">
@@ -283,9 +287,11 @@ export default async function EquipmentDetailsPage({ params }: Props) {
                       <MapPin className="h-4 w-4 text-primary" /> {equipment.location}, {equipment.district}
                     </div>
                   </div>
-                  <Button variant="outline" size="icon" className="rounded-full h-10 w-10 text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition-colors">
-                    <Heart className="h-5 w-5" />
-                  </Button>
+                  <FavoriteButton 
+                    equipmentId={equipment.id} 
+                    equipmentName={equipment.title} 
+                    size="lg" 
+                  />
                 </div>
 
                 <div className="py-6 border-y border-gray-100 my-6">

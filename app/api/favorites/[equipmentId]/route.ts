@@ -9,6 +9,10 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ e
     const { user, error: authError } = await requireAuth()
     if (authError) return authError
 
+    if (equipmentId.startsWith('mock-')) {
+      return successResponse({ deleted: true })
+    }
+
     const supabase = await createClient()
     
     // Only delete if it belongs to the current user
