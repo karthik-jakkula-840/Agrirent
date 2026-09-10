@@ -120,7 +120,7 @@ export function FavoritesClient({ initialFavorites }: { initialFavorites: any[] 
                     Details
                   </Button>
                 </Link>
-                <Link href={`/equipment/${eq.id}?book=true`} className="flex-[2]">
+                <Link href={`/equipment/${eq.id}/book`} className="flex-[2]">
                   <Button className="w-full h-10 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold uppercase tracking-wider text-sm shadow-md">
                     Rent Now
                   </Button>

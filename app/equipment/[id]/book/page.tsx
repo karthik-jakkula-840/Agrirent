@@ -29,13 +29,37 @@ export default async function BookEquipmentPage({ params }: Props) {
   }
 
   let equipment: any
-  try {
-    equipment = await equipmentService.getEquipmentById(id)
-  } catch (error) {
-    notFound()
+  if (id.startsWith('mock-')) {
+    equipment = {
+      id,
+      title: id === 'mock-1' ? 'Mahindra 575 DI Tractor' : id === 'mock-2' ? 'Swaraj 744 FE Harvester' : id === 'mock-3' ? 'John Deere Rotavator' : 'Heavy Duty Trailer 5T',
+      category: id === 'mock-1' ? 'Tractors' : id === 'mock-2' ? 'Harvesters' : id === 'mock-3' ? 'Tillage' : 'Trailers',
+      brand: id === 'mock-1' ? 'Mahindra' : id === 'mock-2' ? 'Swaraj' : id === 'mock-3' ? 'John Deere' : 'Tata',
+      model: id === 'mock-1' ? '575 DI' : id === 'mock-2' ? '744 FE' : id === 'mock-3' ? 'Rotary Tiller' : '5 Ton HD',
+      year: 2022,
+      location: id === 'mock-1' ? 'Hyderabad' : id === 'mock-2' ? 'Warangal' : id === 'mock-3' ? 'Nizamabad' : 'Karimnagar',
+      district: 'Telangana',
+      state: 'Telangana',
+      equipment_images: [{ image_url: id === 'mock-1' ? '/mock_tractor.jpg' : id === 'mock-2' ? '/mock_harvester.jpg' : id === 'mock-3' ? '/mock_rotavator.jpg' : '/mock_trailer.jpg' }],
+      owner_id: 'mock-owner',
+      profiles: { full_name: 'Verified Owner', is_verified: true },
+      description: 'Well-maintained equipment ready for high efficiency farming operations.',
+      daily_price: id === 'mock-1' ? 2500 : id === 'mock-2' ? 4000 : id === 'mock-3' ? 1200 : 800,
+      hourly_price: id === 'mock-1' ? 500 : null,
+      deposit: 2000,
+      availability: 'available',
+      status: 'approved',
+      insurance_status: 'insured',
+    }
+  } else {
+    try {
+      equipment = await equipmentService.getEquipmentById(id)
+    } catch (error) {
+      notFound()
+    }
   }
 
-  if (equipment.status !== 'approved' || equipment.owner_id === user.id) {
+  if (equipment.status !== 'approved' || (user && equipment.owner_id === user.id)) {
     redirect(`/equipment/${id}`)
   }
 

@@ -132,7 +132,7 @@ export function EquipmentCard({
                 Details
               </Button>
             </Link>
-            <Link href={`/equipment/${id}?book=true`} className="flex-[1.5]">
+            <Link href={`/equipment/${id}/book`} className="flex-[1.5]">
               <Button 
                 className="w-full h-10 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
               >

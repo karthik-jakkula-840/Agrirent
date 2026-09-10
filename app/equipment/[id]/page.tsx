@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { EquipmentService } from '@/services/equipment.service'
@@ -15,6 +15,7 @@ import { FavoriteButton } from '@/components/equipment/favorite-button'
 
 interface Props {
   params: Promise<{ id: string }>
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -53,8 +54,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function EquipmentDetailsPage({ params }: Props) {
+export default async function EquipmentDetailsPage({ params, searchParams }: Props) {
   const { id } = await params
+  const sParams = searchParams ? await searchParams : {}
+  if (sParams?.book === 'true') {
+    redirect(`/equipment/${id}/book`)
+  }
   const supabase = await createClient()
   const equipmentService = new EquipmentService(supabase)
   
@@ -370,14 +375,11 @@ export default async function EquipmentDetailsPage({ params }: Props) {
               )}
             </div>
             <div className="w-1/2">
-              <BookingModal 
-                equipment={equipment} 
-                trigger={
-                  <Button className="w-full h-11 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs shadow-md active:scale-98">
-                    Rent Now
-                  </Button>
-                }
-              />
+              <Link href={`/equipment/${equipment.id}/book`} className="block w-full">
+                <Button className="w-full h-11 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs shadow-md active:scale-98">
+                  Rent Now
+                </Button>
+              </Link>
             </div>
           </div>
         )}

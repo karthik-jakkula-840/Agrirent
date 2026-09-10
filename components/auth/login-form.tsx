@@ -51,6 +51,17 @@ export function LoginForm() {
     }
   })
 
+  const getRedirectDestination = (defaultUrl: string) => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const redirect = params.get('redirect') || params.get('next')
+      if (redirect && redirect.startsWith('/')) {
+        return redirect
+      }
+    }
+    return defaultUrl
+  }
+
   const onEmailSubmit = async (data: LoginFormValues) => {
     setErrorMessage(null)
     setIsLoading(true)
@@ -63,7 +74,7 @@ export function LoginForm() {
       }
       if (result?.success && result?.redirectUrl) {
         toast.success('Login successful.')
-        window.location.href = result.redirectUrl
+        window.location.href = getRedirectDestination(result.redirectUrl)
         return
       }
       toast.error('Login did not complete. Please try again.')
@@ -119,7 +130,7 @@ export function LoginForm() {
         const verifyResult = await verifyEmailOtp(contactValue, otp, currentRole)
         if (verifyResult.success && verifyResult.redirectUrl) {
           toast.success('OTP Verified. Logging you in...')
-          window.location.href = verifyResult.redirectUrl
+          window.location.href = getRedirectDestination(verifyResult.redirectUrl)
         } else {
           toast.error(verifyResult.error || 'Invalid OTP')
         }
@@ -130,7 +141,7 @@ export function LoginForm() {
           const loginResult = await handlePhoneLoginSession(contactValue, currentRole)
           
           if (loginResult.success && loginResult.redirectUrl) {
-            window.location.href = loginResult.redirectUrl
+            window.location.href = getRedirectDestination(loginResult.redirectUrl)
           } else {
             toast.error(loginResult.error || 'Login failed after verification.')
           }
