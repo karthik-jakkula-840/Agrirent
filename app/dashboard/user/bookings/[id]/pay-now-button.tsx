@@ -20,9 +20,11 @@ interface PayNowButtonProps {
   amount: number
   ownerPhone?: string
   ownerName?: string
+  className?: string
+  label?: string
 }
 
-export function PayNowButton({ bookingId, amount, ownerPhone, ownerName }: PayNowButtonProps) {
+export function PayNowButton({ bookingId, amount, ownerPhone, ownerName, className, label }: PayNowButtonProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -67,8 +69,8 @@ export function PayNowButton({ bookingId, amount, ownerPhone, ownerName }: PayNo
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger 
         render={
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white shrink-0">
-            Pay ₹{amount} Now
+          <Button className={`bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-sm transition-all active:scale-95 ${className || 'shrink-0'}`}>
+            {label || `Pay ₹${amount} Now`}
           </Button>
         } 
       />

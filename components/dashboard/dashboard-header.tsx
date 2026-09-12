@@ -63,15 +63,37 @@ export function DashboardHeader({
         </Link>
         
         <Link href={profileHref} aria-label="View profile" className="relative h-8 w-8 sm:h-9 sm:w-9 rounded-full overflow-hidden bg-gray-100 ring-2 ring-[#009b55]/20 hover:ring-[#009b55]/50 shadow-xs hover:scale-105 active:scale-95 transition-all shrink-0">
-          {profile?.avatar_url ? (
-            <Image src={profile.avatar_url} alt="Profile" fill sizes="36px" className="object-cover" />
-          ) : (
-            <div className="flex items-center justify-center h-full w-full bg-[#009b55] text-white font-bold text-xs sm:text-sm">
-              {profile?.full_name?.charAt(0) || 'U'}
-            </div>
-          )}
+          <HeaderAvatar profile={profile} />
         </Link>
       </div>
     </header>
+  )
+}
+
+function HeaderAvatar({ profile }: { profile: any }) {
+  const [hasError, setHasError] = useState(false)
+  const avatarUrl = profile?.avatar_url || profile?.profile_image
+
+  const isValidUrl = avatarUrl && typeof avatarUrl === 'string' && avatarUrl.trim() !== '' && !hasError
+
+  if (isValidUrl) {
+    return (
+      <Image 
+        src={avatarUrl} 
+        alt="" 
+        fill 
+        sizes="36px" 
+        className="object-cover" 
+        onError={() => setHasError(true)}
+      />
+    )
+  }
+
+  const initial = (profile?.full_name || profile?.first_name || 'U').charAt(0).toUpperCase()
+
+  return (
+    <div className="flex items-center justify-center h-full w-full bg-gradient-to-br from-[#009b55] to-emerald-700 text-white font-bold text-xs sm:text-sm select-none">
+      {initial}
+    </div>
   )
 }
